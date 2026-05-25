@@ -15,13 +15,19 @@ export default function Signup() {
             const email = formData.get('email')
             const password = formData.get('password')
             /* check if user already has an account */
-            const data = await fetch('/api/auth/signup', {
+            const response = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
             })
 
-            /* user doesnt have account, password is hashed and info is inserted into database */
+            const data = await response.json()
+
+            if(!response.ok) {
+                setError(data.error);
+            } else {
+                setUserCreated(true);
+            }
 
             /* user is redirected to login page */
 
@@ -41,17 +47,17 @@ export default function Signup() {
                 <div>
                     {userCreated === true ?
                         (<div className='flex gap-2 justify-center zoom-in animate-duration-700'>
-                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' className='text-lime-500 size-6'>
+                            <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor' className='text-lime-600 size-6'>
                                 <path fillRule='evenodd' d='M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z' clipRule='evenodd' />
                             </svg>
 
 
-                            <p className='text-md'>User successfully created</p>
+                            <p className='text-md text-stone-800'>User successfully created</p>
                         </div>)
                         :
                         (<form onSubmit={handleSubmit} className='space-y-6'>
                             {error && (
-                                <div className='bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded'>
+                                <div className='bg-red-500/10 border border-red-700 text-red-900 px-4 py-2 rounded'>
                                     {error}
                                 </div>
                             )}
