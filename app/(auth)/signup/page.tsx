@@ -1,5 +1,5 @@
 'use client'
-import { NextResponse } from 'next/server'
+
 import { useState } from 'react'
 
 export default function Signup() {

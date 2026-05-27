@@ -1,7 +1,8 @@
 import { SessionOptions } from 'iron-session';  
 
 export interface SessionData {
-        userId?:string;
+        userId?:number;
+        email?:string;
 }
 
 export const sessionOptions: SessionOptions = {
@@ -10,6 +11,8 @@ export const sessionOptions: SessionOptions = {
     cookieOptions: {
         secure:process.env.NODE_ENV === 'production',
         httpOnly: true
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7
     }
 
 }
