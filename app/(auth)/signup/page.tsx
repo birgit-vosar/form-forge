@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function Signup() {
     const [userCreated, setUserCreated] = useState(false)
     const [error, setError] = useState<boolean | string>('')
+    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -23,13 +25,20 @@ export default function Signup() {
 
             const data = await response.json()
 
-            if(!response.ok) {
-                setError(data.error);
-            } else {
-                setUserCreated(true);
+            if (!response.ok) {
+                setError(data.error)
+                return
             }
+                setError(false)
+                setUserCreated(true)
+                setTimeout(() => {
+                    router.push('/login')
+                }, 3000)
+            
 
             /* user is redirected to login page */
+
+
 
         } catch (err) {
             console.error('Signup error:', err);
