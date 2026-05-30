@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         )
 
         if (response.rows.length === 0) {
-            return NextResponse.json({ error: 'Invalid email or password'}, { status: 400 })
+            return NextResponse.json({ error: 'Invalid email or password'}, { status: 401 })
         }
 
         const hash = response.rows[0].password_hash

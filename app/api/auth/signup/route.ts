@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server"
-import bcrypt from "bcryptjs"
-import { getIronSession } from "iron-session"
-import pool from "@/lib/db"
-import { SessionData, sessionOptions } from "@/lib/sessions"
+import { NextRequest, NextResponse } from 'next/server'
+import bcrypt from 'bcryptjs'
+import { getIronSession } from 'iron-session'
+import pool from '@/lib/db'
+import { SessionData, sessionOptions } from '@/lib/sessions'
 
 
 export async function POST(req: NextRequest) {
@@ -14,13 +14,13 @@ export async function POST(req: NextRequest) {
         if (!email) {
             return NextResponse.json(
                 { error: 'Email is required' },
-                { status: 401 }
+                { status: 400 }
             )
         }
         if (!password) {
             return NextResponse.json(
                 { error: 'Password is required' },
-                { status: 401 }
+                { status: 400 }
             )
         }
 
