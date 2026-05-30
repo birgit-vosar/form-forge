@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 export default function Signup() {
     const [userCreated, setUserCreated] = useState(false)
     const [error, setError] = useState<boolean | string>('')
+    const [loading, setLoading] = useState<boolean>(false)
     const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -14,6 +15,8 @@ export default function Signup() {
 
 
         try {
+            setLoading(true)
+            setError(false)
             const email = formData.get('email')
             const password = formData.get('password')
             /* check if user already has an account */
@@ -26,10 +29,12 @@ export default function Signup() {
             const data = await response.json()
 
             if (!response.ok) {
+                setLoading(false)
                 setError(data.error)
                 return
             }
                 setError(false)
+                setLoading(false)
                 setUserCreated(true)
                 setTimeout(() => {
                     router.push('/login')
@@ -96,7 +101,7 @@ export default function Signup() {
                             </div>
                             <div>
                                 <button type='submit' className='cursor-pointer hover:bg-emerald-500 active:bg-emerald-700 items-center justify-center rounded-md text-sm font-normal bg-emerald-600 h-10 w-full'>
-                                    Sign up
+                                    {loading === true ? 'Loading...' : 'Sign up'}
                                 </button>
                             </div>
                         </form>)}
