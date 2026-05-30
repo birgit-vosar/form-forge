@@ -3,21 +3,32 @@ import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "@/lib/sessions";
 
 
-export async function middleware(request: NextRequest) {
-    const response = NextResponse.next()
+export async function middleware(req: NextRequest) {
+    const pathname = req.nextUrl.pathname
+    const publicPaths = ['/login', '/signup', '/favicon.ico'];
+    if (
+        publicPaths.includes(pathname) ||
+        pathname.startsWith('/api/auth') ||
+        pathname.startsWith('/_next') ||
+        pathname.startsWith('/f/')
+    ) {
+        return NextResponse.next();
+    }
+
+    const res = NextResponse.next()
     const session = await getIronSession<SessionData>(
-        request,
-        response,
+        req,
+        res,
         sessionOptions
     )
 
     if (!session.userId) {
-        return NextResponse.redirect(new URL('/login', request.url))
+        return NextResponse.redirect(new URL('/login', req.url))
     }
 
-    return response
+    return res
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+    matcher: ['/:path*'],
 }

@@ -37,7 +37,7 @@ export default function Login() {
             setUserCreated(true)
             setTimeout(() => {
                 setUserCreated(false)
-                router.push('/dashboard')
+                router.push('/')
             }, 3000)
 
 
