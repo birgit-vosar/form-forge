@@ -3,18 +3,45 @@ import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import Card from '@/components/Card'
 import { useState } from 'react'
+import DeleteCard from '@/components/DeleteCard'
 import Link from 'next/link';
 
 export default function DashboardPage() {
     const [loading, setLoading] = useState(false)
-    const [isLive, setIsLive] = useState(false)
-    const [responseAmount, setResponseAmount] = useState<number>(0)
-    const [lastResponse, setLastResponse] = useState<number>(0)
+    const [deleteCardOpen, setDeleteCardOpen] = useState(false)
     const router = useRouter()
-    const handleLogout = async () => {
-        await fetch('/api/auth/logout', { method: 'POST' })
-        router.push('/login')
+
+
+
+    const handleDelete = (id: number) => {
+        console.log('deleting form id:', id)
+        return
     }
+
+    const formList = [{
+        id: 1,
+        title: 'Contact form',
+        isLive: false,
+        responseAmount: 0,
+        lastResponse: 0,
+        onDelete: handleDelete
+    },
+    {
+        id: 2,
+        title: 'Contact form 2',
+        isLive: false,
+        responseAmount: 0,
+        lastResponse: 15,
+        onDelete: handleDelete
+    },
+    {
+        id: 3,
+        title: 'Contact form 3',
+        isLive: false,
+        responseAmount: 0,
+        lastResponse: 0,
+        onDelete: handleDelete
+    }]
 
     return (
         <div className='flex flex-row min-h-screen'>
@@ -73,12 +100,9 @@ export default function DashboardPage() {
 
                                 <div className='flex-3 px-6'>
                                     <div className='grid lg:grid-cols-3 grid-col-reverse gap-4'>
-                                        <Card title='Contact form' isLive={isLive} responseAmount={responseAmount} lastResponse={lastResponse}>
-                                        </Card>
-                                        <Card title='Contact form 2' isLive={isLive} responseAmount={responseAmount} lastResponse={lastResponse}>
-                                        </Card>
-                                        <Card title='Contact form 3' isLive={isLive} responseAmount={responseAmount} lastResponse={lastResponse}>
-                                        </Card>
+                                        {formList.map(form => <Card id={form.id} title={form.title} isLive={form.isLive} responseAmount={form.responseAmount} lastResponse={form.lastResponse} onDelete={() => handleDelete(form.id, form.title)}>
+                                        </Card>)}
+
                                     </div>
 
                                 </div>
@@ -88,6 +112,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
+            <DeleteCard/>
         </div>
     )
 }
