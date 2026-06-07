@@ -1,26 +1,68 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
 import Card from '@/components/Card'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import DeleteCard from '@/components/DeleteCard'
-import Link from 'next/link';
 
 export default function DashboardPage() {
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState<string>('')
     const [deleteCardOpen, setDeleteCardOpen] = useState(false)
-    const router = useRouter()
+    const [formTitle, setFormTitle] = useState<string>('')
+    const [formId, setFormId] = useState<number>(0)
 
+    useEffect(() => {
+        const res = async () => {
+            const data = await fetch('/api/forms');
+            if(!data.ok) {
+                setError('Something went wrong with fetching the forms.')
+            }
+        }
 
+        console.log(res)
+    }, [])
 
-    const handleDelete = (id: number) => {
-        console.log('deleting form id:', id)
+    const handleDelete = ({ id, title }: { id: number, title: string }) => {
+        setDeleteCardOpen(true)
+        setFormTitle(title)
+        setFormId(id)
+        return
+    }
+
+    async function handleDeleteConfirm() {
+        setLoading(true)
+        setError('')
+        console.log('Sending info to database, that form with this id:', formId, 'has to be deleted')
+        const result = await fetch('/api/forms/${formId}', {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formId)
+        })
+        if (!result.ok) {
+            setError('Something went wrong with deleting the form, please try again.')
+            setLoading(false)
+            return
+        }
+        setFormTitle('')
+        setFormId(0)
+        setDeleteCardOpen(false)
+        setLoading(false)
+        return
+    }
+
+    const handleDeleteCancel = () => {
+        setDeleteCardOpen(false)
+        setFormTitle('')
+        setFormId(0)
+        setError('')
         return
     }
 
     const formList = [{
         id: 1,
-        title: 'Contact form',
+        title: 'Solar consultation form',
         isLive: false,
         responseAmount: 0,
         lastResponse: 0,
@@ -28,7 +70,7 @@ export default function DashboardPage() {
     },
     {
         id: 2,
-        title: 'Contact form 2',
+        title: 'EV offer',
         isLive: false,
         responseAmount: 0,
         lastResponse: 15,
@@ -36,7 +78,7 @@ export default function DashboardPage() {
     },
     {
         id: 3,
-        title: 'Contact form 3',
+        title: 'Birthday discount offer',
         isLive: false,
         responseAmount: 0,
         lastResponse: 0,
@@ -100,8 +142,8 @@ export default function DashboardPage() {
 
                                 <div className='flex-3 px-6'>
                                     <div className='grid lg:grid-cols-3 grid-col-reverse gap-4'>
-                                        {formList.map(form => <Card id={form.id} title={form.title} isLive={form.isLive} responseAmount={form.responseAmount} lastResponse={form.lastResponse} onDelete={() => handleDelete(form.id, form.title)}>
-                                        </Card>)}
+                                        {formList.map(form => <Card key={form.id} id={form.id} title={form.title} isLive={form.isLive} responseAmount={form.responseAmount}
+                                            lastResponse={form.lastResponse} onDelete={() => handleDelete({ id: form.id, title: form.title })} />)}
 
                                     </div>
 
@@ -112,7 +154,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
-            <DeleteCard/>
+            <DeleteCard error={error} formId={formId} formTitle={formTitle} cardOpen={deleteCardOpen} onCancel={() => handleDeleteCancel()} onConfirm={() => { handleDeleteConfirm() }} />
         </div>
     )
 }

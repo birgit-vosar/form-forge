@@ -3,12 +3,13 @@ import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "@/lib/sessions";
 
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
     const pathname = req.nextUrl.pathname
     const publicPaths = ['/login', '/signup', '/favicon.ico'];
     if (
         publicPaths.includes(pathname) ||
         pathname.startsWith('/api/auth') ||
+        pathname.startsWith('/api/forms') ||
         pathname.startsWith('/_next') ||
         pathname.startsWith('/f/')
     ) {

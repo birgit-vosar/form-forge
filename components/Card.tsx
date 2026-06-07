@@ -6,10 +6,10 @@ interface CardProps {
     isLive: boolean
     responseAmount: number
     lastResponse: number
-    onDelete: (id: string, title: string) => void
+    onDelete: (id: number, title: string) => void
 }
 
-export default function Card({ title, isLive, responseAmount, lastResponse, onDelete }: CardProps) {
+export default function Card({ id, title, isLive, responseAmount, lastResponse, onDelete }: CardProps) {
 
     return (
         <div className='flex flex-2 flex-col h-full shadow-sm border rounded-xl border-gray-300 bg-white p-6 gap-2 hover:scale-101 hover:shadow-md/5 transition-all duration-200 ease-in-out'>
@@ -22,7 +22,7 @@ export default function Card({ title, isLive, responseAmount, lastResponse, onDe
                 {isLive === true ? (<div className="text-sm">
                     Live
                 </div>) : ('')}
-                <button onClick={() => onDelete()}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-5 text-gray-600 cursor-pointer hover:text-teal-700 hover:scale-115">
+                <button onClick={() => onDelete(id, title)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-5 text-gray-600 cursor-pointer hover:text-teal-700 hover:scale-115">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg></button>
 
