@@ -4,22 +4,34 @@ import Card from '@/components/Card'
 import { useEffect, useState } from 'react'
 import DeleteCard from '@/components/DeleteCard'
 
+type Form = {
+    id: number,
+    title: string,
+    is_published: boolean,
+    responses_amount: number,
+    last_response: number
+}
+
 export default function DashboardPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string>('')
     const [deleteCardOpen, setDeleteCardOpen] = useState(false)
     const [formTitle, setFormTitle] = useState<string>('')
     const [formId, setFormId] = useState<number>(0)
+    const [forms, setForms] = useState<Form[]>([])
 
     useEffect(() => {
-        const res = async () => {
-            const data = await fetch('/api/forms');
-            if(!data.ok) {
+        const fetchForms = async () => {
+            const res = await fetch('/api/forms');
+            if(!res.ok) {
                 setError('Something went wrong with fetching the forms.')
+                return
             }
+            const data = await res.json()
+            setForms(data)
         }
 
-        console.log(res)
+        fetchForms();
     }, [])
 
     const handleDelete = ({ id, title }: { id: number, title: string }) => {
@@ -59,31 +71,6 @@ export default function DashboardPage() {
         setError('')
         return
     }
-
-    const formList = [{
-        id: 1,
-        title: 'Solar consultation form',
-        isLive: false,
-        responseAmount: 0,
-        lastResponse: 0,
-        onDelete: handleDelete
-    },
-    {
-        id: 2,
-        title: 'EV offer',
-        isLive: false,
-        responseAmount: 0,
-        lastResponse: 15,
-        onDelete: handleDelete
-    },
-    {
-        id: 3,
-        title: 'Birthday discount offer',
-        isLive: false,
-        responseAmount: 0,
-        lastResponse: 0,
-        onDelete: handleDelete
-    }]
 
     return (
         <div className='flex flex-row min-h-screen'>
@@ -142,8 +129,8 @@ export default function DashboardPage() {
 
                                 <div className='flex-3 px-6'>
                                     <div className='grid lg:grid-cols-3 grid-col-reverse gap-4'>
-                                        {formList.map(form => <Card key={form.id} id={form.id} title={form.title} isLive={form.isLive} responseAmount={form.responseAmount}
-                                            lastResponse={form.lastResponse} onDelete={() => handleDelete({ id: form.id, title: form.title })} />)}
+                                        {forms.map(form => <Card key={form.id} id={form.id} title={form.title} isLive={form.is_published} responseAmount={form.responses_amount}
+                                            lastResponse={form.last_response} onDelete={() => handleDelete({ id: form.id, title: form.title })} />)}
 
                                     </div>
 
@@ -154,7 +141,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
-            <DeleteCard error={error} formId={formId} formTitle={formTitle} cardOpen={deleteCardOpen} onCancel={() => handleDeleteCancel()} onConfirm={() => { handleDeleteConfirm() }} />
+            <DeleteCard error={error} formTitle={formTitle} cardOpen={deleteCardOpen} onCancel={() => handleDeleteCancel()} onConfirm={() => { handleDeleteConfirm() }} />
         </div>
     )
 }

@@ -5,11 +5,21 @@ interface CardProps {
     title: string
     isLive: boolean
     responseAmount: number
-    lastResponse: number
+    lastResponse: string
     onDelete: (id: number, title: string) => void
 }
 
 export default function Card({ id, title, isLive, responseAmount, lastResponse, onDelete }: CardProps) {
+
+    function timeAgo(timestamp: string) {
+        const diff = Date.now() - new Date(timestamp).getTime()
+        const hours = Math.floor(diff / (1000 * 60 * 60))
+        const days = Math.floor(hours / 24)
+
+        if (days > 0) return `${days} days ago`
+        if (hours > 0) return `${hours} hours ago`
+        return 'Just now'
+    }
 
     return (
         <div className='flex flex-2 flex-col h-full shadow-sm border rounded-xl border-gray-300 bg-white p-6 gap-2 hover:scale-101 hover:shadow-md/5 transition-all duration-200 ease-in-out'>
@@ -33,7 +43,7 @@ export default function Card({ id, title, isLive, responseAmount, lastResponse, 
             </div>
             <div className="flex justify-between text-sm text-gray-600 mt-6">
                 <div className="flex gap-1"><p>responses</p> <Link href='/responses' className="underline">View</Link></div>
-                {lastResponse === 0 ? <p>no responses yet</p> : <p>about {lastResponse} hours ago</p>}
+                <p>{lastResponse ? timeAgo(lastResponse) : 'No responses yet'}</p>
             </div>
             <div className="flex gap-2 mt-2 pt-4 border-t border-gray-300">
                 <Link href='/forms' className="py-2 flex-1 border rounded-md border-[#b7e0d8] text-center bg-teal-50 hover:bg-emerald-100 transition-all duration-200"> Edit</Link>
