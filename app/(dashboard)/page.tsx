@@ -9,7 +9,7 @@ type Form = {
     title: string,
     is_published: boolean,
     responses_amount: number,
-    last_response: number
+    last_response: string
 }
 
 export default function DashboardPage() {
@@ -21,17 +21,18 @@ export default function DashboardPage() {
     const [forms, setForms] = useState<Form[]>([])
 
     useEffect(() => {
+        setLoading(true)
         const fetchForms = async () => {
             const res = await fetch('/api/forms');
-            if(!res.ok) {
+            if (!res.ok) {
                 setError('Something went wrong with fetching the forms.')
                 return
             }
             const data = await res.json()
             setForms(data)
         }
-
-        fetchForms();
+        setLoading(false)
+        fetchForms()
     }, [])
 
     const handleDelete = ({ id, title }: { id: number, title: string }) => {
@@ -45,7 +46,7 @@ export default function DashboardPage() {
         setLoading(true)
         setError('')
         console.log('Sending info to database, that form with this id:', formId, 'has to be deleted')
-        const result = await fetch('/api/forms/${formId}', {
+        const result = await fetch(`/api/forms/${formId}`, {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json",
@@ -54,9 +55,10 @@ export default function DashboardPage() {
         })
         if (!result.ok) {
             setError('Something went wrong with deleting the form, please try again.')
-            setLoading(false)
+            setLoading(false) 
             return
         }
+        setForms(prev => prev.filter(form => form.id !== formId))
         setFormTitle('')
         setFormId(0)
         setDeleteCardOpen(false)
@@ -129,9 +131,17 @@ export default function DashboardPage() {
 
                                 <div className='flex-3 px-6'>
                                     <div className='grid lg:grid-cols-3 grid-col-reverse gap-4'>
-                                        {forms.map(form => <Card key={form.id} id={form.id} title={form.title} isLive={form.is_published} responseAmount={form.responses_amount}
-                                            lastResponse={form.last_response} onDelete={() => handleDelete({ id: form.id, title: form.title })} />)}
+                                        {loading === true ?
+                                            (<div className='flex ml-8 mt-8'>
+                                                <div className='min-w-8 min-h-8 w-8 h-8 border-4 border-gray-300 border-t-transparent rounded-full animate-spin'></div>
+                                            </div>)
+                                            :
+                                            (
+                                                forms.map(form => <Card key={form.id} id={form.id} title={form.title} isLive={form.is_published} responseAmount={form.responses_amount}
+                                                    lastResponse={form.last_response} onDelete={() => handleDelete({ id: form.id, title: form.title })} />)
 
+                                            )
+                                        }
                                     </div>
 
                                 </div>
