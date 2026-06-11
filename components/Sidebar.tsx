@@ -36,13 +36,13 @@ export default function Nav() {
     ]
 
     return (
-        <div className={`${mobileMenu ? 'fixed top-0 left-0 w-70 h-full z-50' : 'hidden md:flex'} md:relative md:block flex flex-col self-stretch overflow-y-auto bg-stone-100 border-r border-gray-300 text-black `}>
+        <div className={`${mobileMenu ? 'fixed top-0 left-0 w-70 h-full z-50' : 'hidden md:flex'} md:relative md:block flex flex-col self-stretch overflow-y-auto bg-[#B7E0D8] border-r border-[#87cbbe] text-black `}>
 
             <Link href='/' className='flex px-6 py-3 gap-2'>
 
                 <div className='flex flex-col mt-1'>
                     <p className='font-semibold text-zinc-800'>FormForge</p>
-                    <p className='text-xs text-gray-500'>No-Code Form Builder</p>
+                    <p className='text-xs font-semibold font-sans text-gray-800'>No-Code Form Builder</p>
                 </div>
 
             </Link>
@@ -51,8 +51,8 @@ export default function Nav() {
                 {navItems.map((item) => (
                     <Link key={item.href} href={item.href} className={`cursor-pointer items-center flex flex-row py-2 w-full rounded-xl gap-3 pl-4 pr-18 text-sm active:opacity-50 
                             ${pathname === item.href
-                            ? 'bg-gray-200 text-zinc-700 hover:bg-gray-300'
-                            : 'text-gray-400 hover:bg-gray-300 hover:text-gray-700 transition duration-300'
+                            ? 'bg-[#95d1c5] font-semibold font-sans text-gray-800 hover:bg-[#87cbbe]'
+                            : 'font-semibold font-sans text-gray-800 hover:bg-[#87cbbe] hover:text-gray-700 transition duration-300'
                         }`}>
                         {item.icon}
                         {item.label}

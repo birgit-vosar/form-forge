@@ -100,7 +100,7 @@ export default function Signup() {
                                 </div>
                             </div>
                             <div>
-                                <button type='submit' className='cursor-pointer hover:bg-emerald-600 active:bg-emerald-700 items-center justify-center rounded-md text-sm font-normal bg-emerald-700 h-10 w-full'>
+                                <button type='submit' className='cursor-pointer hover:bg-[#004E89] active:bg-emerald-700 items-center justify-center rounded-md text-white font-semibold font-sans tracking-wide text-sm border border-[#1A659E] bg-[#1A659E] h-10 w-full'>
                                     {loading === true ? 'Loading...' : 'Sign up'}
                                 </button>
                             </div>

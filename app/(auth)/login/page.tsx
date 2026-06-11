@@ -99,13 +99,13 @@ export default function Login() {
                                 </div>
                             </div>
                             <div>
-                                <button type='submit' className='cursor-pointer hover:bg-emerald-600 active:bg-emerald-700 items-center justify-center rounded-md text-sm font-normal bg-emerald-700 h-10 w-full'>
+                                <button type='submit' className='cursor-pointer hover:bg-[#004E89] active:bg-emerald-700 items-center justify-center rounded-md text-white font-semibold font-sans tracking-wide text-sm border border-[#1A659E] bg-[#1A659E] h-10 w-full'>
                                     {loading === true ? 'Loading...' : 'Log in'}
                                 </button>
                             </div>
                             <div className='mt-4 text-center text-sm'>
                                 <span className='text-gray-500'>Don't have an account? </span>
-                                <a href='/signup' className='text-emerald-700 hover:text-emerald-600'>
+                                <a href='/signup' className='text-[#1A659E] hover:text-[#004E89]'>
                                     Sign up
                                 </a>
                             </div>
