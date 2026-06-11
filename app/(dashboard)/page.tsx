@@ -23,15 +23,20 @@ export default function DashboardPage() {
     useEffect(() => {
         setLoading(true)
         const fetchForms = async () => {
-            const res = await fetch('/api/forms');
-            if (!res.ok) {
+            try {
+                const res = await fetch('/api/forms');
+                if (!res.ok) {
+                    setError('Something went wrong with fetching the forms.')
+                    return
+                }
+                const data = await res.json()
+                setForms(data)
+            } catch (err) {
                 setError('Something went wrong with fetching the forms.')
-                return
+            } finally {
+                setLoading(false)
             }
-            const data = await res.json()
-            setForms(data)
-        }
-        setLoading(false)
+        } 
         fetchForms()
     }, [])
 
@@ -55,7 +60,7 @@ export default function DashboardPage() {
         })
         if (!result.ok) {
             setError('Something went wrong with deleting the form, please try again.')
-            setLoading(false) 
+            setLoading(false)
             return
         }
         setForms(prev => prev.filter(form => form.id !== formId))

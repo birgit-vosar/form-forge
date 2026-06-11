@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
             'SELECT forms.id, forms.title, forms.is_published, COUNT(responses.id) AS responses_amount, MAX(responses.submitted_at) AS last_response FROM forms LEFT JOIN responses ON forms.id=responses.form_id WHERE forms.user_id = $1 GROUP BY forms.id', [userId]
         )
         if (res.rows.length === 0) {
-            return NextResponse.json({ response: 'Failed to fetch forms' }, { status: 401 })
+            return NextResponse.json({ response: 'No forms exist' }, { status: 401 })
         }
         return NextResponse.json(res.rows)
     } catch (err) {
