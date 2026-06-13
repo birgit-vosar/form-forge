@@ -22,6 +22,31 @@ export async function GET(req: NextRequest) {
     }
 }
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+    try {
+        const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
+        const userId = session.userId
+        if (!userId) {
+            return Response.json({ error: 'Unauthorized' }, { status: 401 });
+        }
 
+        const title = 'Untitled form'
+        try {
+            const res = await pool.query(
+                'INSERT INTO forms (user_id, title) VALUES ($1, $2) RETURNING id', [userId, title]
+            )
+            const formId = res.rows[0].id
+            console.log(formId)
+
+            return NextResponse.json(formId)
+        } catch (err) {
+            console.log('failed to insert data')
+        }
+
+
+
+    } catch (err) {
+        console.log('Failed to create new form base in server')
+        return NextResponse.json({ error: 'Failed to create new form' }, { status: 500 })
+    }
 }

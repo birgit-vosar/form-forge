@@ -3,6 +3,7 @@ import Sidebar from '@/components/Sidebar'
 import Card from '@/components/Card'
 import { useEffect, useState } from 'react'
 import DeleteCard from '@/components/DeleteCard'
+import { useRouter } from 'next/navigation'
 
 type Form = {
     id: number,
@@ -13,6 +14,7 @@ type Form = {
 }
 
 export default function DashboardPage() {
+    const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string>('')
     const [deleteCardOpen, setDeleteCardOpen] = useState(false)
@@ -39,6 +41,19 @@ export default function DashboardPage() {
         }
         fetchForms()
     }, [])
+
+    async function createForm() {
+        const res = await fetch('/api/forms', {
+            method: 'POST'
+        })
+
+        if(!res.ok) {
+            setError('Failed to create new form, please try again.')
+        }
+        const formId = res.json()
+        console.log('this is client side res:', res)
+        router.push(`/forms/${formId}/builder`)
+    }
 
     const handleDelete = ({ id, title }: { id: number, title: string }) => {
         setDeleteCardOpen(true)
@@ -97,7 +112,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div>
-                                        <button className='cursor-pointer hover:bg-[#004E89] py-2 px-4 mr-4 border rounded-lg border-[#1A659E] bg-[#1A659E] text-white font-semibold font-sans tracking-wide text-sm'>
+                                        <button onClick={createForm} className='cursor-pointer hover:bg-[#004E89] py-2 px-4 mr-4 border rounded-lg border-[#1A659E] bg-[#1A659E] text-white font-semibold font-sans tracking-wide text-sm'>
                                             + Create new form
                                         </button>
                                     </div>
