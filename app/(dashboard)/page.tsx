@@ -50,8 +50,7 @@ export default function DashboardPage() {
         if(!res.ok) {
             setError('Failed to create new form, please try again.')
         }
-        const formId = res.json()
-        console.log('this is client side res:', res)
+        const formId = await res.json()
         router.push(`/forms/${formId}/builder`)
     }
 

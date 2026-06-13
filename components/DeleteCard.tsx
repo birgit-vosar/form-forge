@@ -17,15 +17,13 @@ export default function DeleteCard({ cardOpen, formTitle, error, onCancel, onCon
 
   return (
     <div
-      className={`${cardOpen=== true ? 'block' : 'hidden'} fixed inset-0 z-50 flex items-center justify-center bg-black/60`}
-      onClick={handleCancel}
-    >
+      className={`${cardOpen === true ? 'block' : 'hidden'} fixed inset-0 z-50 flex items-center justify-center bg-black/60`}
+      onClick={handleCancel}>
       <div
         className="bg-stone-100 border border-gray-300 rounded-2xl p-8 w-full max-w-md mx-4 flex flex-col items-center gap-4"
-        onClick={(e) => e.stopPropagation()}
-      >
+        onClick={(e) => e.stopPropagation()}>
         <div className={`${error !== '' ? 'block' : 'hidden'} bg-red-500/20 text-red-800 p-2 mb-4 border rounded-md`}>
-            <p>{error}</p>
+          <p>{error}</p>
         </div>
         {/* Icon */}
         <div className="w-14 h-14 rounded-full bg-red-500/20 flex items-center justify-center">
