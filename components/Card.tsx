@@ -46,7 +46,8 @@ export default function Card({ id, title, isLive, responseAmount, lastResponse, 
                 <p>{lastResponse ? timeAgo(lastResponse) : 'No responses yet'}</p>
             </div>
             <div className="flex gap-2 mt-2 pt-4 border-t border-gray-300">
-                <Link href='/forms' className="font-sans font-semibold text-[#E4572E] py-2 flex-1 border-2 rounded-md border-[#E4572E] text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200"> Edit</Link>
+                <Link href={`/forms/${id}/builder`} className="font-sans font-semibold text-[#E4572E] py-2 flex-1 border-2 rounded-md border-[#E4572E] 
+                text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200"> Edit</Link>
                 <Link href='/responses' className="py-2 flex-1 text-center hover:underline">Duplicate</Link>
             </div>
         </div>
