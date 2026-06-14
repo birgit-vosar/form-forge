@@ -4,14 +4,14 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 
 type Form = {
-    title:string
+    title: string
 }
 
 export default function DashboardPage() {
     const { formId } = useParams()
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string>('')
-    const [form, setForm] = useState<Form | null>({})
+    const [form, setForm] = useState<Form | null>(null)
 
     useEffect(() => {
         setLoading(true)
@@ -32,6 +32,53 @@ export default function DashboardPage() {
         }
         fetchForms()
     }, [])
+
+    if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
+        <Sidebar />
+        {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
+        <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
+            <div className='flex-1 flex flex-col overflow-hidden'>
+                {/* main */}
+                <div className='flex-1 flex flex-col lg:flex-row overflow-hidden'>
+                    <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
+                        <div className='flex-1 flex flex-col overflow-hidden'>
+                            <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
+                                <div className='flex flex-row justify-between px-4 py-1'>
+                                    <div className='flex flex-col gap-2'>
+                                        <p className='font-mono text-md font-semibold'>Loading...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>)
+    if (!form) return (<div className='flex flex-row h-screen overflow-hidden'>
+        <Sidebar />
+        {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
+        <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
+            <div className='flex-1 flex flex-col overflow-hidden'>
+                {/* main */}
+                <div className='flex-1 flex flex-col lg:flex-row overflow-hidden'>
+                    <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
+                        <div className='flex-1 flex flex-col overflow-hidden'>
+                            <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
+                                <div className='flex flex-row justify-between px-4 py-1'>
+                                    <div className='flex flex-col gap-2'>
+                                        <p className='font-mono text-md font-semibold'>Form not found</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>)
 
     return (
         <div className='flex flex-row h-screen overflow-hidden'>
@@ -73,9 +120,9 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div className='bg-white flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm min-w-40'>
-                                            <div className='flex gap-2 '>
-                                                <p className='font-semibold font-sans'>No field selected</p>
-                                            </div>
+                                        <div className='flex gap-2 '>
+                                            <p className='font-semibold font-sans'>No field selected</p>
+                                        </div>
                                     </div>
                                 </div>
 
