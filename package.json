@@ -12,6 +12,7 @@
     "bcryptjs": "^3.0.3",
     "iron-session": "^8.0.4",
     "next": "^15.5.19",
+    "nextjs-toploader": "^3.9.17",
     "pg": "^8.20.0",
     "postgres": "^3.4.9",
     "react": "19.2.4",
