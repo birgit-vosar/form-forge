@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { pool } from '@/lib/db'
 import { SessionData, sessionOptions } from "@/lib/sessions"
 import { getIronSession } from "iron-session"
+import { z } from 'zod'
 
 export async function DELETE(req: NextRequest) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
@@ -43,4 +44,31 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
         return NextResponse.json({ error: 'Failed to fetch info for the specific form' }, { status: 500 })
     }
     
+}
+
+export async function PATCH(req:NextRequest, context: {params: { formId: string }}) {
+    const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
+    const userId = session.userId
+    if (!userId) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try { 
+        const { formId } = await context.params
+        const body = await req.json()
+        
+        const schema = z.object({ title: z.string().min(1).max(50) })
+        const parsed = schema.safeParse(body)
+        if (!parsed.success) return NextResponse.json({ error: 'Invalid' }, { status: 400 })
+
+        await pool.query(
+            'UPDATE forms SET title = $1 WHERE id = $2 AND user_id = $3', [body.title, formId, userId]
+        )
+
+        return NextResponse.json({ response: 'Field changed successfully' }, { status: 200 })
+    } catch(err) {
+        console.log('failed to change the info')
+        return NextResponse.json({ error: 'Failed to change set new information' }, { status: 500 })
+    }
+
 }
