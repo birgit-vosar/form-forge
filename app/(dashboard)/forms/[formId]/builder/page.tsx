@@ -3,6 +3,7 @@ import Sidebar from '@/components/Sidebar'
 import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import FieldTypeMenu from '@/components/builder/FieldTypeMenu'
+import { FieldType } from '@/lib/fieldTypes'
 
 type Form = {
     title: string
@@ -18,6 +19,7 @@ export default function DashboardPage() {
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
     const [title, setTitle] = useState('')
+    const [formTypesArray, setFormTypesArray] = useState<FieldType[]>([])
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -75,6 +77,16 @@ export default function DashboardPage() {
             }
         }, 800)
     }, [title])
+
+
+    function handleAddField(type: FieldType) {
+        setFormTypesArray(
+            [
+                ...formTypesArray,
+                type
+            ]
+        )
+    }
 
     if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
         <Sidebar />
@@ -153,7 +165,7 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                                 <div className='flex-1 flex flex-row justify-between overflow-hidden'>
-                                    <FieldTypeMenu />
+                                    <FieldTypeMenu onAddField={handleAddField} />
                                     <div className='flex-1 self-start flex flex-col'>
                                         <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
                                             <p className='text-red-400 font-sans text-sm'>{error}</p>
@@ -165,11 +177,19 @@ export default function DashboardPage() {
                                                     defaultValue={form.title} maxLength={50}
                                                     onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
                                                 </textarea>
-                                                <div className='flex flex-col gap-1'>
-                                                    <label className='text-slate-800 font-mono text-md font-semibold'>This is a label</label>
-                                                    <textarea className='p-2 rounded outline outline-border-md outline-slate-800/20' placeholder='Add a description...'>
-                                                    </textarea>
+                                                <div className={formTypesArray.length === 0 ? 'border px-2 py-6 mt-2 rounded border-stone-300 border-dashed' : 'hidden'}>
+                                                    <label className='text-stone-400 font-mono text-xs'>Click a field type on the left to get started.</label>
                                                 </div>
+                                                {formTypesArray.map((type) => {
+                                                    return (
+                                                        <div className='flex flex-col gap-1'>
+                                                            <label className='text-slate-800 font-mono text-md font-semibold'>This is a label</label>
+                                                            <textarea className='p-2 rounded outline outline-border-md outline-slate-800/20' placeholder='Add a description...'>
+                                                            </textarea>
+                                                        </div>
+                                                    )
+                                                })}
+
                                             </div>
                                         </div>
                                     </div>
