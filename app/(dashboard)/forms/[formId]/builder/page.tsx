@@ -2,6 +2,7 @@
 import Sidebar from '@/components/Sidebar'
 import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
+import FieldTypeMenu from '@/components/builder/FieldTypeMenu'
 
 type Form = {
     title: string
@@ -66,7 +67,7 @@ export default function DashboardPage() {
                         console.log('error:', 500)
                     }
                 }
-                
+
             } catch (err) {
                 setError('Something went wrong with saving the form.')
             } finally {
@@ -152,33 +153,27 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                                 <div className='flex-1 flex flex-row justify-between overflow-hidden'>
-                                    <div className='bg-white flex flex-row pt-6 px-4 border-r border-gray-300 text-sm h-full'>
-                                        <div className='flex-1 flex flex-col gap-4 h-full min-w-40'>
-                                            <div className='flex-1 flex gap-2'>
-                                                <p className='uppercase text-xs font-sans'>field types</p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <FieldTypeMenu />
                                     <div className='flex-1 self-start flex flex-col'>
                                         <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
                                             <p className='text-red-400 font-sans text-sm'>{error}</p>
                                         </div>
-                                        <div className='bg-white flex-1 flex flex-row mx-6 px-4 py-6 my-6 border rounded-xl border-gray-300 text-sm'>
+                                        <div className='bg-white flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-gray-300 text-sm'>
                                             <div className='flex-1 flex flex-col gap-4'>
                                                 <textarea rows={1} className='text-black font-mono text-lg font-semibold placeholder:font-mono placeholder:text-md
-                                            placeholder:font-semibold placeholder:text-black focus:outline-none resize-none break-words whitespace-pre-wrap w-full' placeholder={title ? title : form.title} 
-                                            defaultValue={form.title} maxLength={50}
+                                            placeholder:font-semibold placeholder:text-black focus:outline-none resize-none break-words whitespace-pre-wrap w-full' placeholder={title ? title : form.title}
+                                                    defaultValue={form.title} maxLength={50}
                                                     onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
                                                 </textarea>
                                                 <div className='flex flex-col gap-1'>
-                                                <label className='text-slate-800 font-mono text-md font-semibold'>This is a label</label>
-                                                <textarea className='p-2 rounded outline outline-border-md outline-slate-800/20' placeholder='Add a description...'>
-                                                </textarea>
+                                                    <label className='text-slate-800 font-mono text-md font-semibold'>This is a label</label>
+                                                    <textarea className='p-2 rounded outline outline-border-md outline-slate-800/20' placeholder='Add a description...'>
+                                                    </textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='bg-white flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
+                                    <div className='bg-[#eeeeee] flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
                                         <div className='flex gap-2 '>
                                             <p className='font-semibold font-sans'>No field selected</p>
                                         </div>

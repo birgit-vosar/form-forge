@@ -11,6 +11,7 @@
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "iron-session": "^8.0.4",
+    "lucide-react": "^1.23.0",
     "next": "^15.5.19",
     "nextjs-toploader": "^3.9.17",
     "pg": "^8.20.0",

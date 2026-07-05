@@ -47,9 +47,9 @@ export default function Nav() {
 
             </Link>
 
-            <div className='flex-1 pt-2 px-4'>
+            <div className='flex-1 px-4'>
                 {navItems.map((item) => (
-                    <Link key={item.href} href={item.href} className={`cursor-pointer items-center flex flex-row py-2 w-full rounded-xl gap-3 pl-4 pr-18 text-sm active:opacity-50 
+                    <Link key={item.href} href={item.href} className={`cursor-pointer items-center flex flex-row py-2 w-full rounded-xl gap-3 pl-2 pr-18 text-sm active:opacity-50 
                             ${pathname === item.href
                             ? 'bg-[#95d1c5] font-semibold font-sans text-gray-800 hover:bg-[#87cbbe]'
                             : 'font-semibold font-sans text-gray-800 hover:bg-[#87cbbe] hover:text-gray-700 transition duration-300'
