@@ -3,7 +3,8 @@ import Sidebar from '@/components/Sidebar'
 import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import FieldTypeMenu from '@/components/builder/FieldTypeMenu'
-import { FieldType } from '@/lib/fieldTypes'
+import { Field, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
+import FormFields from '@/components/builder/FormFields'
 
 type Form = {
     title: string
@@ -19,7 +20,7 @@ export default function DashboardPage() {
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
     const [title, setTitle] = useState('')
-    const [formTypesArray, setFormTypesArray] = useState<FieldType[]>([])
+    const [fields, setFields] = useState<Field[]>([])
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -46,6 +47,8 @@ export default function DashboardPage() {
             isMounted.current = true
             return
         }
+
+        if (!title) { return }
 
         if (debounceRef.current) { clearTimeout(debounceRef.current) }
         debounceRef.current = setTimeout(async () => {
@@ -80,10 +83,23 @@ export default function DashboardPage() {
 
 
     function handleAddField(type: FieldType) {
-        setFormTypesArray(
+        const typeInfo = FIELD_TYPE_CONFIG[type]
+
+        const newField: Field = {
+            id: crypto.randomUUID(),
+            form_id: formId,
+            type: type,
+            label: typeInfo.label,
+            placeholder: null,
+            required: false,
+            order_index: fields.length,
+            validation_rules: typeInfo.defaultValidation
+        }
+
+        setFields(
             [
-                ...formTypesArray,
-                type
+                ...fields,
+                newField
             ]
         )
     }
@@ -170,25 +186,14 @@ export default function DashboardPage() {
                                         <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
                                             <p className='text-red-400 font-sans text-sm'>{error}</p>
                                         </div>
-                                        <div className='bg-white flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-gray-300 text-sm'>
+                                        <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
                                             <div className='flex-1 flex flex-col gap-4'>
                                                 <textarea rows={1} className='text-black font-mono text-lg font-semibold placeholder:font-mono placeholder:text-md
                                             placeholder:font-semibold placeholder:text-black focus:outline-none resize-none break-words whitespace-pre-wrap w-full' placeholder={title ? title : form.title}
                                                     defaultValue={form.title} maxLength={50}
                                                     onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
                                                 </textarea>
-                                                <div className={formTypesArray.length === 0 ? 'border px-2 py-6 mt-2 rounded border-stone-300 border-dashed' : 'hidden'}>
-                                                    <label className='text-stone-400 font-mono text-xs'>Click a field type on the left to get started.</label>
-                                                </div>
-                                                {formTypesArray.map((type) => {
-                                                    return (
-                                                        <div className='flex flex-col gap-1'>
-                                                            <label className='text-slate-800 font-mono text-md font-semibold'>This is a label</label>
-                                                            <textarea className='p-2 rounded outline outline-border-md outline-slate-800/20' placeholder='Add a description...'>
-                                                            </textarea>
-                                                        </div>
-                                                    )
-                                                })}
+                                                <FormFields fields={fields}/>
 
                                             </div>
                                         </div>
