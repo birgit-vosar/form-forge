@@ -28,6 +28,10 @@ export interface Field {
     options?: FieldOption[]
 }
 
+export interface FieldInputProps {
+  field: Field
+}
+
 interface FieldTypeConfig {
     label: string,
     icon: string,

@@ -19,7 +19,7 @@ export default function FormFields({ fields } : FormFieldsType) {
         {
             fields.map((field) => (
                 <div className='flex flex-col gap-1 mb-4 py-4 px-2 border-2 rounded-md border-[#84c9b1] bg-[#9ed4c9]' key={field.id}>
-                    <label className='text-slate-800 font-mono text-md font-semibold mb-1'>{field.label}</label>
+                    <label className='text-black font-mono text-md font-semibold mb-1'>{field.label}</label>
                     <FieldRenderer field={field}/>
                 </div>
             ))

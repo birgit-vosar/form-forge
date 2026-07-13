@@ -187,7 +187,7 @@ export default function DashboardPage() {
                                             <p className='text-red-400 font-sans text-sm'>{error}</p>
                                         </div>
                                         <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
-                                            <div className='flex-1 flex flex-col gap-4'>
+                                            <div className='flex-1 flex flex-col gap-4 '>
                                                 <textarea rows={1} className='text-black font-mono text-lg font-semibold placeholder:font-mono placeholder:text-md
                                             placeholder:font-semibold placeholder:text-black focus:outline-none resize-none break-words whitespace-pre-wrap w-full' placeholder={title ? title : form.title}
                                                     defaultValue={form.title} maxLength={50}

@@ -33,7 +33,9 @@ export default function RootLayout({
                     color='#004E89'
                     height={3}
                     showSpinner={false}
-                />{children}</body>
+                />{children}
+                <script src="../path/to/flowbite/dist/flowbite.min.js"></script>
+                </body>
     </html>
   );
 }
