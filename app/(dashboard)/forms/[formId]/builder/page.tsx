@@ -12,6 +12,7 @@ type Form = {
 
 export default function DashboardPage() {
     const { formId } = useParams()
+    const formIdSrting = Array.isArray(formId) ? formId[0] : formId ?? ''
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string>('')
@@ -87,7 +88,7 @@ export default function DashboardPage() {
 
         const newField: Field = {
             id: crypto.randomUUID(),
-            form_id: formId,
+            form_id: formIdSrting,
             type: type,
             label: typeInfo.label,
             placeholder: null,
