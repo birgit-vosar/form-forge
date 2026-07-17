@@ -26,13 +26,17 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchForms = async () => {
             try {
-                const res = await fetch(`/api/forms/${formId}`);
+                const res = await fetch(`/api/forms/${formId}`)
                 if (!res.ok) {
                     setError('Something went wrong with fetching the forms.')
                     return
                 }
                 const data = await res.json()
                 setForm(data)
+
+                const resFields = await fetch(`/api/forms/${formId}/fields`)
+                const fieldsData = await resFields.json()
+                setFields(fieldsData)
             } catch (err) {
                 setError('Something went wrong with fetching the forms.')
             } finally {
