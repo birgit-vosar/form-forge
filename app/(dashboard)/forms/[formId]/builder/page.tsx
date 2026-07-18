@@ -21,7 +21,7 @@ export default function DashboardPage() {
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
     const [title, setTitle] = useState('')
-    const [fields, setFields] = useState<NewField[]>([])
+    const [fields, setFields] = useState<Field[]>([])
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -118,6 +118,21 @@ export default function DashboardPage() {
         )
     }
 
+    async function handleDeleteField(fieldId: number) {
+        const res = await fetch(`/api/forms/${formId}/fields`, {
+            method: 'DELETE',
+            body: JSON.stringify(fieldId)
+        })
+
+        if (!res.ok) {
+            setError('Failed to delete the field, please try again.')
+            return
+        }
+        
+        const updatedFields = fields.filter(field => field.id !== fieldId)
+        setFields(updatedFields)
+    }
+
     if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
         <Sidebar />
         {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
@@ -207,7 +222,7 @@ export default function DashboardPage() {
                                                     defaultValue={form.title} maxLength={50}
                                                     onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
                                                 </textarea>
-                                                <FormFields fields={fields}/>
+                                                <FormFields fields={fields}  onDelete={handleDeleteField} />
 
                                             </div>
                                         </div>

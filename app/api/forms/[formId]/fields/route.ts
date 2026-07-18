@@ -76,3 +76,33 @@ export async function POST(req: NextRequest, context: { params: { formId: string
     }
 
 }
+
+export async function DELETE(req: NextRequest, context: { params: { formId: string } }) {
+    const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
+    const userId = session.userId
+    if (!userId) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try {
+        const { formId } = await context.params
+        const res = await pool.query(
+            'SELECT id FROM forms WHERE user_id = $1 AND id = $2', [userId, formId]
+        )
+        if (res.rows.length === 0) {
+            return NextResponse.json({ response: 'Request failed, please try again.' }, { status: 404 })
+        }
+
+        const fieldId = await req.json()
+        
+        await pool.query(
+            'DELETE FROM fields WHERE id = $1', [fieldId]
+        )
+
+        return NextResponse.json({ response: 'Field deletion successful.'}, { status: 201 })
+
+    } catch(err) {
+        console.log(err)
+        return NextResponse.json({ error: 'Failed to delete field.' }, { status: 500 })
+    }
+}

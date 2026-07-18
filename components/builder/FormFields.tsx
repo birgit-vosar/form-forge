@@ -3,9 +3,10 @@ import FieldRenderer from "./FieldRenderer"
 
 interface FormFieldsType {
     fields: Field[]
+    onDelete: (fieldId: number) => void
 }
 
-export default function FormFields({ fields } : FormFieldsType) {
+export default function FormFields({ fields, onDelete }: FormFieldsType) {
 
     if (fields.length === 0) {
         return (
@@ -16,14 +17,19 @@ export default function FormFields({ fields } : FormFieldsType) {
     }
     return (
         <div>
-        {
-            fields.map((field) => (
-                <div className='flex flex-col gap-1 mb-4 py-4 px-2 border-2 rounded-md border-[#84c9b1] bg-[#9ed4c9]' key={field.id}>
-                    <label className='text-black font-mono text-md font-semibold mb-1'>{field.label}</label>
-                    <FieldRenderer field={field}/>
-                </div>
-            ))
-        }
+            {
+                fields.map((field) => (
+                    <div className='flex flex-col gap-1 mb-4 py-4 px-2 border-2 rounded-md border-[#84c9b1] bg-[#9ed4c9]' key={field.id}>
+                        <div className="flex justify-between">
+                            <label className='text-black font-mono text-md font-semibold mb-1'>{field.label}</label>
+                            <button onClick={() => onDelete(field.id)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="size-4 mb-2 text-gray-800/75 cursor-pointer hover:text-teal-800 hover:scale-115">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg></button>
+                        </div>
+                        <FieldRenderer field={field} />
+                    </div>
+                ))
+            }
         </div>
 
     )
