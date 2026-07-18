@@ -17,14 +17,14 @@ export interface FieldOption {
 }
 
 export interface Field {
-    id: string,
-    form_id: string,
+    id: number,
+    form_id: number,
     type: FieldType,
     label: string,
     placeholder: string | null,
     required: boolean,
     order_index: number,
-    validation_rules: ValidationRules,
+    validation_rules: ValidationRules | null,
     options?: FieldOption[]
 }
 
