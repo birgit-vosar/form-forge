@@ -3,7 +3,7 @@ import Sidebar from '@/components/Sidebar'
 import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import FieldTypeMenu from '@/components/builder/FieldTypeMenu'
-import { Field, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
+import { Field, NewField, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
 import FormFields from '@/components/builder/FormFields'
 
 type Form = {
@@ -12,7 +12,7 @@ type Form = {
 
 export default function DashboardPage() {
     const { formId } = useParams()
-    const formIdSrting = Array.isArray(formId) ? formId[0] : formId ?? ''
+    const formIdString = Array.isArray(formId) ? formId[0] : formId ?? ''
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string>('')
@@ -21,7 +21,7 @@ export default function DashboardPage() {
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
     const [title, setTitle] = useState('')
-    const [fields, setFields] = useState<Field[]>([])
+    const [fields, setFields] = useState<NewField[]>([])
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -87,12 +87,10 @@ export default function DashboardPage() {
     }, [title])
 
 
-    function handleAddField(type: FieldType) {
+    async function handleAddField(type: FieldType) {
         const typeInfo = FIELD_TYPE_CONFIG[type]
 
-        const newField: Field = {
-            id: crypto.randomUUID(),
-            form_id: formIdSrting,
+        const newField: NewField = {
             type: type,
             label: typeInfo.label,
             placeholder: null,
@@ -101,10 +99,21 @@ export default function DashboardPage() {
             validation_rules: typeInfo.defaultValidation
         }
 
-        setFields(
+        const res = await fetch(`/api/forms/${formId}/fields`, {
+            method: 'POST',
+            body: JSON.stringify(newField)
+        })
+
+        if (!res.ok) {
+            setError('Failed to add a form field, please try again.')
+            return
+        }
+        const savedField = await res.json()
+
+        setFields( prev =>
             [
-                ...fields,
-                newField
+                ...prev,
+                savedField
             ]
         )
     }

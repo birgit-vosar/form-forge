@@ -9,8 +9,8 @@ export interface ValidationRules {
 }
 
 export interface FieldOption {
-    id: string,
-    field_id: string,
+    id: number,
+    field_id: number,
     label: string,
     value: string,
     order_index: number
@@ -19,6 +19,16 @@ export interface FieldOption {
 export interface Field {
     id: number,
     form_id: number,
+    type: FieldType,
+    label: string,
+    placeholder: string | null,
+    required: boolean,
+    order_index: number,
+    validation_rules: ValidationRules | null,
+    options?: FieldOption[]
+}
+
+export interface NewField {
     type: FieldType,
     label: string,
     placeholder: string | null,
