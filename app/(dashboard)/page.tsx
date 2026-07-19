@@ -168,7 +168,7 @@ export default function DashboardPage() {
                                             </div>)
                                             :
                                             (
-                                                forms.map(form => <Card key={form.id} id={form.id} title={form.title} isLive={form.is_published} responseAmount={form.responses_amount}
+                                                forms.map (form => <Card key={form.id} id={form.id} title={form.title} isLive={form.is_published} responseAmount={form.responses_amount}
                                                     lastResponse={form.last_response} onDelete={() => handleDelete({ id: form.id, title: form.title })} />)
 
                                             )

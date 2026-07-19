@@ -12,7 +12,6 @@ type Form = {
 
 export default function DashboardPage() {
     const { formId } = useParams()
-    const formIdString = Array.isArray(formId) ? formId[0] : formId ?? ''
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string>('')
@@ -22,6 +21,7 @@ export default function DashboardPage() {
     const isMounted = useRef(false)
     const [title, setTitle] = useState('')
     const [fields, setFields] = useState<Field[]>([])
+    const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null)
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -116,6 +116,7 @@ export default function DashboardPage() {
                 savedField
             ]
         )
+        setSelectedFieldId(savedField.id)
     }
 
     async function handleDeleteField(fieldId: number) {
@@ -131,6 +132,10 @@ export default function DashboardPage() {
         
         const updatedFields = fields.filter(field => field.id !== fieldId)
         setFields(updatedFields)
+    }
+
+    function handleSelect(fieldId: number) {
+        setSelectedFieldId(fieldId)
     }
 
     if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
@@ -210,7 +215,7 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                                 <div className='flex-1 flex flex-row justify-between overflow-hidden'>
-                                    <FieldTypeMenu onAddField={handleAddField} />
+                                    <FieldTypeMenu onAddField={handleAddField}/>
                                     <div className='flex-1 self-start flex flex-col'>
                                         <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
                                             <p className='text-red-400 font-sans text-sm'>{error}</p>
@@ -222,14 +227,14 @@ export default function DashboardPage() {
                                                     defaultValue={form.title} maxLength={50}
                                                     onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
                                                 </textarea>
-                                                <FormFields fields={fields}  onDelete={handleDeleteField} />
+                                                <FormFields fields={fields} onSelect={handleSelect} onDelete={handleDeleteField} selectedFieldId={selectedFieldId}/>
 
                                             </div>
                                         </div>
                                     </div>
                                     <div className='bg-[#eeeeee] flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
                                         <div className='flex gap-2 '>
-                                            <p className='font-semibold font-sans'>No field selected</p>
+                                            {selectedFieldId === null ? (<p className='font-semibold font-sans text-gray-600'>No field selected</p>) : (<p>This is the selected field id: {selectedFieldId}</p>) }
                                         </div>
                                     </div>
                                 </div>
