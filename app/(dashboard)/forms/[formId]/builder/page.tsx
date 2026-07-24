@@ -3,7 +3,7 @@ import Sidebar from '@/components/Sidebar'
 import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import FieldTypeMenu from '@/components/builder/FieldTypeMenu'
-import { Field, NewField, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
+import { Field, NewField, FieldUpdateProps, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
 import FormFields from '@/components/builder/FormFields'
 import FieldSettingsPanel from '@/components/builder/FieldSettingsPanel'
 
@@ -136,6 +136,10 @@ export default function DashboardPage() {
         setFields(updatedFields)
     }
 
+    async function handleUpdateField({fieldId, update} : FieldUpdateProps) {
+        console.log('this is the id: ', fieldId, ' and this is the update: ', update)
+    }
+
     function handleSelect(fieldId: number) {
         setSelectedFieldId(fieldId)
         const selectedField = fields.find(field => field.id === fieldId)
@@ -220,7 +224,7 @@ export default function DashboardPage() {
                                     </div>
                                 </div>
                                 <div className='flex-1 flex flex-row justify-between overflow-hidden'>
-                                    <FieldTypeMenu onAddField={handleAddField}/>
+                                    <FieldTypeMenu onAddField={handleAddField} />
                                     <div className='flex-1 self-start flex flex-col'>
                                         <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
                                             <p className='text-red-400 font-sans text-sm'>{error}</p>
@@ -238,9 +242,8 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div className='bg-[#eeeeee] flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
-                                        <div className='flex gap-2 '>
-                                            
-                                            <FieldSettingsPanel selectedField={selectedField}/>
+                                        <div className='flex gap-2 '> 
+                                            <FieldSettingsPanel selectedField={selectedField} onUpdate={handleUpdateField}/>
                                         </div>
                                     
                                     </div>

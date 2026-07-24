@@ -42,6 +42,11 @@ export interface FieldInputProps {
   field: Field
 }
 
+export interface FieldUpdateProps {
+  fieldId: number,
+  update: string | boolean
+}
+
 interface FieldTypeConfig {
     label: string,
     icon: string,
