@@ -44,7 +44,7 @@ export interface FieldInputProps {
 
 export interface FieldUpdateProps {
   fieldId: number,
-  update: string | boolean
+  update: Partial<Pick<Field, 'label' | 'placeholder' | 'required'>>
 }
 
 interface FieldTypeConfig {

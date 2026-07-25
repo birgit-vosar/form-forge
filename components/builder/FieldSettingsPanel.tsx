@@ -1,6 +1,5 @@
 
 import { Field, FieldUpdateProps } from '@/lib/fieldTypes';
-import { useState } from 'react';
 
 interface FieldSettingsPanelProps {
     selectedField: Field | null | undefined,
@@ -11,7 +10,6 @@ interface FieldSettingsPanelProps {
 
 
 export default function FieldSettingsPanel({ selectedField, onUpdate }: FieldSettingsPanelProps) {
-    const [required, setRequired] = useState(false);
     if (!selectedField) {
         return (
             <div className='bg-[#eeeeee] flex flex-row pt-6  text-sm h-full'>
@@ -33,22 +31,23 @@ export default function FieldSettingsPanel({ selectedField, onUpdate }: FieldSet
                 </div>
                 <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Label</p>
-                    <input onChange={(e) => {onUpdate({fieldId: selectedField.id, update: e.target.value})}} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" placeholder={selectedField.label}></input>
+                    <input onChange={(e) => {onUpdate({fieldId: selectedField.id, update: { label: e.target.value }})}} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
+                    placeholder={selectedField.label}></input>
                 </div>
                 <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Placeholder text</p>
-                    <textarea className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" placeholder={selectedField.placeholder ?? undefined}></textarea>
+                    <textarea onChange={(e) => {onUpdate({fieldId: selectedField.id, update: { placeholder: e.target.value }})}} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" placeholder={selectedField.placeholder ?? undefined}></textarea>
                 </div>
                 <div className='flex justify-between items-center w-full gap-2 mx-4 my-3 px-2 py-3 border rounded-xs border-stone-300 bg-white'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Required:</p>
                     <button
                         type="button"
-                        onClick={() => setRequired(!required)}
-                        className={`relative h-5 w-10 rounded-full transition-colors ${required ? "bg-[#9ed4c9]" : "bg-gray-300"
+                        onClick={() => {!selectedField.required; onUpdate({fieldId: selectedField.id, update: { required : !selectedField.required }})}}
+                        className={`relative h-5 w-10 rounded-full transition-colors ${selectedField.required === true ? "bg-[#9ed4c9]" : "bg-gray-300"
                             }`}
                     >
                         <span
-                            className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition-transform ${required ? "translate-x-5" : ""
+                            className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition-transform ${selectedField.required === true ? "translate-x-5" : ""
                                 }`}
                         />
                     </button>

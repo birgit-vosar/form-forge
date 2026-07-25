@@ -112,7 +112,7 @@ export default function DashboardPage() {
         }
         const savedField = await res.json()
 
-        setFields( prev =>
+        setFields(prev =>
             [
                 ...prev,
                 savedField
@@ -131,19 +131,64 @@ export default function DashboardPage() {
             setError('Failed to delete the field, please try again.')
             return
         }
-        
+
         const updatedFields = fields.filter(field => field.id !== fieldId)
         setFields(updatedFields)
     }
 
-    async function handleUpdateField({fieldId, update} : FieldUpdateProps) {
-        console.log('this is the id: ', fieldId, ' and this is the update: ', update)
+    async function handleUpdateField({ fieldId, update }: FieldUpdateProps) {
+        setFields( prev => prev.map(
+            field => field.id === fieldId ? 
+            { ...field, ...update } :
+            field
+        ))
+
+        if (!isMounted.current) {
+            isMounted.current = true
+            return
+        }
+
+        if (debounceRef.current) { clearTimeout(debounceRef.current) }
+
+        debounceRef.current = setTimeout(async () => {
+            try {
+                setSaving(true)
+                setError('')
+                const res = await fetch(`/api/forms/${formId}/fields/${fieldId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ update })
+                })
+
+                if (!res.ok) {
+                    if (res.status === 400) {
+                        setError('Update format is incorrect.')
+                        console.log('error:', 400)
+                    } else {
+                        setError('Something went wrong saving the form — please try again.')
+                        console.log('error:', 500)
+                    }
+                }
+
+                const savedField = await res.json()
+                setFields(prev =>
+                    prev.map(field =>
+                        field.id === fieldId ? { ...field, ...savedField } : field
+                    )
+                )
+            } catch (err) {
+                setError('Something went wrong with saving the new field update.')
+            } finally {
+                setSaving(false)
+            }
+        }, 800)
     }
 
     function handleSelect(fieldId: number) {
         setSelectedFieldId(fieldId)
         const selectedField = fields.find(field => field.id === fieldId)
-        console.log(selectedField)
         setSelectedField(selectedField)
     }
 
@@ -236,16 +281,16 @@ export default function DashboardPage() {
                                                     defaultValue={form.title} maxLength={50}
                                                     onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
                                                 </textarea>
-                                                <FormFields fields={fields} onSelect={handleSelect} onDelete={handleDeleteField} selectedFieldId={selectedFieldId}/>
+                                                <FormFields fields={fields} onSelect={handleSelect} onDelete={handleDeleteField} selectedFieldId={selectedFieldId} />
 
                                             </div>
                                         </div>
                                     </div>
                                     <div className='bg-[#eeeeee] flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
-                                        <div className='flex gap-2 '> 
-                                            <FieldSettingsPanel selectedField={selectedField} onUpdate={handleUpdateField}/>
+                                        <div className='flex gap-2 '>
+                                            <FieldSettingsPanel selectedField={selectedField} onUpdate={handleUpdateField} />
                                         </div>
-                                    
+
                                     </div>
                                 </div>
 
