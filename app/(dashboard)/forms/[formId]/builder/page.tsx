@@ -23,7 +23,7 @@ export default function DashboardPage() {
     const [title, setTitle] = useState('')
     const [fields, setFields] = useState<Field[]>([])
     const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null)
-    const [selectedField, setSelectedField] = useState<Field | null>()
+    const selectedField = fields.find(field => field.id === selectedFieldId) ?? null
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -188,8 +188,6 @@ export default function DashboardPage() {
 
     function handleSelect(fieldId: number) {
         setSelectedFieldId(fieldId)
-        const selectedField = fields.find(field => field.id === fieldId)
-        setSelectedField(selectedField)
     }
 
     if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
@@ -288,7 +286,7 @@ export default function DashboardPage() {
                                     </div>
                                     <div className='bg-[#eeeeee] flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
                                         <div className='flex gap-2 '>
-                                            <FieldSettingsPanel selectedField={selectedField} onUpdate={handleUpdateField} />
+                                            <FieldSettingsPanel key={selectedFieldId} selectedField={selectedField} onUpdate={handleUpdateField} />
                                         </div>
 
                                     </div>

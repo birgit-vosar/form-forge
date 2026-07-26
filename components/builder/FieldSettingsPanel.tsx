@@ -32,11 +32,13 @@ export default function FieldSettingsPanel({ selectedField, onUpdate }: FieldSet
                 <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Label</p>
                     <input onChange={(e) => {onUpdate({fieldId: selectedField.id, update: { label: e.target.value }})}} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
-                    placeholder={selectedField.label}></input>
+                    placeholder='Enter a label...' value={selectedField.label}></input>
                 </div>
                 <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Placeholder text</p>
-                    <textarea onChange={(e) => {onUpdate({fieldId: selectedField.id, update: { placeholder: e.target.value }})}} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" placeholder={selectedField.placeholder ?? undefined}></textarea>
+                    <textarea onChange={(e) => {onUpdate({fieldId: selectedField.id, update: { placeholder: e.target.value }})}} 
+                    className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
+                    placeholder='Enter a placeholder...' value={selectedField.placeholder ?? undefined}></textarea>
                 </div>
                 <div className='flex justify-between items-center w-full gap-2 mx-4 my-3 px-2 py-3 border rounded-xs border-stone-300 bg-white'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Required:</p>
