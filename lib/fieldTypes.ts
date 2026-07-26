@@ -47,6 +47,15 @@ export interface FieldUpdateProps {
   update: Partial<Pick<Field, 'label' | 'placeholder' | 'required'>>
 }
 
+export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+export const PHONE_SHAPE_REGEX = /^[+]?[\d\s\-().]{7,20}$/
+
+export function isValidPhone( value: string ): boolean {
+  if (!PHONE_SHAPE_REGEX.test(value)) return false
+  const digitsOnly = value.replace(/\D/g, "")
+  return digitsOnly.length >= 7 && digitsOnly.length <= 15
+}
+
 interface FieldTypeConfig {
     label: string,
     icon: string,
