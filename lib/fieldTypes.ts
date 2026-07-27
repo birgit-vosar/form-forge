@@ -56,6 +56,10 @@ export function isValidPhone( value: string ): boolean {
   return digitsOnly.length >= 7 && digitsOnly.length <= 15
 }
 
+export function isValidEmail( value: string ): boolean {
+  return EMAIL_REGEX.test(value)
+}
+
 interface FieldTypeConfig {
     label: string,
     icon: string,
