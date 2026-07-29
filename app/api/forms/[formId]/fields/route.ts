@@ -50,7 +50,7 @@ export async function POST(req: NextRequest, context: { params: { formId: string
 
         const body = await req.json()
         const schema = z.object({
-            type: z.enum(['text', 'textarea', 'email', 'phone', 'select', 'radio', 'checkbox', 'date']),
+            type: z.enum(['text', 'textarea', 'email', 'phone', 'dropdown', 'radio', 'checkbox', 'date']),
             label: z.string().min(1),
             placeholder: z.string().nullable(),
             required: z.boolean(),

@@ -1,5 +1,6 @@
 
 import { Field, FieldUpdateProps } from '@/lib/fieldTypes';
+import OptionsListEditor from './OptionsListEditor';
 
 interface FieldSettingsPanelProps {
     selectedField: Field | null | undefined,
@@ -27,24 +28,13 @@ export default function FieldSettingsPanel({ selectedField, onUpdate }: FieldSet
                 <p className='uppercase text-md font-semibold font-sans px-4 pb-4'>Field properties</p>
                 <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Type</p>
-                    <input readOnly className="pointer-events-none py-1 w-full px-2 border rounded-xs border-stone-400 bg-[#eeeeee]" placeholder={selectedField.type}></input>
-                </div>
-                <div className='flex flex-col w-full gap-2 mx-4 my-3'>
-                    <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Label</p>
-                    <input onChange={(e) => {onUpdate({fieldId: selectedField.id, update: { label: e.target.value }})}} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
-                    placeholder='Enter a label...' value={selectedField.label}></input>
-                </div>
-                <div className='flex flex-col w-full gap-2 mx-4 my-3'>
-                    <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Placeholder text</p>
-                    <textarea onChange={(e) => {onUpdate({fieldId: selectedField.id, update: { placeholder: e.target.value }})}} 
-                    className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
-                    placeholder='Enter a placeholder...' value={selectedField.placeholder ?? undefined}></textarea>
+                    <input readOnly className="pointer-events-none py-1 w-full px-2 border rounded-xs border-stone-400 bg-white text-black" placeholder={selectedField.type}></input>
                 </div>
                 <div className='flex justify-between items-center w-full gap-2 mx-4 my-3 px-2 py-3 border rounded-xs border-stone-300 bg-white'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Required:</p>
                     <button
                         type="button"
-                        onClick={() => {!selectedField.required; onUpdate({fieldId: selectedField.id, update: { required : !selectedField.required }})}}
+                        onClick={() => { !selectedField.required; onUpdate({ fieldId: selectedField.id, update: { required: !selectedField.required } }) }}
                         className={`relative h-5 w-10 rounded-full transition-colors ${selectedField.required === true ? "bg-[#9ed4c9]" : "bg-gray-300"
                             }`}
                     >
@@ -54,6 +44,18 @@ export default function FieldSettingsPanel({ selectedField, onUpdate }: FieldSet
                         />
                     </button>
                 </div>
+                <div className='flex flex-col w-full gap-2 mx-4 my-3'>
+                    <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Label</p>
+                    <input onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { label: e.target.value } }) }} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                        placeholder='Enter a label...' value={selectedField.label}></input>
+                </div>
+                <div className='flex flex-col w-full gap-2 mx-4 my-3'>
+                    <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Placeholder text</p>
+                    <textarea onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { placeholder: e.target.value } }) }}
+                        className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                        placeholder='Enter a placeholder...' value={selectedField.placeholder ?? undefined}></textarea>
+                </div>
+                <OptionsListEditor />
             </div>
         </div>
     )

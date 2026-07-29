@@ -3,7 +3,7 @@ import TextFieldInput from "./fields/TextFieldInput";
 import TextareaFieldInput from "./fields/TextareaFieldInput";
 import EmailFieldInput from "./fields/EmailFieldInput";
 import PhoneFieldInput from "./fields/PhoneFieldInput";
-import SelectFieldInput from "./fields/SelectFieldInput";
+import DropdownFieldInput from "./fields/DropdownFieldInput";
 import RadioFieldInput from "./fields/RadioFieldInput";
 import CheckboxFieldInput from "./fields/CheckboxFieldInput";
 import DateFieldInput from "./fields/DateFieldInput";
@@ -17,7 +17,7 @@ const FIELD_COMPONENT_MAP = {
     textarea: TextareaFieldInput,
     email: EmailFieldInput,
     phone: PhoneFieldInput,
-    select: SelectFieldInput,
+    dropdown: DropdownFieldInput,
     radio: RadioFieldInput,
     checkbox: CheckboxFieldInput,
     date: DateFieldInput

@@ -1,4 +1,4 @@
-export type FieldType = | 'text' | 'textarea' | 'email' | 'phone' | 'select' | 'radio' | 'checkbox' |  'date'
+export type FieldType = | 'text' | 'textarea' | 'email' | 'phone' | 'dropdown' | 'radio' | 'checkbox' |  'date'
 
 export interface ValidationRules {
     minLength?: number,
@@ -105,10 +105,10 @@ export const FIELD_TYPE_CONFIG: Record<FieldType, FieldTypeConfig> = {
     },
   },
 
-  'select': {
+  'dropdown': {
     label: 'Dropdown',
     icon: 'ChevronDown',
-    defaultLabel: 'New select field',
+    defaultLabel: 'New dropdown field',
     hasOptions: true,
     defaultValidation: {},
   },
@@ -139,6 +139,6 @@ export const FIELD_TYPE_CONFIG: Record<FieldType, FieldTypeConfig> = {
 };
 
 export const FIELD_TYPES: FieldType[] = [
-    'text', 'textarea', 'email', 'phone', 'select', 'radio', 'checkbox', 'date'
+    'text', 'textarea', 'email', 'phone', 'dropdown', 'radio', 'checkbox', 'date'
 ]
 

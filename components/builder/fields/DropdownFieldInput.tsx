@@ -1,6 +1,6 @@
 import { FieldInputProps } from "@/lib/fieldTypes";
 
-export default function SelectFieldInput({ field }: FieldInputProps) {
+export default function DropdownFieldInput({ field }: FieldInputProps) {
     return (
         <div>
             <select className="py-1 w-full px-2 border rounded-sm border-[#8ed0b8] bg-[#dbf1e9] text-sm">
