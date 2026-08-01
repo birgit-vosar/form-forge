@@ -22,8 +22,6 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
 
         const { update } = await req.json()
 
-        console.log(update.label)
-
         if (update.label !== undefined) {
             await pool.query(
                 'UPDATE fields SET label = $1 WHERE form_id = $2 AND id = $3', [update.label, formId, fieldId]

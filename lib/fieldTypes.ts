@@ -47,6 +47,12 @@ export interface FieldUpdateProps {
   update: Partial<Pick<Field, 'label' | 'placeholder' | 'required'>>
 }
 
+export interface OptionsUpdateProps {
+  fieldId: number,
+  optionId: number,
+  update: Partial<Pick<FieldOption, 'label' | 'value'>>
+}
+
 export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const PHONE_SHAPE_REGEX = /^[+]?[\d\s\-().]{7,20}$/
 

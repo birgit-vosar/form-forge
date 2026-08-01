@@ -3,7 +3,7 @@ import Sidebar from '@/components/Sidebar'
 import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import FieldTypeMenu from '@/components/builder/FieldTypeMenu'
-import { Field, NewField, FieldUpdateProps, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
+import { Field, NewField, FieldUpdateProps, OptionsUpdateProps, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
 import FormFields from '@/components/builder/FormFields'
 import FieldSettingsPanel from '@/components/builder/FieldSettingsPanel'
 
@@ -20,6 +20,8 @@ export default function DashboardPage() {
 
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
+    const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
+    const isMountedMap = useRef<Record<number, boolean>>({});
     const [title, setTitle] = useState('')
     const [fields, setFields] = useState<Field[]>([])
     const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null)
@@ -35,7 +37,7 @@ export default function DashboardPage() {
                 }
                 const data = await res.json()
                 setForm(data)
- 
+
                 const resFields = await fetch(`/api/forms/${formId}/fields`)
                 const fieldsData = await resFields.json()
                 setFields(fieldsData)
@@ -134,10 +136,10 @@ export default function DashboardPage() {
         const newOptionField = await res.json()
 
         setFields(prev =>
-            prev.map( field =>
+            prev.map(field =>
                 field.id === fieldId
-                ? { ... field, options: [ ...(field.options ?? []), newOptionField]}
-                : field
+                    ? { ...field, options: [...(field.options ?? []), newOptionField] }
+                    : field
             )
         )
     }
@@ -169,19 +171,19 @@ export default function DashboardPage() {
         }
 
         setFields(prev =>
-            prev.map( field =>
+            prev.map(field =>
                 field.id === fieldId
-                ? { ... field, options: [ ...(field.options ?? []).filter(opt => opt.id !== optionId)]}
-                : field
+                    ? { ...field, options: [...(field.options ?? []).filter(opt => opt.id !== optionId)] }
+                    : field
             )
         )
     }
 
     async function handleUpdateField({ fieldId, update }: FieldUpdateProps) {
-        setFields( prev => prev.map(
-            field => field.id === fieldId ? 
-            { ...field, ...update } :
-            field
+        setFields(prev => prev.map(
+            field => field.id === fieldId ?
+                { ...field, ...update } :
+                field
         ))
 
         if (!isMounted.current) {
@@ -217,6 +219,69 @@ export default function DashboardPage() {
                 setFields(prev =>
                     prev.map(field =>
                         field.id === fieldId ? { ...field, ...savedField } : field
+                    )
+                )
+            } catch (err) {
+                setError('Something went wrong with saving the new field update.')
+            } finally {
+                setSaving(false)
+            }
+        }, 800)
+    }
+
+    async function handleUpdateOption({ fieldId, optionId, update }: OptionsUpdateProps) {
+setFields(prev =>
+        prev.map(field =>
+            field.id === fieldId
+                ? {
+                    ...field,
+                    options: (field.options ?? []).map(opt =>
+                        opt.id === optionId ? { ...opt, ...update } : opt
+                    )
+                }
+                : field
+        )
+    )
+
+        if (!isMountedMap.current[optionId]) {
+            isMountedMap.current[optionId] = true
+            return
+        }
+
+        if (debounceRefMap.current[optionId]) {
+            clearTimeout(debounceRefMap.current[optionId])
+        }
+
+        debounceRefMap.current[optionId] = setTimeout(async () => {
+            try {
+                setSaving(true)
+                setError('')
+                const res = await fetch(`/api/forms/${formId}/fields/${fieldId}/options`, {
+                    method: 'PATCH',
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ update, optionId })
+                })
+
+                if (!res.ok) {
+                    if (res.status === 400) {
+                        setError('Update format is incorrect.')
+                    } else {
+                        setError('Something went wrong saving the form — please try again.')
+                    }
+                    return // stop here — don't try to parse a failed response as the saved option
+                }
+
+                const savedOptionsField = await res.json()
+                setFields(prev =>
+                    prev.map(field =>
+                        field.id === fieldId
+                            ? {
+                                ...field,
+                                options: (field.options ?? []).map(opt =>
+                                    opt.id === optionId ? savedOptionsField : opt
+                                )
+                            }
+                            : field
                     )
                 )
             } catch (err) {
@@ -328,7 +393,7 @@ export default function DashboardPage() {
                                     <div className='bg-[#eeeeee] flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
                                         <div className='flex gap-2 '>
                                             <FieldSettingsPanel key={selectedFieldId} selectedField={selectedField} onUpdate={handleUpdateField} addOption={handleAddOption}
-                                                deleteOption={handleDeleteOption}/>
+                                                deleteOption={handleDeleteOption} updateOption={handleUpdateOption} />
                                         </div>
 
                                     </div>

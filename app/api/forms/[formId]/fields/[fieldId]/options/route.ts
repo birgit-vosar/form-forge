@@ -68,3 +68,43 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ form
         return NextResponse.json({ error: 'Failed to add a new options field.' }, { status: 500 })
     }
 }
+
+export async function PATCH(req: NextRequest, context: { params: { formId: string, fieldId: number } }) {
+    const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
+    const userId = session.userId
+    if (!userId) {
+        return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    try {
+        const { formId, fieldId } = await context.params
+        const res = await pool.query(
+            'SELECT id FROM forms WHERE user_id = $1 AND id = $2', [userId, formId]
+        )
+        if (res.rows.length === 0) {
+            return NextResponse.json({ response: 'Request failed, please try again.' }, { status: 404 })
+        }
+
+        const { optionId, update } = await req.json()
+
+
+        await pool.query(
+            'UPDATE field_options SET label = $1 WHERE field_id = $2 AND id = $3', [update.label, fieldId, optionId ]
+        )
+        
+
+        const result = await pool.query(
+            'SELECT * FROM field_options WHERE id = $1 AND field_id = $2', [optionId, fieldId]
+        )
+
+        if (result.rows.length === 0) {
+            return NextResponse.json({ error: 'Option not found' }, { status: 404 })
+        }
+
+        return NextResponse.json(result.rows[0])
+
+    } catch (err) {
+        console.log(err)
+        return NextResponse.json({ error: 'Failed to delete field.' }, { status: 500 })
+    }
+}

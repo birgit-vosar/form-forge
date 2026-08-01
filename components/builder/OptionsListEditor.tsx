@@ -1,21 +1,22 @@
-import { FieldOption } from '@/lib/fieldTypes';
+import { FieldOption, OptionsUpdateProps } from '@/lib/fieldTypes';
 
 interface OptionsListEditorProps {
     fieldId: number
   fieldOptions: FieldOption[];
   addOption: () => void,
-  deleteOption: (optionId: number, fieldId: number) => void
+  deleteOption: (optionId: number, fieldId: number) => void,
+  updateOption: (props: OptionsUpdateProps) => void
 }
 
-export default function OptionsListEditor({ fieldId, fieldOptions, addOption, deleteOption }: OptionsListEditorProps) {
+export default function OptionsListEditor({ fieldId, fieldOptions, addOption, deleteOption, updateOption }: OptionsListEditorProps) {
     return (
         <div className='flex flex-col w-full gap-2 mx-4 my-3'>
             <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Options</p>
             {fieldOptions.map((option) => {
                 return (
                     <div key={option.id} className="flex gap-1 justify-center">
-                        <input className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" defaultValue
-                            placeholder='Enter a label...' value={option.label}></input>
+                        <input className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
+                            placeholder='Enter a label...' onChange={(e) => updateOption({fieldId: fieldId, optionId: option.id, update: { label: e.target.value }})} value={option.label}></input>
                         <button onClick={() => deleteOption(option.id, fieldId)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="size-4 text-gray-800/75 cursor-pointer hover:text-black hover:scale-105">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg></button>
