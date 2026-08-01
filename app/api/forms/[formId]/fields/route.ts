@@ -25,7 +25,17 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
             'SELECT * FROM fields WHERE form_id = $1 ORDER BY order_index ASC', [formId]
         )
 
-        return NextResponse.json(existingFields.rows)
+        const optionsFields = await pool.query(
+            'SELECT * FROM field_options WHERE form_id = $1 ORDER BY order_index ASC', [formId]
+        )
+
+        const fields = existingFields.rows.map( field => ({
+            ...field,
+            options: optionsFields.rows.filter(option => option.field_id === field.id)
+        })
+    )
+
+        return NextResponse.json(fields)
     } catch (err) {
         console.error(err)
         return NextResponse.json({ error: 'Failed to fetch form fields' }, { status: 500 })

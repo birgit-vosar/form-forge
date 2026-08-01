@@ -12,7 +12,7 @@ export interface FieldOption {
     id: number,
     field_id: number,
     label: string,
-    value: string,
+    value: string | null,
     order_index: number
 }
 

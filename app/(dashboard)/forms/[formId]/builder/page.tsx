@@ -35,7 +35,7 @@ export default function DashboardPage() {
                 }
                 const data = await res.json()
                 setForm(data)
-
+ 
                 const resFields = await fetch(`/api/forms/${formId}/fields`)
                 const fieldsData = await resFields.json()
                 setFields(fieldsData)
@@ -121,6 +121,27 @@ export default function DashboardPage() {
         setSelectedFieldId(savedField.id)
     }
 
+    async function handleAddOption(fieldId: number) {
+
+        const res = await fetch(`/api/forms/${formId}/fields/${fieldId}/options`, {
+            method: 'POST'
+        })
+
+        if (!res.ok) {
+            setError('Failed to add a new options field, please try again.')
+            return
+        }
+        const newOptionField = await res.json()
+
+        setFields(prev =>
+            prev.map( field =>
+                field.id === fieldId
+                ? { ... field, options: [ ...(field.options ?? []), newOptionField]}
+                : field
+            )
+        )
+    }
+
     async function handleDeleteField(fieldId: number) {
         const res = await fetch(`/api/forms/${formId}/fields`, {
             method: 'DELETE',
@@ -134,6 +155,26 @@ export default function DashboardPage() {
 
         const updatedFields = fields.filter(field => field.id !== fieldId)
         setFields(updatedFields)
+    }
+
+    async function handleDeleteOption(optionId: number, fieldId: number) {
+        const res = await fetch(`/api/forms/${formId}/fields/${fieldId}/options`, {
+            method: 'DELETE',
+            body: JSON.stringify({ optionId })
+        })
+
+        if (!res.ok) {
+            setError('Failed to delete options field, please try again.')
+            return
+        }
+
+        setFields(prev =>
+            prev.map( field =>
+                field.id === fieldId
+                ? { ... field, options: [ ...(field.options ?? []).filter(opt => opt.id !== optionId)]}
+                : field
+            )
+        )
     }
 
     async function handleUpdateField({ fieldId, update }: FieldUpdateProps) {
@@ -286,7 +327,8 @@ export default function DashboardPage() {
                                     </div>
                                     <div className='bg-[#eeeeee] flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
                                         <div className='flex gap-2 '>
-                                            <FieldSettingsPanel key={selectedFieldId} selectedField={selectedField} onUpdate={handleUpdateField} />
+                                            <FieldSettingsPanel key={selectedFieldId} selectedField={selectedField} onUpdate={handleUpdateField} addOption={handleAddOption}
+                                                deleteOption={handleDeleteOption}/>
                                         </div>
 
                                     </div>

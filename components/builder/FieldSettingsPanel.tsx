@@ -4,13 +4,15 @@ import OptionsListEditor from './OptionsListEditor';
 
 interface FieldSettingsPanelProps {
     selectedField: Field | null | undefined,
-    onUpdate: (props: FieldUpdateProps) => void
+    onUpdate: (props: FieldUpdateProps) => void,
+    addOption: (props: number) => void,
+    deleteOption: (props: number) => void
 }
 
 
 
 
-export default function FieldSettingsPanel({ selectedField, onUpdate }: FieldSettingsPanelProps) {
+export default function FieldSettingsPanel({ selectedField, onUpdate, addOption, deleteOption }: FieldSettingsPanelProps) {
     if (!selectedField) {
         return (
             <div className='bg-[#eeeeee] flex flex-row pt-6  text-sm h-full'>
@@ -55,7 +57,7 @@ export default function FieldSettingsPanel({ selectedField, onUpdate }: FieldSet
                         className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
                         placeholder='Enter a placeholder...' value={selectedField.placeholder ?? undefined}></textarea>
                 </div>
-                <OptionsListEditor />
+                <OptionsListEditor fieldId={selectedField.id} fieldOptions={selectedField.options} addOption={() => addOption(selectedField.id)}  deleteOption={deleteOption}/>
             </div>
         </div>
     )
