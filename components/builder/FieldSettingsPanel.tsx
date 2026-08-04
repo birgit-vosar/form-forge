@@ -1,5 +1,5 @@
 
-import { Field, FieldUpdateProps, OptionsUpdateProps } from '@/lib/fieldTypes';
+import { Field, FieldUpdateProps, OptionsUpdateProps, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes';
 import OptionsListEditor from './OptionsListEditor';
 
 interface FieldSettingsPanelProps {
@@ -24,6 +24,8 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
             </div>
         )
     }
+
+    const fieldConfig = FIELD_TYPE_CONFIG[selectedField.type]
 
     return (
         <div className='bg-[#eeeeee] flex flex-row pt-6  text-sm h-full'>
@@ -52,14 +54,16 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
                     <input onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { label: e.target.value } }) }} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
                         placeholder='Enter a label...' value={selectedField.label}></input>
                 </div>
-                <div className='flex flex-col w-full gap-2 mx-4 my-3'>
+                { fieldConfig.hasPlaceholder && (<div className='flex flex-col w-full gap-2 mx-4 my-3'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Placeholder text</p>
                     <textarea onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { placeholder: e.target.value } }) }}
                         className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
                         placeholder='Enter a placeholder...' value={selectedField.placeholder ?? undefined}></textarea>
-                </div>
-                <OptionsListEditor fieldId={selectedField.id} fieldOptions={selectedField.options ?? []} addOption={() => addOption(selectedField.id)}  
-                deleteOption={deleteOption} updateOption={updateOption}/>
+                </div>)
+                }
+                { fieldConfig.hasOptions && (<OptionsListEditor fieldId={selectedField.id} fieldOptions={selectedField.options ?? []} addOption={() => addOption(selectedField.id)}
+                    deleteOption={deleteOption} updateOption={updateOption} />)
+                }
             </div>
         </div>
     )
