@@ -90,7 +90,6 @@ export default function DashboardPage() {
         }, 800)
     }, [title])
 
-
     async function handleAddField(type: FieldType) {
         const typeInfo = FIELD_TYPE_CONFIG[type]
 
@@ -230,18 +229,18 @@ export default function DashboardPage() {
     }
 
     async function handleUpdateOption({ fieldId, optionId, update }: OptionsUpdateProps) {
-setFields(prev =>
-        prev.map(field =>
-            field.id === fieldId
-                ? {
-                    ...field,
-                    options: (field.options ?? []).map(opt =>
-                        opt.id === optionId ? { ...opt, ...update } : opt
-                    )
-                }
-                : field
+        setFields(prev =>
+            prev.map(field =>
+                field.id === fieldId
+                    ? {
+                        ...field,
+                        options: (field.options ?? []).map(opt =>
+                            opt.id === optionId ? { ...opt, ...update } : opt
+                        )
+                    }
+                    : field
+            )
         )
-    )
 
         if (!isMountedMap.current[optionId]) {
             isMountedMap.current[optionId] = true
@@ -308,7 +307,7 @@ setFields(prev =>
                             <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
                                 <div className='flex flex-row justify-between px-4 py-1'>
                                     <div className='flex flex-col gap-2'>
-                                        <p className='font-mono text-md font-semibold'>Loading...</p>
+                                        <p className='font-mono text-md font-semibold'>Loading…</p>
                                     </div>
                                 </div>
                             </div>
@@ -385,7 +384,7 @@ setFields(prev =>
                                                     defaultValue={form.title} maxLength={50}
                                                     onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
                                                 </textarea>
-                                                <FormFields fields={fields} onSelect={handleSelect} onDelete={handleDeleteField} selectedFieldId={selectedFieldId} />
+                                                <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField} selectedFieldId={selectedFieldId} />
 
                                             </div>
                                         </div>
