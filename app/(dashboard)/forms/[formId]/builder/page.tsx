@@ -384,7 +384,8 @@ export default function DashboardPage() {
                                                     defaultValue={form.title} maxLength={50}
                                                     onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
                                                 </textarea>
-                                                <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField} selectedFieldId={selectedFieldId} />
+                                                <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField} 
+                                                selectedFieldId={selectedFieldId} formId={formId}/>
 
                                             </div>
                                         </div>

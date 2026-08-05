@@ -10,19 +10,34 @@ interface FormFieldsType {
     selectedFieldId: number | null,
     onDelete: (fieldId: number) => void,
     onSelect: (fieldId: number) => void,
+    formId: number
 }
 
-export default function FormFields({ fields, setFields, selectedFieldId, onDelete, onSelect }: FormFieldsType) {
+export default function FormFields({ fields, setFields, selectedFieldId, onDelete, onSelect, formId }: FormFieldsType) {
     const sensors = useSensors(useSensor(PointerSensor))
 
-    function handleDragEnd(e: DragEndEvent) {
+    async function handleDragEnd(e: DragEndEvent) {
         const { active, over } = e
         if (!over || active.id === over.id) return
 
         const oldIndex = fields.findIndex((field) => field.id === active.id)
         const newIndex = fields.findIndex((field) => field.id === over.id)
 
-        setFields(arrayMove(fields, oldIndex, newIndex))
+        const newArray = arrayMove(fields, oldIndex, newIndex)
+        console.log(newArray)
+        setFields(newArray)
+
+        const fieldOrder = newArray.map((field, index) => ({ id: field.id, order_index: index }))
+
+        try {
+            await fetch(`/api/forms/${formId}/fields/reorder`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fieldOrder }),
+            })
+        } catch(err) {
+            console.error('Failed to save field order', err)
+        }
     }
 
     if (fields.length === 0) {
