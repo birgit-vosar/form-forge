@@ -3,12 +3,20 @@
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import FormFields from "@/components/builder/FormFields"
+import { Field } from "@/lib/fieldTypes"
+
+interface FormData {
+    id: number
+    title: string
+    description: string | null
+    fields: Field[]
+}
 
 export default function FormsPage() {
     const { formId } = useParams()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(true)
-    const [form, setForm] = useState([])
+    const [form, setForm] = useState<FormData | null>(null)
 
     useEffect(() => {
         const fetchForms = async() => {
@@ -20,6 +28,7 @@ export default function FormsPage() {
                 }
 
                 const data = await res.json()
+                console.log(data)
                 setForm(data)
             } catch(err) {
                 setError('Something went wrong with fetching the forms.')
@@ -30,6 +39,8 @@ export default function FormsPage() {
 
         fetchForms()
     }, [])
+    
+
 
     return(
        <div className='flex flex-row h-screen overflow-hidden'>
@@ -43,7 +54,7 @@ export default function FormsPage() {
                                        <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
                                            <div className='flex flex-row justify-between px-4 py-1'>
                                                <div className='flex flex-col gap-2'>
-                                                   <p className='font-mono text-md font-semibold'>{form.title}</p>
+                                                   <p className='font-mono text-md font-semibold'>{form?.title}</p>
                                                </div>
                                            </div>
                                        </div>
@@ -54,8 +65,6 @@ export default function FormsPage() {
                                                </div>
                                                <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
                                                    <div className='flex-1 flex flex-col gap-4 '>
-                                                       <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField} 
-                                                       selectedFieldId={selectedFieldId} formId={formId}/>
        
                                                    </div>
                                                </div>
