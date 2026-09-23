@@ -4,6 +4,7 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import FormFields from "@/components/builder/FormFields"
 import { Field } from "@/lib/fieldTypes"
+import FieldRenderer from "@/components/builder/FieldRenderer"
 
 interface FormData {
     id: number
@@ -19,7 +20,7 @@ export default function FormsPage() {
     const [form, setForm] = useState<FormData | null>(null)
 
     useEffect(() => {
-        const fetchForms = async() => {
+        const fetchForms = async () => {
             try {
                 const res = await fetch(`/api/public/forms/${formId}`)
                 if (!res.ok) {
@@ -30,7 +31,7 @@ export default function FormsPage() {
                 const data = await res.json()
                 console.log(data)
                 setForm(data)
-            } catch(err) {
+            } catch (err) {
                 setError('Something went wrong with fetching the forms.')
             } finally {
                 setLoading(false)
@@ -39,43 +40,67 @@ export default function FormsPage() {
 
         fetchForms()
     }, [])
-    
 
 
-    return(
-       <div className='flex flex-row h-screen overflow-hidden'>
-                   {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
-                   <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
-                       <div className='flex-1 flex flex-col overflow-hidden'>
-                           {/* main */}
-                           <div className='flex-1 flex flex-col lg:flex-row overflow-hidden'>
-                               <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
-                                   <div className='flex-1 flex flex-col overflow-hidden'>
-                                       <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
-                                           <div className='flex flex-row justify-between px-4 py-1'>
-                                               <div className='flex flex-col gap-2'>
-                                                   <p className='font-mono text-md font-semibold'>{form?.title}</p>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div className='flex-1 flex flex-row justify-between overflow-hidden'>
-                                           <div className='flex-1 self-start flex flex-col'>
-                                               <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
-                                                   <p className='text-red-400 font-sans text-sm'>{error}</p>
-                                               </div>
-                                               <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
-                                                   <div className='flex-1 flex flex-col gap-4 '>
-       
-                                                   </div>
-                                               </div>
-                                           </div>
-                                       </div>
-       
-                                   </div>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
+
+    return (
+        <div className='flex flex-row h-screen overflow-hidden'>
+            {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
+            <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
+                <div className='flex-1 flex flex-col overflow-hidden'>
+                    {/* main */}
+                    <div className='flex-1 flex flex-col lg:flex-row overflow-hidden'>
+                        <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
+                            <div className='flex-1 flex flex-col overflow-hidden'>
+                                <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
+                                    <div className='flex flex-row justify-between px-4 py-1'>
+                                        <div className='flex flex-col gap-2'>
+                                            <p className='font-mono text-md font-semibold'>{form?.title}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex-1 flex flex-row justify-between overflow-hidden'>
+                                    <div className='flex-1 self-start flex flex-col'>
+                                        <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
+                                            <p className='text-red-400 font-sans text-sm'>{error}</p>
+                                        </div>
+                                        <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
+                                            <div className='flex-1 flex flex-col gap-4 '>
+                                                {
+                                                    form?.fields.map((field) => (
+                                                       <div  className={`flex flex-col gap-1 mb-4 py-4 px-2 border-2 rounded-md bg-[#9ed4c9] border-[#6ca692] active:scale-99 active:shadow-sm active:shadow-[#6ca692]/50 `} 
+                                                                   key={field.id}>
+                                                                   <div className="flex justify-between">
+                                                                       <div className="flex gap-1 items-center">
+                                                                           <span className="cursor-grab active:cursor-grabbing mr-1 text-gray-800/50 hover:text-teal-800">
+                                                                               <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" className="size-4">
+                                                                                   <circle cx="8" cy="6" r="1.5" />
+                                                                                   <circle cx="8" cy="12" r="1.5" />
+                                                                                   <circle cx="8" cy="18" r="1.5" />
+                                                                                   <circle cx="16" cy="6" r="1.5" />
+                                                                                   <circle cx="16" cy="12" r="1.5" />
+                                                                                   <circle cx="16" cy="18" r="1.5" />
+                                                                               </svg>
+                                                                           </span>
+                                                                           <label className='text-black font-mono text-md font-semibold mb-1'>{field.label}</label>
+                                                                           {field.required === true ? (<p className="font-mono text-md font-semibold">*</p>) : ('')}
+                                                                       </div>
+                                                                   </div>
+                                                                   <FieldRenderer field={field} />
+                                                               </div>
+                                                    ))
+                                                }
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
