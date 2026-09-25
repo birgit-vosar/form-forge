@@ -111,7 +111,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div>
-                                        <button onClick={createForm} className='cursor-pointer hover:bg-[#004E89] py-2 px-4 mr-4 border rounded-lg border-[#1A659E] bg-[#1A659E] text-white font-semibold font-sans tracking-wide text-sm'>
+                                        <button onClick={createForm} className='cursor-pointer hover:bg-[#004E89] py-2 px-4 mr-4 border rounded-md border-[#1A659E] bg-[#1A659E] text-white font-semibold font-sans tracking-wide text-sm'>
                                             + Create new form
                                         </button>
                                     </div>

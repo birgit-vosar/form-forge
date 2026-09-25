@@ -47,7 +47,7 @@ export default function Nav() {
 
             </Link>
 
-            <div className='flex-1 px-4'>
+            <div className='flex-1 px-4 gap-2 flex flex-col'>
                 {navItems.map((item) => (
                     <Link key={item.href} href={item.href} className={`cursor-pointer items-center flex flex-row py-2 w-full rounded-xl gap-3 pl-2 pr-18 text-sm active:opacity-50 
                             ${pathname === item.href

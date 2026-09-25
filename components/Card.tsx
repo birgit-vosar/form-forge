@@ -42,13 +42,13 @@ export default function Card({ id, title, isLive, responseAmount, lastResponse, 
                 <p className="text-sm text-gray-600">Quick info about what happens if you click here</p>
             </div>
             <div className="flex justify-between text-sm text-gray-600 mt-6">
-                <div className="flex gap-1"><p>responses</p> <Link href='/responses' className="underline text-[#004E89] hover:text-[#1A659E]">View</Link></div>
+                <div className="flex gap-1"><p>Responses</p> {lastResponse ? (<Link href='/responses' className="underline text-[#004E89] hover:text-[#1A659E]">view</Link>) : ''}</div>
                 <p>{lastResponse ? timeAgo(lastResponse) : 'No responses yet'}</p>
             </div>
-            <div className="flex gap-2 mt-2 pt-4 border-t border-gray-300">
-                <Link href={`/forms/${id}/builder`} className="font-sans font-semibold text-[#E4572E] py-2 flex-1 border-2 rounded-md border-[#E4572E] 
+            <div className="flex gap-5 mt-2 pt-4 border-t border-gray-300">
+                <Link href={`/forms/${id}/builder`} className="basis-64 font-sans font-semibold text-[#E4572E] py-2 flex-1 border-2 rounded-md border-[#E4572E] 
                 text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200"> Edit</Link>
-                <Link href='/responses' className="py-2 flex-1 text-center hover:underline">Duplicate</Link>
+                <Link href={`/f/${id}`} className="basis-128 py-2 flex-1 hover:underline">Submit link</Link>
             </div>
         </div>
     )
