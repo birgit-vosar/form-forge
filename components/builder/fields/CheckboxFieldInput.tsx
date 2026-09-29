@@ -7,7 +7,7 @@ export default function CheckboxFieldInput({ field }: FieldInputProps) {
       {field.options?.map((option) => {
         const optionId = `option-${option.id}`
         return (
-          <div className="inline-flex items-center">
+          <div className="inline-flex items-center" key={optionId}>
             <label className="relative flex cursor-pointer items-center" htmlFor={optionId}>
               <input type="checkbox" id={optionId} className="peer h-4 w-4 cursor-pointer appearance-none rounded border border-slate-600 shadow transition-all hover:shadow-md checked:border-slate-800 checked:bg-slate-800"/>
               <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform text-white opacity-0 peer-checked:opacity-100">

@@ -2,7 +2,6 @@
 
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import FormFields from "@/components/builder/FormFields"
 import { Field } from "@/lib/fieldTypes"
 import FieldRenderer from "@/components/builder/FieldRenderer"
 
@@ -18,6 +17,7 @@ export default function FormsPage() {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(true)
     const [form, setForm] = useState<FormData | null>(null)
+    const [fieldValues, setFieldValues] = useState<string[]>([])
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -31,6 +31,16 @@ export default function FormsPage() {
                 const data = await res.json()
                 console.log(data)
                 setForm(data)
+
+                const values = data.fields.map((field : Field) => {
+                    return (
+                        ['dropdown', 'radio'].includes(field.type) ? (field.options?.[0]?.value ?? '') : ''
+                    )
+                }
+                )
+                setFieldValues(values)
+
+                console.log('an array of values:', values)
             } catch (err) {
                 setError('Something went wrong with fetching the forms.')
             } finally {
@@ -55,7 +65,7 @@ export default function FormsPage() {
                                 <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
                                     <div className='flex flex-row justify-between px-4 py-1'>
                                         <div className='flex flex-row gap-3 items-center'>
-                                            <p className='font-mono text-md font-semibold'>{form?.title}</p>
+                                            <p className='font-mono text-md font-semibold'>FormForge | {form?.title}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -67,9 +77,9 @@ export default function FormsPage() {
                                         <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 md:mx-40 lg:mx-70 xl:mx-100 2xl:mx-120 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
 
                                             <div className='flex-1 flex flex-col gap-4 '>
-                                                <div className='px-2 mb-2 pt-2 flex justify-between items-center'>
-                                                    <div className='pb-6 flex flex-row justify-between py-1 border-b-2  border-[#6ca692] w-full'>
-                                                            <p className='font-mono text-xl font-semibold'>{form?.title}</p>
+                                                <div className='px-2 mb-2 pt-2 flex items-center'>
+                                                    <div className='pb-6 flex flex-row py-1 border-b-2  border-[#6ca692] w-full'>
+                                                        <p className='font-mono text-xl font-semibold'>{form?.title}</p>
                                                     </div>
                                                 </div>
                                                 {
@@ -86,7 +96,12 @@ export default function FormsPage() {
                                                         </div>
                                                     ))
                                                 }
-
+                                                <div className='pt-2 flex flex-row justify-between px-2 py-1 w-full justify-end'>
+                                                    <button className="cursor-pointer font-sans font-semibold text-[#c5421c] py-2 px-6 border-2 rounded-md border-[#E4572E] 
+                                                                        text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200">
+                                                        Submit
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

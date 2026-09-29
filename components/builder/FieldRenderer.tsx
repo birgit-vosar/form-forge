@@ -31,7 +31,7 @@ export default function FieldRenderer({ field }: FieldRendererProps) {
             <div className="text-sm text-red-500">
                 Unsupported field type: {field.type}
             </div>
-        );
+        ); 
     }
 
     return <Component field={field} />;
