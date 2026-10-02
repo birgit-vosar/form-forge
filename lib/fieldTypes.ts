@@ -39,7 +39,8 @@ export interface NewField {
 }
 
 export interface FieldInputProps {
-  field: Field
+  field: Field,
+  value: '' | string | number
 }
 
 export interface FieldUpdateProps {

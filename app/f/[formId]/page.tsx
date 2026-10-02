@@ -32,15 +32,22 @@ export default function FormsPage() {
                 console.log(data)
                 setForm(data)
 
-                const values = data.fields.map((field : Field) => {
-                    return (
-                        ['dropdown', 'radio'].includes(field.type) ? (field.options?.[0]?.value ?? '') : ''
-                    )
-                }
+                const values = Object.fromEntries(
+                    data.fields.map((field: Field) => {
+                        return [
+                            field.id,
+                            ['dropdown', 'radio'].includes(field.type)
+                                ? (field.options?.[0]?.value ?? '')
+                                : ''
+                        ]
+                    })
                 )
+
                 setFieldValues(values)
 
                 console.log('an array of values:', values)
+                console.log('this is one of the values in submit page:', values[34])
+
             } catch (err) {
                 setError('Something went wrong with fetching the forms.')
             } finally {
@@ -92,7 +99,7 @@ export default function FormsPage() {
                                                                     {field.required === true ? (<p className="font-mono text-md font-semibold">*</p>) : ('')}
                                                                 </div>
                                                             </div>
-                                                            <FieldRenderer field={field} />
+                                                            <FieldRenderer field={field} value={fieldValues[field.id]} />
                                                         </div>
                                                     ))
                                                 }

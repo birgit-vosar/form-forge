@@ -1,9 +1,13 @@
 import { FieldInputProps } from "@/lib/fieldTypes";
 
-export default function TextFieldInput({ field } : FieldInputProps) {
+export default function TextFieldInput({ field, value } : FieldInputProps) {
+    console.log('this is the value that arrived to a field: ', value)
     return(
         <div>
-            <input className="py-2 w-full px-2 border rounded-sm border-[#8ed0b8] bg-[#dbf1e9]" placeholder={field.placeholder ?? undefined}></input>
+            <input className="py-2 w-full px-2 border rounded-sm border-[#8ed0b8] bg-[#dbf1e9]" 
+             placeholder={field.placeholder ?? undefined}>
+
+            </input>
         </div>
     )
 }

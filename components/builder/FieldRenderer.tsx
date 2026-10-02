@@ -9,7 +9,8 @@ import CheckboxFieldInput from "./fields/CheckboxFieldInput";
 import DateFieldInput from "./fields/DateFieldInput";
 
 interface FieldRendererProps {
-    field: Field
+    field: Field,
+    value: '' | string | number
 }
 
 const FIELD_COMPONENT_MAP = {
@@ -23,8 +24,9 @@ const FIELD_COMPONENT_MAP = {
     date: DateFieldInput
 };
 
-export default function FieldRenderer({ field }: FieldRendererProps) {
+export default function FieldRenderer({ field, value }: FieldRendererProps) {
     const Component = FIELD_COMPONENT_MAP[field.type as keyof typeof FIELD_COMPONENT_MAP];
+    console.log('this is the value that arrived to fieldRenderer:', value)
 
     if (!Component) {
         return (
@@ -34,5 +36,5 @@ export default function FieldRenderer({ field }: FieldRendererProps) {
         ); 
     }
 
-    return <Component field={field} />;
+    return <Component field={field} value={value}/>;
 }

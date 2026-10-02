@@ -1,6 +1,6 @@
 import { FieldInputProps } from "@/lib/fieldTypes";
 
-export default function CheckboxFieldInput({ field }: FieldInputProps) {
+export default function CheckboxFieldInput({ field, value }: FieldInputProps) {
   return (
     <div className="flex gap-6">
 

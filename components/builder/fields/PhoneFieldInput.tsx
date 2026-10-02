@@ -1,17 +1,17 @@
 import { FieldInputProps, isValidPhone } from "@/lib/fieldTypes";
 import { useState } from "react";
 
-export default function PhoneFieldInput({ field }: FieldInputProps) {
+export default function PhoneFieldInput({ field, value }: FieldInputProps) {
     const [error, setError] = useState('')
-    const [value, setValue] = useState<string>('')
+    const [isValid, setIsValid] = useState<string>('')
 
     function handleBlur() {
-        if (!value) {
+        if (!isValid) {
             setError('')
             return
         }
 
-        if (!isValidPhone(value)) {
+        if (!isValidPhone(isValid)) {
             setError('Please enter a valid phone number')
             return
         }
@@ -24,7 +24,7 @@ export default function PhoneFieldInput({ field }: FieldInputProps) {
             <input className="py-2 w-full px-2 border rounded-sm border-[#8ed0b8] bg-[#dbf1e9]"
                 placeholder={field.placeholder ?? undefined}
                 value={value}
-                onChange={(e) => setValue(e.target.value)}
+                onChange={(e) => setIsValid(e.target.value)}
                 onBlur={handleBlur}
             ></input>
             <p className='text-[#d70000] font-sans text-sm mt-1'>{error ? (`${error}`) : ''}</p>

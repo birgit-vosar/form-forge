@@ -1,6 +1,6 @@
 import { FieldInputProps } from "@/lib/fieldTypes";
 
-export default function RadioFieldInput({ field }: FieldInputProps) {
+export default function RadioFieldInput({ field, value }: FieldInputProps) {
   return (
     <div className="relative flex flex-col border rounded-sm border-[#8ed0b8] bg-[#dbf1e9]">
       <nav className="flex min-w-[240px] flex-col gap-1 p-2">
