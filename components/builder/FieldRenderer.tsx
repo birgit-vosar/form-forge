@@ -11,6 +11,7 @@ import DateFieldInput from "./fields/DateFieldInput";
 interface FieldRendererProps {
     field: Field,
     value: '' | string | number
+    onChange?: (fieldId: number, value: string) => void
 }
 
 const FIELD_COMPONENT_MAP = {
@@ -24,7 +25,7 @@ const FIELD_COMPONENT_MAP = {
     date: DateFieldInput
 };
 
-export default function FieldRenderer({ field, value }: FieldRendererProps) {
+export default function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
     const Component = FIELD_COMPONENT_MAP[field.type as keyof typeof FIELD_COMPONENT_MAP];
     console.log('this is the value that arrived to fieldRenderer:', value)
 
@@ -36,5 +37,5 @@ export default function FieldRenderer({ field, value }: FieldRendererProps) {
         ); 
     }
 
-    return <Component field={field} value={value}/>;
+    return <Component field={field} value={value} onChange={onChange}/>;
 }

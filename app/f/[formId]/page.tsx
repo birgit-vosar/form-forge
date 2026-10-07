@@ -58,7 +58,11 @@ export default function FormsPage() {
         fetchForms()
     }, [])
 
-
+    function handleValueChange(fieldId: number, newValue: string) {
+        setFieldValues((prev) => ({...prev, [fieldId]: newValue}))
+        console.log('this is the newValue: ', newValue)
+        console.log('FINAL FIELDVALUE: ', fieldValues)
+    }
 
     return (
         <div className='flex flex-row h-screen overflow-hidden'>
@@ -99,7 +103,7 @@ export default function FormsPage() {
                                                                     {field.required === true ? (<p className="font-mono text-md font-semibold">*</p>) : ('')}
                                                                 </div>
                                                             </div>
-                                                            <FieldRenderer field={field} value={fieldValues[field.id]} />
+                                                            <FieldRenderer field={field} value={fieldValues[field.id]} onChange={handleValueChange} />
                                                         </div>
                                                     ))
                                                 }

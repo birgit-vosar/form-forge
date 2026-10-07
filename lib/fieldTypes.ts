@@ -41,6 +41,7 @@ export interface NewField {
 export interface FieldInputProps {
   field: Field,
   value: '' | string | number
+  onChange?: (fieldId: number, value: string) => void
 }
 
 export interface FieldUpdateProps {
