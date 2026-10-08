@@ -85,7 +85,7 @@ export default function FormsPage() {
                                         <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
                                             <p className='text-red-400 font-sans text-sm'>{error}</p>
                                         </div>
-                                        <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 md:mx-40 lg:mx-70 xl:mx-100 2xl:mx-120 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
+                                        <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 md:mx-40 lg:mx-70 xl:mx-100 2xl:mx-120 px-4 py-6 my-6 border rounded-xs border-[#8ed0b8] text-sm shadow-lg'>
 
                                             <div className='flex-1 flex flex-col gap-4 '>
                                                 <div className='px-2 mb-2 pt-2 flex items-center'>
