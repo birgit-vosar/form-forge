@@ -10,7 +10,7 @@ import DateFieldInput from "./fields/DateFieldInput";
 
 interface FieldRendererProps {
     field: Field,
-    value: '' | string | number
+    value?: '' | string | number
     onChange?: (fieldId: number, value: string) => void
 }
 

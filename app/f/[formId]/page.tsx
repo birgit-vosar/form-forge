@@ -17,7 +17,7 @@ export default function FormsPage() {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(true)
     const [form, setForm] = useState<FormData | null>(null)
-    const [fieldValues, setFieldValues] = useState<string[]>([])
+    const [fieldValues, setFieldValues] = useState<Record<number, string>>({})
 
     useEffect(() => {
         const fetchForms = async () => {
@@ -32,7 +32,7 @@ export default function FormsPage() {
                 console.log(data)
                 setForm(data)
 
-                const values = Object.fromEntries(
+                const values: Record<number, string> = Object.fromEntries(
                     data.fields.map((field: Field) => {
                         return [
                             field.id,
@@ -44,9 +44,6 @@ export default function FormsPage() {
                 )
 
                 setFieldValues(values)
-
-                console.log('an array of values:', values)
-                console.log('this is one of the values in submit page:', values[34])
 
             } catch (err) {
                 setError('Something went wrong with fetching the forms.')
@@ -61,8 +58,9 @@ export default function FormsPage() {
     function handleValueChange(fieldId: number, newValue: string) {
         setFieldValues((prev) => ({...prev, [fieldId]: newValue}))
         console.log('this is the newValue: ', newValue)
-        console.log('FINAL FIELDVALUE: ', fieldValues)
     }
+
+    useEffect(() => { console.log('this is the FINAL ARRAY: ', fieldValues) }, [fieldValues])
 
     return (
         <div className='flex flex-row h-screen overflow-hidden'>
