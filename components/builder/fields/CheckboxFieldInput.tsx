@@ -1,3 +1,4 @@
+import { getOptionValue } from "@/lib/fieldHelpers";
 import { FieldInputProps } from "@/lib/fieldTypes";
 
 export default function CheckboxFieldInput({ field, value, onChange }: FieldInputProps) {
@@ -15,11 +16,11 @@ export default function CheckboxFieldInput({ field, value, onChange }: FieldInpu
 
       {field.options?.map((option) => {
         const optionId = `option-${option.id}`
-        const optionValue = option.value || option.label
+        const optionValue = getOptionValue(option)
         return (
           <div className="inline-flex items-center" key={optionId}>
             <label className="relative flex cursor-pointer items-center" htmlFor={optionId}>
-              <input 
+              <input  
               type="checkbox" 
               id={optionId}
               checked={selected.includes(optionValue)} 

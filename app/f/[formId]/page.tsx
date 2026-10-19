@@ -4,6 +4,7 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Field } from "@/lib/fieldTypes"
 import FieldRenderer from "@/components/builder/FieldRenderer"
+import { getOptionValue } from "@/lib/fieldHelpers"
 
 interface FormData {
     id: number
@@ -37,7 +38,7 @@ export default function FormsPage() {
                         return [
                             field.id,
                             ['dropdown', 'radio'].includes(field.type)
-                                ? (field.options?.[0]?.value ?? '')
+                                ? (field.options?.[0] ? getOptionValue(field.options[0]) : '')
                                 : ''
                         ]
                     })

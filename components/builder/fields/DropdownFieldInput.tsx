@@ -1,3 +1,4 @@
+import { getOptionValue } from "@/lib/fieldHelpers";
 import { FieldInputProps } from "@/lib/fieldTypes";
 
 export default function DropdownFieldInput({ field, onChange, value }: FieldInputProps) {
@@ -10,8 +11,13 @@ export default function DropdownFieldInput({ field, onChange, value }: FieldInpu
                 <option value="" disabled>-- Please choose an option --</option>
                 {field.options?.map((option) => {
                     const optionId = `option-${option.id}`
+                    const optionValue = getOptionValue(option)
                     return (
-                        <option id={optionId} key={optionId} value={option.label}>{option.label}</option>
+                        <option 
+                        id={optionId} 
+                        key={optionId} 
+                        value={optionValue}
+                        >{option.label}</option>
                     )
                 })}
             </select>

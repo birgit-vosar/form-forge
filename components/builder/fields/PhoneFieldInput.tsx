@@ -1,4 +1,5 @@
-import { FieldInputProps, isValidPhone } from "@/lib/fieldTypes";
+import { FieldInputProps } from "@/lib/fieldTypes";
+import { isValidPhone } from "@/lib/fieldHelpers";
 import { useState } from "react";
 
 export default function PhoneFieldInput({ field, value, onChange }: FieldInputProps) {

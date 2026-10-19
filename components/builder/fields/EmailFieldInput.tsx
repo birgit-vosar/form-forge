@@ -1,4 +1,5 @@
-import { FieldInputProps, isValidEmail } from "@/lib/fieldTypes";
+import { FieldInputProps } from "@/lib/fieldTypes";
+import { isValidEmail } from "@/lib/fieldHelpers";
 import { useState } from "react";
 
 export default function EmailFieldInput({ field, value, onChange }: FieldInputProps) {
