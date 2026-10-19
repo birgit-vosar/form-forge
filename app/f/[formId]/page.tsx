@@ -62,6 +62,27 @@ export default function FormsPage() {
 
     useEffect(() => { console.log('this is the FINAL ARRAY: ', fieldValues) }, [fieldValues])
 
+    if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
+            <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
+                <div className='flex-1 flex flex-col overflow-hidden'>
+                    <div className='flex-1 flex flex-col lg:flex-row overflow-hidden'>
+                        <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
+                            <div className='flex-1 flex flex-col overflow-hidden'>
+                                <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
+                                    <div className='flex flex-row justify-between px-4 py-1'>
+                                        <div className='flex flex-col gap-2'>
+                                            <p className='font-mono text-md font-semibold'>Loading…</p>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>)
+
     return (
         <div className='flex flex-row min-h-screen'>
             {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
@@ -93,7 +114,7 @@ export default function FormsPage() {
                                                 </div>
                                                 {
                                                     form?.fields.map((field) => (
-                                                        <div className={`flex flex-col gap-1 px-2 active:scale-99 active:shadow-sm active:shadow-[#6ca692]/50 `}
+                                                        <div className={`flex flex-col gap-1 px-2`}
                                                             key={field.id}>
                                                             <div className="flex justify-between">
                                                                 <div className="flex gap-1 items-center">
