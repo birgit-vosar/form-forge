@@ -1,16 +1,17 @@
-import { Field } from "@/lib/fieldTypes";
-import TextFieldInput from "./fields/TextFieldInput";
-import TextareaFieldInput from "./fields/TextareaFieldInput";
-import EmailFieldInput from "./fields/EmailFieldInput";
-import PhoneFieldInput from "./fields/PhoneFieldInput";
-import DropdownFieldInput from "./fields/DropdownFieldInput";
-import RadioFieldInput from "./fields/RadioFieldInput";
-import CheckboxFieldInput from "./fields/CheckboxFieldInput";
-import DateFieldInput from "./fields/DateFieldInput";
+import { Field } from "@/lib/fieldTypes"
+import TextFieldInput from "./fields/TextFieldInput"
+import TextareaFieldInput from "./fields/TextareaFieldInput"
+import EmailFieldInput from "./fields/EmailFieldInput"
+import PhoneFieldInput from "./fields/PhoneFieldInput"
+import DropdownFieldInput from "./fields/DropdownFieldInput"
+import RadioFieldInput from "./fields/RadioFieldInput"
+import CheckboxFieldInput from "./fields/CheckboxFieldInput"
+import DateFieldInput from "./fields/DateFieldInput"
+import { useState } from "react"
 
 interface FieldRendererProps {
     field: Field,
-    value?: '' | string | number
+    value?: string
     onChange?: (fieldId: number, value: string) => void
 }
 
@@ -26,8 +27,10 @@ const FIELD_COMPONENT_MAP = {
 };
 
 export default function FieldRenderer({ field, value, onChange }: FieldRendererProps) {
-    const Component = FIELD_COMPONENT_MAP[field.type as keyof typeof FIELD_COMPONENT_MAP];
-    console.log('this is the value that arrived to fieldRenderer:', value)
+    const [valueForBuilder, setValueForBuilder] = useState('')
+    const isFromSubmitPage = onChange !== undefined
+
+    const Component = FIELD_COMPONENT_MAP[field.type as keyof typeof FIELD_COMPONENT_MAP]
 
     if (!Component) {
         return (
@@ -37,5 +40,8 @@ export default function FieldRenderer({ field, value, onChange }: FieldRendererP
         ); 
     }
 
-    return <Component field={field} value={value} onChange={onChange}/>;
+    return <Component 
+    field={field} 
+    value={isFromSubmitPage ? value : valueForBuilder} 
+    onChange={isFromSubmitPage ? onChange : (_id: number, newValue: string) => setValueForBuilder(newValue)}/>
 }

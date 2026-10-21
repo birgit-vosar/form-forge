@@ -17,7 +17,7 @@ export default function RadioFieldInput({ field, value, onChange }: FieldInputPr
               <label htmlFor={optionId} className="flex w-full cursor-pointer items-center px-3 py-2">
                 <div className="inline-flex items-center">
                   <label htmlFor={optionId} className="relative flex cursor-pointer items-center">
-                    <input name="framework" type="radio" 
+                    <input name={optionId} type="radio" 
                       className="peer h-5 w-5 cursor-pointer appearance-none rounded-full border border-slate-300 transition-all checked:border-slate-400"
                       id={optionId}
                       checked={value === optionValue}

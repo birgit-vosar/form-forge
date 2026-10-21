@@ -24,7 +24,6 @@ export default function FormFields({ fields, setFields, selectedFieldId, onDelet
         const newIndex = fields.findIndex((field) => field.id === over.id)
 
         const newArray = arrayMove(fields, oldIndex, newIndex)
-        console.log(newArray)
         setFields(newArray)
 
         const fieldOrder = newArray.map((field, index) => ({ id: field.id, order_index: index }))

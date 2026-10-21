@@ -16,7 +16,7 @@ export default function DropdownFieldInput({ field, onChange, value }: FieldInpu
                         <option 
                         id={optionId} 
                         key={optionId} 
-                        value={optionValue}
+                        value={optionValue ?? ''}
                         >{option.label}</option>
                     )
                 })}

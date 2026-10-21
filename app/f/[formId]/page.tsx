@@ -34,14 +34,7 @@ export default function FormsPage() {
                 setForm(data)
 
                 const values: Record<number, string> = Object.fromEntries(
-                    data.fields.map((field: Field) => {
-                        return [
-                            field.id,
-                            ['dropdown', 'radio'].includes(field.type)
-                                ? (field.options?.[0] ? getOptionValue(field.options[0]) : '')
-                                : ''
-                        ]
-                    })
+                    data.fields.map((field: Field) => [field.id, ''])
                 )
 
                 setFieldValues(values)

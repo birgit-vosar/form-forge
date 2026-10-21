@@ -2,7 +2,6 @@ import { FieldInputProps } from "@/lib/fieldTypes";
 import { useState } from "react";
 
 export default function TextFieldInput({ field, value, onChange } : FieldInputProps) {
-    console.log('this is the value that arrived to TextFieldInput: ', value)
     const [newPh, setNewPh] = useState<string>('')
     return(
         <div>
