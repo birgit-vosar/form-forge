@@ -32,7 +32,7 @@ export default function DashboardPage() {
             try {
                 const res = await fetch(`/api/forms/${formId}`)
                 if (!res.ok) {
-                    setError('Something went wrong with fetching the forms.')
+                    setError('Something went wrong with fetching the form.')
                     return
                 }
                 const data = await res.json()
@@ -42,7 +42,7 @@ export default function DashboardPage() {
                 const fieldsData = await resFields.json()
                 setFields(fieldsData)
             } catch (err) {
-                setError('Something went wrong with fetching the forms.')
+                setError('Something went wrong with loading the page.')
             } finally {
                 setLoading(false)
             }

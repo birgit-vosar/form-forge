@@ -6,7 +6,7 @@ import { Field } from "@/lib/fieldTypes"
 import FieldRenderer from "@/components/builder/FieldRenderer"
 import { getOptionValue } from "@/lib/fieldHelpers"
 
-interface FormData {
+interface SubmitFormInfo {
     id: number
     title: string
     description: string | null
@@ -17,7 +17,7 @@ export default function FormsPage() {
     const { formId } = useParams()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(true)
-    const [form, setForm] = useState<FormData | null>(null)
+    const [form, setForm] = useState<SubmitFormInfo | null>(null)
     const [fieldValues, setFieldValues] = useState<Record<number, string>>({})
 
     useEffect(() => {
@@ -25,7 +25,7 @@ export default function FormsPage() {
             try {
                 const res = await fetch(`/api/public/forms/${formId}`)
                 if (!res.ok) {
-                    setError('Something went wrong with fetching the forms.')
+                    setError('Something went wrong with fetching the form.')
                     return
                 }
 
@@ -40,14 +40,14 @@ export default function FormsPage() {
                 setFieldValues(values)
 
             } catch (err) {
-                setError('Something went wrong with fetching the forms.')
+                setError('Something went wrong with loading the page.')
             } finally {
                 setLoading(false)
             }
         }
 
         fetchForms()
-    }, [])
+    }, [formId])
 
     function handleValueChange(fieldId: number, newValue: string) {
         setFieldValues((prev) => ({...prev, [fieldId]: newValue}))
@@ -96,7 +96,7 @@ export default function FormsPage() {
                                 <div className='flex-1 flex flex-row justify-between min-h-screen'>
                                     <div className='flex-1 self-start flex flex-col'>
                                         <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
-                                            <p className='text-red-400 font-sans text-sm'>{error}</p>
+                                            <p className='text-red-600 font-sans text-sm'>{error}</p>
                                         </div>
                                         <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 md:mx-40 lg:mx-70 xl:mx-100 2xl:mx-120 px-4 py-6 my-6 border rounded-xs border-[#8ed0b8] text-sm shadow-lg'>
 
