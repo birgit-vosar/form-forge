@@ -3,6 +3,12 @@ import { pool } from '@/lib/db'
 
 export async function GET(req: NextRequest, context: { params: { formId: string } }) {
     const { formId } = await context.params
+    const id = Number(formId)
+
+    if(!Number.isInteger(id) || id <= 0) {
+            return NextResponse.json({ error: 'Form not found' }, { status: 404 })
+        }
+
     try {
         const formsRes = await pool.query(
             'SELECT id, title, description FROM forms WHERE id = $1', [formId]

@@ -24,6 +24,12 @@ export default function FormsPage() {
         const fetchForms = async () => {
             try {
                 const res = await fetch(`/api/public/forms/${formId}`)
+                console.log(res.status)
+                if (res.status === 404) {
+                    setError('Form not found.')
+                    return
+                }
+
                 if (!res.ok) {
                     setError('Something went wrong with fetching the form.')
                     return
@@ -52,6 +58,13 @@ export default function FormsPage() {
     function handleValueChange(fieldId: number, newValue: string) {
         setFieldValues((prev) => ({...prev, [fieldId]: newValue}))
         console.log('this is the newValue: ', newValue)
+    }
+
+    async function submitForm(values: Record<number, string>) {
+        const res = await fetch(`/api/public/forms/${formId}`, {
+            method: 'POST',
+            body: JSON.stringify(values)
+        })
     }
 
     useEffect(() => { console.log('this is the FINAL ARRAY: ', fieldValues) }, [fieldValues])
@@ -121,8 +134,7 @@ export default function FormsPage() {
                                                     ))
                                                 }
                                                 <div className='pt-2 flex flex-row justify-between px-2 py-1 w-full justify-end'>
-                                                    <button className="cursor-pointer font-sans font-semibold text-[#c5421c] py-2 px-6 border-2 rounded-md border-[#E4572E] 
-                                                                        text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200">
+                                                    <button className={error ? 'hidden' : 'cursor-pointer font-sans font-semibold text-[#c5421c] py-2 px-6 border-2 rounded-md border-[#E4572E] text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200'}>
                                                         Submit
                                                     </button>
                                                 </div>
