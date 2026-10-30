@@ -46,3 +46,16 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
         return NextResponse.json({ error: 'Failed to fetch the forms from the server.' }, { status: 500 })
     }
 }
+
+export async function POST(req: NextRequest, context: { params: { formId: string } }) {
+    const { formId } = await context.params
+    const body = await req.json()
+
+    try {
+        console.log('this is the server submit data: ', formId, ' ', body)
+        return NextResponse.json({status: 200})
+    } catch(err) {
+        console.error('Failed to submit form:', err)
+        return NextResponse.json({ error: 'Failed to submit the forms.' }, { status: 500 })
+    }
+}

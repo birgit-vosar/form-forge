@@ -36,7 +36,7 @@ export default function FormsPage() {
                 }
 
                 const data = await res.json()
-                console.log(data)
+                console.log('this is the data in the formspage:', data)
                 setForm(data)
 
                 const values: Record<number, string> = Object.fromEntries(
@@ -57,10 +57,10 @@ export default function FormsPage() {
 
     function handleValueChange(fieldId: number, newValue: string) {
         setFieldValues((prev) => ({...prev, [fieldId]: newValue}))
-        console.log('this is the newValue: ', newValue)
     }
 
     async function submitForm(values: Record<number, string>) {
+        console.log('these are submit values: ', values)
         const res = await fetch(`/api/public/forms/${formId}`, {
             method: 'POST',
             body: JSON.stringify(values)
@@ -134,7 +134,9 @@ export default function FormsPage() {
                                                     ))
                                                 }
                                                 <div className='pt-2 flex flex-row justify-between px-2 py-1 w-full justify-end'>
-                                                    <button className={error ? 'hidden' : 'cursor-pointer font-sans font-semibold text-[#c5421c] py-2 px-6 border-2 rounded-md border-[#E4572E] text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200'}>
+                                                    <button 
+                                                    className={error ? 'hidden' : 'cursor-pointer font-sans font-semibold text-[#c5421c] py-2 px-6 border-2 rounded-md border-[#E4572E] text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200'}
+                                                    onClick={(e) => submitForm(fieldValues)}>
                                                         Submit
                                                     </button>
                                                 </div>
