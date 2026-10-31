@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Field } from "@/lib/fieldTypes"
 import FieldRenderer from "@/components/builder/FieldRenderer"
 import { getOptionValue } from "@/lib/fieldHelpers"
+import { isValidEmail, isValidPhone } from "@/lib/fieldHelpers"
 
 interface SubmitFormInfo {
     id: number
@@ -16,6 +17,7 @@ interface SubmitFormInfo {
 export default function FormsPage() {
     const { formId } = useParams()
     const [error, setError] = useState('')
+    const [fieldErrors, setFieldErrors] = useState<Record <number, string>>({})
     const [loading, setLoading] = useState(true)
     const [form, setForm] = useState<SubmitFormInfo | null>(null)
     const [fieldValues, setFieldValues] = useState<Record<number, string>>({})
@@ -56,39 +58,76 @@ export default function FormsPage() {
     }, [formId])
 
     function handleValueChange(fieldId: number, newValue: string) {
-        setFieldValues((prev) => ({...prev, [fieldId]: newValue}))
+        setFieldValues((prev) => ({ ...prev, [fieldId]: newValue }))
+    }
+
+    function validateForm(): Record<number, string> {
+        const newErrors: Record<number, string> = {}
+
+        for (const field of form?.fields ?? []) {
+            const value = (fieldValues[field.id] ?? '').trim()
+
+            if (field.required && value === '') {
+                newErrors[field.id] = 'This field is required'
+                continue
+            }
+
+            if (field.type === 'email' && !isValidEmail(value)) {
+                newErrors[field.id] = 'Please enter a valid email address'
+            }
+            if (field.type === 'phone' && !isValidPhone(value)) {
+                newErrors[field.id] = 'Please enter a valid phone number'
+            }
+        }
+
+        return newErrors
     }
 
     async function submitForm(values: Record<number, string>) {
         console.log('these are submit values: ', values)
-        const res = await fetch(`/api/public/forms/${formId}`, {
-            method: 'POST',
-            body: JSON.stringify(values)
-        })
+        const newErrors = validateForm()
+        setFieldErrors(newErrors)
+        if (Object.keys(newErrors).length > 0) return
+        try {
+            const res = await fetch(`/api/public/forms/${formId}`, {
+                method: 'POST',
+                body: JSON.stringify(values)
+            })
+
+            if (!res.ok) {
+                setError('Something went wrong with submitting the form.')
+                return
+            }
+        } catch (err) {
+            setError('Something went wrong with submitting the form.')
+        } finally {
+            setLoading(false)
+        }
+
     }
 
     useEffect(() => { console.log('this is the FINAL ARRAY: ', fieldValues) }, [fieldValues])
 
     if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
-            <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
-                <div className='flex-1 flex flex-col overflow-hidden'>
-                    <div className='flex-1 flex flex-col lg:flex-row overflow-hidden'>
-                        <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
-                            <div className='flex-1 flex flex-col overflow-hidden'>
-                                <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
-                                    <div className='flex flex-row justify-between px-4 py-1'>
-                                        <div className='flex flex-col gap-2'>
-                                            <p className='font-mono text-md font-semibold'>Loading…</p>
-                                        </div>
+        <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
+            <div className='flex-1 flex flex-col overflow-hidden'>
+                <div className='flex-1 flex flex-col lg:flex-row overflow-hidden'>
+                    <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
+                        <div className='flex-1 flex flex-col overflow-hidden'>
+                            <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
+                                <div className='flex flex-row justify-between px-4 py-1'>
+                                    <div className='flex flex-col gap-2'>
+                                        <p className='font-mono text-md font-semibold'>Loading…</p>
                                     </div>
                                 </div>
-    
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
-        </div>)
+        </div>
+    </div>)
 
     return (
         <div className='flex flex-row min-h-screen'>
@@ -130,13 +169,17 @@ export default function FormsPage() {
                                                                 </div>
                                                             </div>
                                                             <FieldRenderer field={field} value={fieldValues[field.id]} onChange={handleValueChange} />
+                                                            {fieldErrors[field.id] && (
+                                                                <p className='text-[#d70000] font-sans text-sm mt-1'>{fieldErrors[field.id]}</p>
+                                                            )}
                                                         </div>
                                                     ))
                                                 }
                                                 <div className='pt-2 flex flex-row justify-between px-2 py-1 w-full justify-end'>
-                                                    <button 
-                                                    className={error ? 'hidden' : 'cursor-pointer font-sans font-semibold text-[#c5421c] py-2 px-6 border-2 rounded-md border-[#E4572E] text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200'}
-                                                    onClick={(e) => submitForm(fieldValues)}>
+                                                    <button
+                                                        className={error ? 'hidden' : 'cursor-pointer font-sans font-semibold text-[#c5421c] py-2 px-6 border-2 rounded-md border-[#E4572E] text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200'}
+                                                        type='button'
+                                                        onClick={(e) => submitForm(fieldValues)}>
                                                         Submit
                                                     </button>
                                                 </div>
