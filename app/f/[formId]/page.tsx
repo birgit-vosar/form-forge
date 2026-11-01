@@ -59,6 +59,11 @@ export default function FormsPage() {
 
     function handleValueChange(fieldId: number, newValue: string) {
         setFieldValues((prev) => ({ ...prev, [fieldId]: newValue }))
+        setFieldErrors((prev) => {
+            if (!prev[fieldId]) return prev
+            const { [fieldId]: _removed, ...rest } = prev
+            return rest
+        })
     }
 
     function validateForm(): Record<number, string> {
