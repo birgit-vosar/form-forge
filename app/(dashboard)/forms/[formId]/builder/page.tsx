@@ -23,6 +23,7 @@ export default function DashboardPage() {
     const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
     const isMountedMap = useRef<Record<number, boolean>>({});
     const [title, setTitle] = useState('')
+
     const [fields, setFields] = useState<Field[]>([])
     const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null)
     const selectedField = fields.find(field => field.id === selectedFieldId) ?? null
@@ -379,13 +380,23 @@ export default function DashboardPage() {
                                         </div>
                                         <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
                                             <div className='flex-1 flex flex-col gap-4 '>
-                                                <textarea rows={1} className='text-black font-mono text-lg font-semibold placeholder:font-mono placeholder:text-md
-                                            placeholder:font-semibold placeholder:text-black focus:outline-none resize-none break-words whitespace-pre-wrap w-full' placeholder={title ? title : form.title}
-                                                    defaultValue={form.title} maxLength={50}
-                                                    onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}>
-                                                </textarea>
-                                                <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField} 
-                                                selectedFieldId={selectedFieldId} formId={formId}/>
+                                                <div className='flex flex-row items-center gap-2'>
+                                                    <input
+                                                        type='text'
+                                                        className='text-black font-mono text-lg font-semibold field-sizing-content min-w-20 max-w-md
+                   placeholder:font-mono placeholder:text-md placeholder:font-semibold placeholder:text-black
+                   focus:outline-none'
+                                                        placeholder={title ? title : form.title}
+                                                        defaultValue={form.title}
+                                                        maxLength={50}
+                                                        onChange={(e) => { e.target.value === '' ? setTitle(`${form.title}`) : setTitle(e.target.value) }}
+                                                    />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#659785" className="size-5">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                    </svg>
+                                                </div>
+                                                <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField}
+                                                    selectedFieldId={selectedFieldId} formId={formId} />
 
                                             </div>
                                         </div>

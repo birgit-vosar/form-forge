@@ -42,7 +42,7 @@ export default function Card({ id, title, isLive, responseAmount, lastResponse, 
                 <p className="text-sm text-gray-600">Quick info about what happens if you click here</p>
             </div>
             <div className="flex justify-between text-sm text-gray-600 mt-6">
-                <div className="flex gap-1"><p>Responses</p> {lastResponse ? (<Link href='/responses' className="underline text-[#004E89] hover:text-[#1A659E]">view</Link>) : ''}</div>
+                <div className="flex gap-1">{responseAmount ? responseAmount : ''}<p>Responses</p> {lastResponse ? (<Link href='/responses' className="underline text-[#004E89] hover:text-[#1A659E]">view</Link>) : ''}</div>
                 <p>{lastResponse ? timeAgo(lastResponse) : 'No responses yet'}</p>
             </div>
             <div className="flex gap-5 mt-2 pt-4 border-t border-gray-300">
