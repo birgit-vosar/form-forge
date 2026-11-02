@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { pool } from '@/lib/db'
 import { SessionData, sessionOptions } from "@/lib/sessions"
 import { getIronSession } from "iron-session"
-import { z } from 'zod'
 
 export async function PATCH(req: NextRequest, context: { params: { formId: string, fieldId: number } }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)

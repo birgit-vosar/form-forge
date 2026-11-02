@@ -13,3 +13,10 @@ export const reorderFieldsSchema = z.object({
         })
     )
 })
+
+export const submitResponseSchema = z.object({
+    values: z.record(
+        z.string(),
+        z.string()
+    )
+})

@@ -21,12 +21,12 @@ export default function FormsPage() {
     const [loading, setLoading] = useState(true)
     const [form, setForm] = useState<SubmitFormInfo | null>(null)
     const [fieldValues, setFieldValues] = useState<Record<number, string>>({})
+    const [submitting, setSubmitting] = useState<boolean>(false)
 
     useEffect(() => {
         const fetchForms = async () => {
             try {
                 const res = await fetch(`/api/public/forms/${formId}`)
-                console.log(res.status)
                 if (res.status === 404) {
                     setError('Form not found.')
                     return
@@ -38,7 +38,6 @@ export default function FormsPage() {
                 }
 
                 const data = await res.json()
-                console.log('this is the data in the formspage:', data)
                 setForm(data)
 
                 const values: Record<number, string> = Object.fromEntries(
@@ -89,15 +88,21 @@ export default function FormsPage() {
     }
 
     async function submitForm(values: Record<number, string>) {
-        console.log('these are submit values: ', values)
+        setSubmitting(true)
         const newErrors = validateForm()
         setFieldErrors(newErrors)
         if (Object.keys(newErrors).length > 0) return
+        
         try {
             const res = await fetch(`/api/public/forms/${formId}`, {
                 method: 'POST',
-                body: JSON.stringify(values)
+                body: JSON.stringify({values})
             })
+
+            if(res.status === 500) {
+                setError('Something went wrong with submitting the form, please try again.')
+                return
+            }
 
             if (!res.ok) {
                 setError('Something went wrong with submitting the form.')
@@ -106,12 +111,10 @@ export default function FormsPage() {
         } catch (err) {
             setError('Something went wrong with submitting the form.')
         } finally {
-            setLoading(false)
+            setSubmitting(false)
         }
 
     }
-
-    useEffect(() => { console.log('this is the FINAL ARRAY: ', fieldValues) }, [fieldValues])
 
     if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
         <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
@@ -170,7 +173,7 @@ export default function FormsPage() {
                                                             <div className="flex justify-between">
                                                                 <div className="flex gap-1 items-center">
                                                                     <label className='text-black font-mono text-md font-semibold mb-1'>{field.label}</label>
-                                                                    {field.required === true ? (<p className="font-mono text-md font-semibold">*</p>) : ('')}
+                                                                    {field.required ? (<p className="font-mono text-md font-semibold">*</p>) : ('')}
                                                                 </div>
                                                             </div>
                                                             <FieldRenderer field={field} value={fieldValues[field.id]} onChange={handleValueChange} />
@@ -182,10 +185,10 @@ export default function FormsPage() {
                                                 }
                                                 <div className='pt-2 flex flex-row justify-between px-2 py-1 w-full justify-end'>
                                                     <button
-                                                        className={error ? 'hidden' : 'cursor-pointer font-sans font-semibold text-[#c5421c] py-2 px-6 border-2 rounded-md border-[#E4572E] text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200'}
+                                                        className={`${submitting ? 'bg-gray-300 border-gray-400 text-gray-400' : 'bg-orange-100 border-[#E4572E] text-[#c5421c]'} cursor-pointer font-sans font-semibold py-2 px-6 border-2 rounded-md text-center hover:bg-orange-200 transition-all duration-200`}
                                                         type='button'
                                                         onClick={(e) => submitForm(fieldValues)}>
-                                                        Submit
+                                                        {submitting ? 'Submitting...' : 'Submit'}
                                                     </button>
                                                 </div>
                                             </div>
