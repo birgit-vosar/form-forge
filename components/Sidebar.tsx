@@ -15,13 +15,7 @@ export default function Nav() {
             </svg>)
         },
         {
-            label: 'Forms', href: '/forms', icon: (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
-  <path strokeLinecap="round" strokeLinejoin="round" d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />
-</svg>
-)
-        },
-        {
-            label: 'Responses', href: '/responses', icon: (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+            label: 'Leads', href: '/leads', icon: (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
 </svg>
 )
@@ -51,8 +45,8 @@ export default function Nav() {
                 {navItems.map((item) => (
                     <Link key={item.href} href={item.href} className={`cursor-pointer items-center flex flex-row py-2 w-full rounded-xl gap-3 pl-2 pr-18 text-sm active:opacity-50 
                             ${pathname === item.href
-                            ? 'bg-[#95d1c5] font-semibold font-sans text-gray-800 hover:bg-[#87cbbe]'
-                            : 'font-semibold font-sans text-gray-800 hover:bg-[#87cbbe] hover:text-gray-700 transition duration-300'
+                            ? 'bg-[#95d1c5] font-semibold font-sans text-gray-800 hover:bg-[#87cbbe] hover:border-gray-500 hover:border'
+                            : 'font-semibold font-sans text-gray-800 hover:bg-[#87cbbe] hover:border-gray-500 hover:border hover:text-gray-700  transition duration-100'
                         }`}>
                         {item.icon}
                         {item.label}
