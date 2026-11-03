@@ -12,7 +12,7 @@ type Form = {
 }
 
 export default function DashboardPage() {
-    const { formId } = useParams()
+    const { formId } = useParams<{ formId:string }>()
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string>('')

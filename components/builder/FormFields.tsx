@@ -10,7 +10,7 @@ interface FormFieldsType {
     selectedFieldId: number | null,
     onDelete: (fieldId: number) => void,
     onSelect: (fieldId: number) => void,
-    formId: number
+    formId: string
 }
 
 export default function FormFields({ fields, setFields, selectedFieldId, onDelete, onSelect, formId }: FormFieldsType) {

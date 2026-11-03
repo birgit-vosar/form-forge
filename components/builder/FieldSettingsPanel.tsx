@@ -6,7 +6,7 @@ interface FieldSettingsPanelProps {
     selectedField: Field | null | undefined,
     onUpdate: (props: FieldUpdateProps) => void,
     addOption: (props: number) => void,
-    deleteOption: (props: number) => void
+    deleteOption: (optionId: number, fieldId: number) => void
     updateOption: (props: OptionsUpdateProps) => void
 }
 
