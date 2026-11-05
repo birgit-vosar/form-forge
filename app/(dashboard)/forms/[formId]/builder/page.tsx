@@ -23,6 +23,7 @@ export default function DashboardPage() {
     const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
     const isMountedMap = useRef<Record<number, boolean>>({});
     const [title, setTitle] = useState('')
+    const [published, setPublished] = useState<boolean>(false)
 
     const [fields, setFields] = useState<Field[]>([])
     const [selectedFieldId, setSelectedFieldId] = useState<number | null>(null)
@@ -38,6 +39,7 @@ export default function DashboardPage() {
                 }
                 const data = await res.json()
                 setForm(data)
+                { data.is_published ? setPublished(true) : setPublished(false) }
 
                 const resFields = await fetch(`/api/forms/${formId}/fields`)
                 const fieldsData = await resFields.json()
@@ -297,7 +299,29 @@ export default function DashboardPage() {
     }
 
     async function handlePublish() {
-        alert('publish has been clicked')
+        try {
+            console.log('this is the current publish: ', published)
+            setSaving(true)
+            const res = await fetch(`/api/forms/${formId}`, {
+                method: 'PATCH',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ published: !published })
+            })
+            const publishData = await res.json()
+            if (!res.ok) {
+                setError(publishData.error ?? 'Something went wrong with publishing the form.')
+            }
+            
+            console.log('this is the handlepublish res: ', publishData)
+
+            setPublished(publishData.isPublished)
+        } catch (err) {
+            setError('Something went wrong with publishing the form.')
+        } finally {
+            setSaving(false)
+        }
     }
 
     if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
@@ -364,9 +388,9 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div className='flex gap-2 justify-end mr-4 flex-1'>
-                                        <button type='button' onClick={(e) => handlePublish()} className='max-w-24 basis-64 font-sans font-semibold text-[#E4572E] text-sm py-2 flex-1 border-2 rounded-lg border-[#E4572E] 
+                                        <button type='button' onClick={(e) => handlePublish()} className='max-w-32 basis-64 font-sans font-semibold text-[#E4572E] text-sm py-2 px-2 flex-1 border-2 rounded-lg border-[#E4572E] 
                                                             text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200 cursor-pointer active:scale-90 active:bg-orange-400'>
-                                            Publish
+                                            {published ? 'Published' : 'Unpublished'}
                                         </button>
                                         {saving === true ? <p className='animate-pulse cursor-default font-sans text-sm text-gray-400'>Saving...</p> : (<div className='flex items-center gap-1'>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="text-gray-400 size-4">

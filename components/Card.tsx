@@ -29,12 +29,14 @@ export default function Card({ id, title, isLive, responseAmount, lastResponse, 
                         <path strokeLinecap="round" strokeLinejoin="round" d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z" />
                     </svg>
                 </div>
-                {isLive === true ? (<div className="text-sm">
+                <div className="flex flex-row gap-4 align-center">
+                {isLive === true ? (<div className="text-sm font-mono font-semibold border rounded-xl bg-[#B7E0D8] border-[#87cbbe] py-1 px-2 h-fit">
                     Live
                 </div>) : ('')}
-                <button onClick={() => onDelete()}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="size-5 text-gray-600 cursor-pointer hover:text-teal-700 hover:scale-115">
+                <button onClick={() => onDelete()} className="flex justify-start self-start mt-1"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className=" size-5 text-gray-600 cursor-pointer hover:text-teal-700 hover:scale-115">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg></button>
+                </div>
 
             </div>
             <div className="flex flex-col mt-2">
