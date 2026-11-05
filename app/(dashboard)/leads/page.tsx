@@ -41,7 +41,6 @@ export default function LeadsPage() {
     return (
         <div className='flex flex-row min-h-screen'>
             <Sidebar />
-            {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
             <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 min-h-screen`}>
                 <div className='flex-1 flex flex-col min-h-screen'>
                     {/* main */}

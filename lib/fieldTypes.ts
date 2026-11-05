@@ -20,6 +20,7 @@ export interface Field {
     id: number,
     form_id: number,
     type: FieldType,
+    name: string,
     label: string,
     placeholder: string | null,
     required: boolean,
@@ -30,6 +31,7 @@ export interface Field {
 
 export interface NewField {
     type: FieldType,
+    name: string,
     label: string,
     placeholder: string | null,
     required: boolean,
@@ -46,7 +48,7 @@ export interface FieldInputProps {
 
 export interface FieldUpdateProps {
   fieldId: number,
-  update: Partial<Pick<Field, 'label' | 'placeholder' | 'required'>>
+  update: Partial<Pick<Field, 'label' | 'name' | 'placeholder' | 'required'>>
 }
 
 export interface OptionsUpdateProps {

@@ -107,10 +107,12 @@ export default function FormsPage() {
 
             if (!res.ok) {
                 setError('Something went wrong with submitting the form.')
+                setSubmitting(false)
                 return
             }
         } catch (err) {
             setError('Something went wrong with submitting the form.')
+            setSubmitting(false)
         } finally {
             setSubmitting(false)
             setSubmitted(true)

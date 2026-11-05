@@ -27,6 +27,12 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
             )
         }
 
+        if (update.name !== undefined) {
+            await pool.query(
+                'UPDATE fields SET name = $1 WHERE form_id = $2 AND id = $3', [update.name, formId, fieldId]
+            )
+        }
+
         if (update.placeholder !== undefined) {
             await pool.query(
                 'UPDATE fields SET placeholder = $1 WHERE form_id = $2 AND id = $3', [update.placeholder, formId, fieldId]

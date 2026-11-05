@@ -3,7 +3,19 @@ export interface LeadRow {
     title: string,
     is_published: boolean,
     response_id: number,
-    submitted_at: number
+    submitted_at: string
 }
 
 export type LeadsData = LeadRow[]
+
+export interface ResponseLeadsRow {
+    field_id: number,
+    response_id: number,
+    value: string
+}
+
+export type ResponseLeadsData {
+    id: number,
+    submitted_at: string,
+    answers: ResponseLeadsRow[]
+}

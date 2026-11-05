@@ -32,10 +32,6 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
             <div className='flex-1 flex flex-col h-full w-full min-w-40 xl:min-w-60'>
                 <p className='uppercase text-md font-semibold font-sans px-4 pb-4'>Field properties</p>
                 <div className='flex flex-col w-full gap-2 mx-4 my-3'>
-                    <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Type</p>
-                    <input readOnly className="pointer-events-none py-1 w-full px-2 border rounded-xs border-stone-400 bg-white text-black" placeholder={selectedField.type}></input>
-                </div>
-                <div className='flex justify-between items-center w-full gap-2 mx-4 my-3 px-2 py-3 border rounded-xs border-stone-300 bg-white'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Required:</p>
                     <button
                         type="button"
@@ -48,6 +44,15 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
                                 }`}
                         />
                     </button>
+                </div>
+                <div className='flex flex-col w-full gap-2 mx-4 my-3'>
+                    <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Type</p>
+                    <input readOnly className="pointer-events-none py-1 w-full px-2 border rounded-xs border-stone-400 bg-white text-black" placeholder={selectedField.type}></input>
+                </div>
+                <div className='flex flex-col w-full gap-2 mx-4 my-3'>
+                    <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Name</p>
+                    <input onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { name: e.target.value } }) }} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                        placeholder='Enter a unique name for each field' value={selectedField.name}></input>
                 </div>
                 <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                     <p className='uppercase font-sans font-semibold text-black/75 text-xs'>Label</p>
