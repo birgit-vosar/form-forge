@@ -1,31 +1,36 @@
 'use client'
+import LeadsRow from '@/components/leadsRow'
 import Sidebar from '@/components/Sidebar'
+import { LeadsData } from '@/lib/leadsTypes'
 import { useEffect, useState } from 'react'
 
 
 export default function LeadsPage() {
-    const [loading, setLoading] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(true)
     const [error, setError] = useState('')
     const [resError, setResError] = useState('')
+    const [leadsData, setLeadsData] = useState<LeadsData>()
 
     useEffect(() => {
         const fetchForms = async () => {
             try {
-                setLoading(true)
                 const res = await fetch(`/api/forms/leads`)
                 const data = await res.json()
-                if (res.status === 404) {
-                    setResError(data)
-                    return
-                }
-                if (res.status === 500) {
-                    setError(data)
+
+                if (!res.status) {
+                    setError(data.error ?? 'Something went wrong with loading the data.')
                     return
                 }
 
+                if (data.length === 0) {
+                    setResError('No responses to any forms yet.')
+                    return
+                }
+                setLeadsData(data)
+
                 console.log('this is leads page console: ', data)
             } catch (err) {
-                setError('Something went wrong with loading the page.')
+                setError('Something went wrong with loading the data.')
             } finally {
                 setLoading(false)
             }
@@ -86,28 +91,9 @@ export default function LeadsPage() {
                                                             {resError}
                                                         </div>)
                                                         :
-                                                        (<div className='flex flex-row border-b border-gray-300 font-sans text-xs'>
-                                                            <div className='py-2 pl-2 gap-2 flex-4 flex flex-row border-r border-gray-300'>
-                                                                <div className='w-4 h-4 bg-gray-100 rounded-md border border-gray-300 hover:bg-gray-300'>
-                                                                </div>
-                                                                <p className='underline underline-offset-4'>Solar consultation form</p>
-                                                            </div>
-                                                            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                                                                <p>PV</p>
-                                                            </div>
-                                                            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                                                                <p>11.02.2026 10:30:01</p>
-                                                            </div>
-                                                            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                                                                <p>15</p>
-                                                            </div>
-                                                            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                                                                <p>Active</p>
-                                                            </div>
-                                                            <div className='py-2 pl-2 flex-1 flex border-r border-gray-300'>
-                                                                <p className='underline underline-offset-4'>More</p>
-                                                            </div>
-                                                        </div>)
+                                                        (
+                                                            leadsData?.map((field) => <LeadsRow formId={field.form_id} title={field.title} topic='PV' submitDate={field.submitted_at} leadId={field.response_id} formStatus={field.is_published}/>)
+                                                        )
 
 
                                                 )

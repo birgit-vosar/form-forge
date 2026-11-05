@@ -1,25 +1,21 @@
 import pool from "@/lib/db";
+import { SessionData, sessionOptions } from "@/lib/sessions";
+import { getIronSession } from "iron-session";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req:NextRequest) {
+export async function GET(req: NextRequest) {
+    const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
+    const userId = session.userId
+    if (!userId) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     try {
-        const client = await pool.connect()
-
-        const responsesRes = await client.query(
-                    'SELECT * FROM responses'
+        const res = await pool.query(
+            'SELECT forms.id AS form_id, forms.title, forms.is_published, responses.id AS response_id, responses.submitted_at FROM forms LEFT JOIN responses on responses.form_id = forms.id WHERE forms.user_id = $1 ORDER BY responses.submitted_at DESC NULLS LAST', [userId]
         )
-        if (responsesRes.rows.length === 0) {
-            return NextResponse.json({ error: 'Form submissions inquiry resulted with no responses submitted.' }, { status: 404 })
-        }
-        const resAnswersRes = await client.query(
-                    'SELECT * FROM response_answers'
-        )
-        const formsRes = await client.query(
-                    'SELECT * FROM forms'
-        )
-
-        return NextResponse.json({ res: 'Form fetch successful' }, { status: 200 })
-    } catch(err) {
+        return NextResponse.json(res.rows, { status: 200 })
+    } catch (err) {
         return NextResponse.json({ error: 'Failed to fetch the forms from the server.' }, { status: 500 })
     }
 }
