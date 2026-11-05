@@ -14,7 +14,8 @@ export async function GET(req: NextRequest) {
         const res = await pool.query(
             'SELECT forms.id AS form_id, forms.title, forms.is_published, responses.id AS response_id, responses.submitted_at FROM forms LEFT JOIN responses on responses.form_id = forms.id WHERE forms.user_id = $1 ORDER BY responses.submitted_at DESC NULLS LAST', [userId]
         )
-        return NextResponse.json(res.rows, { status: 200 })
+        const filteredData = res.rows.filter(row => row.response_id !== null)
+        return NextResponse.json(filteredData, { status: 200 })
     } catch (err) {
         return NextResponse.json({ error: 'Failed to fetch the forms from the server.' }, { status: 500 })
     }

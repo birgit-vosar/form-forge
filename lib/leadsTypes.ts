@@ -1,7 +1,9 @@
-export interface LeadsData {
+export interface LeadRow {
     form_id: number
     title: string,
     is_published: boolean,
-    response_id: number | null,
-    submitted_at: number | null
+    response_id: number,
+    submitted_at: number
 }
+
+export type LeadsData = LeadRow[]

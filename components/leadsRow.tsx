@@ -4,8 +4,8 @@ interface LeadRowProps {
     formId: number
     title: string, 
     topic: string, 
-    submitDate: number | null, 
-    leadId: number | null, 
+    submitDate: number, 
+    leadId: number, 
     formStatus: boolean
 }
 
