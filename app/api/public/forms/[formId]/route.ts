@@ -13,10 +13,10 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
 
     try {
         const formsRes = await pool.query(
-            'SELECT id, title, description FROM forms WHERE id = $1', [formId]
+            'SELECT id, title, description, is_published FROM forms WHERE id = $1', [formId]
         )
 
-        if (formsRes.rows.length === 0) {
+        if (formsRes.rows.length === 0 || formsRes.rows[0].is_published === false) {
             return NextResponse.json({ error: 'Form not found' }, { status: 404 })
         }
 

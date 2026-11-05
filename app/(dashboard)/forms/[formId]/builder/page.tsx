@@ -12,7 +12,7 @@ type Form = {
 }
 
 export default function DashboardPage() {
-    const { formId } = useParams<{ formId:string }>()
+    const { formId } = useParams<{ formId: string }>()
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string>('')
@@ -296,6 +296,10 @@ export default function DashboardPage() {
         setSelectedFieldId(fieldId)
     }
 
+    async function handlePublish() {
+        alert('publish has been clicked')
+    }
+
     if (loading) return (<div className='flex flex-row h-screen overflow-hidden'>
         <Sidebar />
         {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
@@ -354,14 +358,15 @@ export default function DashboardPage() {
                         <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
                             <div className='flex-1 flex flex-col min-h-screen'>
                                 <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
-                                    <div className='flex flex-row justify-between px-4 py-1'>
+                                    <div className='flex flex-1 flex-row justify-between px-4 py-1'>
                                         <div className='flex flex-col gap-2'>
                                             <p className='font-mono text-md font-semibold'>{title ? title : form.title}</p>
                                         </div>
                                     </div>
-                                    <div className='flex gap-2 items-center mr-4'>
-                                        <button className='cursor-pointer hover:bg-gray-100 py-2 px-4 mr-4 border rounded-lg border-gray-300 font-semibold font-sans tracking-wide text-sm'>
-                                            Responses
+                                    <div className='flex gap-2 justify-end mr-4 flex-1'>
+                                        <button type='button' onClick={(e) => handlePublish()} className='max-w-24 basis-64 font-sans font-semibold text-[#E4572E] text-sm py-2 flex-1 border-2 rounded-lg border-[#E4572E] 
+                                                            text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200 cursor-pointer active:scale-90 active:bg-orange-400'>
+                                            Publish
                                         </button>
                                         {saving === true ? <p className='animate-pulse cursor-default font-sans text-sm text-gray-400'>Saving...</p> : (<div className='flex items-center gap-1'>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="text-gray-400 size-4">
