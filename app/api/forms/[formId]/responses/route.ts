@@ -36,7 +36,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
         const responseIds = responsesRes.rows.map((r) => r.id)
 
         const answersRes = await pool.query(
-            `SELECT response_id, field_id, value
+            `SELECT id AS answer_id, response_id, field_id, value
      FROM response_answers
      WHERE response_id = ANY($1::int[])`,
             [responseIds]

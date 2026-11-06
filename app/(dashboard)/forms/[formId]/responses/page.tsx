@@ -78,12 +78,15 @@ export default function ResponsesPage() {
                                         </div>
                                         <div className='flex flex-col bg-white border rounded-md border-gray-300 h-full'>
                                             <div className='flex flex-row border-b border-gray-300 bg-stone-100 text-sm font-mono font-semibold'>
+                                                <div className={`${loading ? 'hidden' : ''} capitalize py-2 pl-2 flex-1 flex border-r border-gray-300`}>
+                                                    ID
+                                                </div>
                                                 {fields.map((field) => (
-                                                    <div className='capitalize py-2 pl-2 flex-4 flex border-r border-gray-300'>
+                                                    <div key={field.id} className='capitalize py-2 pl-2 flex-4 flex border-r border-gray-300'>
                                                         {field.name}
                                                     </div>
                                                 ))}
-                                                <div className={`${loading ? 'hidden' : ''}capitalize py-2 pl-2 flex-4 flex border-r border-gray-300`}>
+                                                <div className={`${loading ? 'hidden' : ''} capitalize py-2 pl-2 flex-4 flex border-r border-gray-300`}>
                                                     Date
                                                 </div>
                                             </div>
@@ -101,14 +104,17 @@ export default function ResponsesPage() {
                                                         (
 
                                                             leads?.map((response) => (
-                                                                <div className='flex flex-row border-b border-gray-300 font-sans text-xs'>
+                                                                <div key={response.id} className='flex flex-row border-b border-gray-300 font-sans text-xs'>
+                                                                    <div className='py-2 pl-2 flex-1 flex border-r border-gray-300'>
+                                                                        {response.id}
+                                                                    </div>
                                                                     {response.answers.map((answer) => (
-                                                                        <div key={answer.field_id} className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
+                                                                        <div key={answer.answer_id} className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
                                                                             {answer.value}
                                                                         </div>
                                                                     ))}
-                                                                    <div key={response.id} className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                                                                        {response.submitted_at}
+                                                                    <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
+                                                                        {new Date(response.submitted_at).toLocaleString('et-EE')}
                                                                     </div>
                                                                 </div>
                                                             ))

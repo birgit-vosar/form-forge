@@ -9,6 +9,7 @@ export interface LeadRow {
 export type LeadsData = LeadRow[]
 
 export interface ResponseLeadsRow {
+    answer_id: number,
     field_id: number,
     response_id: number,
     value: string
