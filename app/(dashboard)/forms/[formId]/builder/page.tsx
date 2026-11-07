@@ -6,9 +6,11 @@ import FieldTypeMenu from '@/components/builder/FieldTypeMenu'
 import { Field, NewField, FieldUpdateProps, OptionsUpdateProps, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
 import FormFields from '@/components/builder/FormFields'
 import FieldSettingsPanel from '@/components/builder/FieldSettingsPanel'
+import FormSettingsPanel from '@/components/builder/FormSettingsPanel'
 
 type Form = {
-    title: string
+    title: string,
+    id: number
 }
 
 export default function DashboardPage() {
@@ -294,13 +296,32 @@ export default function DashboardPage() {
         }, 800)
     }
 
+    async function handleUpdateForm(topic: string) {
+        if (!isMounted.current) {
+            isMounted.current = true
+            return
+        }
+        if (debounceRef.current) { clearTimeout(debounceRef.current) }
+
+        debounceRef.current = setTimeout(async () => {
+            try {
+                setSaving(true)
+                console.log(topic)
+            } catch (err) {
+                setError('Something went wrong with publishing the form.')
+            } finally {
+                setSaving(false)
+            }
+        }, 800)
+
+    }
+
     function handleSelect(fieldId: number) {
         setSelectedFieldId(fieldId)
     }
 
     async function handlePublish() {
         try {
-            console.log('this is the current publish: ', published)
             setSaving(true)
             const res = await fetch(`/api/forms/${formId}`, {
                 method: 'PATCH',
@@ -313,8 +334,6 @@ export default function DashboardPage() {
             if (!res.ok) {
                 setError(publishData.error ?? 'Something went wrong with publishing the form.')
             }
-            
-            console.log('this is the handlepublish res: ', publishData)
 
             setPublished(publishData.isPublished)
         } catch (err) {
@@ -430,8 +449,9 @@ export default function DashboardPage() {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='bg-[#eeeeee] flex-1 flex flex-row justify-between pt-6 px-4 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
-                                        <div className='flex gap-2 '>
+                                    <div className='bg-[#eeeeee] flex-1 flex pt-6 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
+                                        <div className='flex flex-col gap-2 divide-y divide-gray-300 w-full'>
+                                            <FormSettingsPanel key={form.id} formId={form.id} onUpdateForm={handleUpdateForm} />
                                             <FieldSettingsPanel key={selectedFieldId} selectedField={selectedField} onUpdate={handleUpdateField} addOption={handleAddOption}
                                                 deleteOption={handleDeleteOption} updateOption={handleUpdateOption} />
                                         </div>

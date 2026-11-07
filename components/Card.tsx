@@ -45,12 +45,12 @@ export default function Card({ id, title, isLive, responseAmount, lastResponse, 
             </div>
             <div className="flex justify-between text-sm text-gray-600 mt-6">
                 <div className="flex gap-1">{responseAmount ? responseAmount : ''}<p>Responses</p> {lastResponse ? (<Link href={`/forms/${id}/responses`} className="underline text-[#004E89] hover:text-[#1A659E]">view</Link>) : ''}</div>
-                <p>{lastResponse ? timeAgo(lastResponse) : 'No responses yet'}</p>
+                <p>{lastResponse ? timeAgo(lastResponse) : 'Publish the form to access live link.'}</p>
             </div>
             <div className="flex gap-5 mt-2 pt-4 border-t border-gray-300">
                 <Link href={`/forms/${id}/builder`} className="basis-64 font-sans font-semibold text-[#E4572E] py-2 flex-1 border-2 rounded-md border-[#E4572E] 
                 text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200 max-w-40"> Edit</Link>
-                <Link href={`/f/${id}`} className={`${isLive ? '' : 'hidden'}basis-128 py-2 flex-1 hover:underline`}>Live link</Link>
+                <Link href={`/f/${id}`} className={`${isLive ? '' : 'hidden'} basis-128 py-2 flex-1 hover:underline`}>Live link</Link>
             </div>
         </div>
     )

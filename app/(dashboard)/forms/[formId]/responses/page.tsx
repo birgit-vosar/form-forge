@@ -107,7 +107,7 @@ export default function ResponsesPage() {
                                                                 <div key={response.id} className='flex flex-row border-b border-gray-300 font-sans text-xs'>
                                                                     <div className='py-2 pl-2 flex-1 flex border-r border-gray-300'>
                                                                         {response.id}
-                                                                    </div>
+                                                                    </div>  
                                                                     {response.answers.map((answer) => (
                                                                         <div key={answer.answer_id} className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
                                                                             {answer.value}
