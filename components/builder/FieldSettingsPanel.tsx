@@ -20,10 +20,16 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
         return (
             <div className='bg-[#eeeeee] flex flex-row pt-1  text-sm h-full'>
                 <div className='flex-1 flex flex-col h-full min-w-40 xl:min-w-60'>
-                    <p className='text-md font-semibold font-sans px-4 pb-4'>FIELD PROPERTIES</p>
-                    <p className='font-sans text-gray-500 px-4 py-3'>No field selected</p>
+                    <div className='mx-4 flex flex-row gap-2 align-center items-center'>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="text-gray-400 size-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z" />
+                        </svg>
+                        <p className='uppercase text-black/75 text-md font-semibold font-sans'>Field properties </p><p className='font-sans text-gray-500'>(No field selected)</p>
+                    </div>
                 </div>
             </div>
+
+            
         )
     }
 

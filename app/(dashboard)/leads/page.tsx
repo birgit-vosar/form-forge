@@ -27,8 +27,6 @@ export default function LeadsPage() {
                     return
                 }
                 setLeadsData(data)
-
-                console.log('this is leads page console: ', data)
             } catch (err) {
                 setError('Something went wrong with loading the data.')
             } finally {

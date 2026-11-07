@@ -10,7 +10,8 @@ import FormSettingsPanel from '@/components/builder/FormSettingsPanel'
 
 type Form = {
     title: string,
-    id: number
+    id: number,
+    topic: string | null
 }
 
 export default function DashboardPage() {
@@ -25,6 +26,7 @@ export default function DashboardPage() {
     const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
     const isMountedMap = useRef<Record<number, boolean>>({});
     const [title, setTitle] = useState('')
+    const [topic, setTopic] = useState<string | null>('')
     const [published, setPublished] = useState<boolean>(false)
 
     const [fields, setFields] = useState<Field[]>([])
@@ -296,24 +298,37 @@ export default function DashboardPage() {
         }, 800)
     }
 
-    async function handleUpdateForm(topic: string) {
+    async function handleUpdateForm(topic: string | null) {
+        
         if (!isMounted.current) {
             isMounted.current = true
             return
         }
+        setTopic(topic)
         if (debounceRef.current) { clearTimeout(debounceRef.current) }
 
         debounceRef.current = setTimeout(async () => {
             try {
                 setSaving(true)
-                console.log(topic)
+                const res = await fetch(`/api/forms/${formId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ topic })
+                })
+                const data = await res.json()
+                if (!res.ok) {
+                    setError(data.error ?? 'Something went wrong with changing the topic.')
+                    return
+                }
+                
             } catch (err) {
-                setError('Something went wrong with publishing the form.')
+                setError('Something went wrong with changing the topic.')
             } finally {
                 setSaving(false)
             }
         }, 800)
-
     }
 
     function handleSelect(fieldId: number) {
@@ -333,6 +348,7 @@ export default function DashboardPage() {
             const publishData = await res.json()
             if (!res.ok) {
                 setError(publishData.error ?? 'Something went wrong with publishing the form.')
+                return
             }
 
             setPublished(publishData.isPublished)
@@ -451,7 +467,7 @@ export default function DashboardPage() {
                                     </div>
                                     <div className='bg-[#eeeeee] flex-1 flex pt-6 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
                                         <div className='flex flex-col gap-2 divide-y divide-gray-300 w-full'>
-                                            <FormSettingsPanel key={form.id} formId={form.id} onUpdateForm={handleUpdateForm} />
+                                            <FormSettingsPanel key={form.id} formId={form.id} onUpdateForm={handleUpdateForm} topic={topic || form.topic || ''}/>
                                             <FieldSettingsPanel key={selectedFieldId} selectedField={selectedField} onUpdate={handleUpdateField} addOption={handleAddOption}
                                                 deleteOption={handleDeleteOption} updateOption={handleUpdateOption} />
                                         </div>

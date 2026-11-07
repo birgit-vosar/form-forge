@@ -3,12 +3,13 @@ import { useState } from "react"
 interface FormSettingsPanelProps {
     onUpdateForm: (topic: string) => void,
     formId: number
+    topic: string
 }
 
 
 
 
-export default function FormSettingsPanel({ onUpdateForm, formId }: FormSettingsPanelProps) {
+export default function FormSettingsPanel({ onUpdateForm, formId, topic }: FormSettingsPanelProps) {
     const [isOpen, setIsOpen] = useState<boolean>(true)
     return (
         <div className='bg-[#eeeeee] flex flex-row pb-4 text-sm '>
@@ -31,7 +32,7 @@ export default function FormSettingsPanel({ onUpdateForm, formId }: FormSettings
                     <div className='flex flex-col w-5/6 gap-2 mx-4 my-3'>
                         <p className='uppercase font-sans font-semibold text-black/75 text-sm'>Topic</p>
                         <input onChange={(e) => { onUpdateForm(e.target.value) }} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
-                            placeholder='Enter a unique name for each field'></input>
+                            placeholder='Enter the topic of this form' value={topic}></input>
                     </div>
                     <div className='flex flex-row w-5/6 gap-1 mx-4 my-3'>
                         <p className='uppercase font-sans font-semibold text-black/75 text-sm'>Form id: </p>

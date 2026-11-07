@@ -15,7 +15,7 @@ export interface ResponseLeadsRow {
     value: string
 }
 
-export type ResponseLeadsData {
+export interface ResponseLeadsData {
     id: number,
     submitted_at: string,
     answers: ResponseLeadsRow[]
