@@ -89,7 +89,7 @@ export default function LeadsPage() {
                                                         </div>)
                                                         :
                                                         (
-                                                            leadsData?.map((field) => <LeadsRow key={field.response_id} formId={field.form_id} title={field.title} topic='PV' submitDate={field.submitted_at} leadId={field.response_id} formStatus={field.is_published}/>)
+                                                            leadsData?.map((field) => <LeadsRow key={field.response_id} formId={field.form_id} title={field.title} topic={field.topic} submitDate={field.submitted_at} leadId={field.response_id} formStatus={field.is_published}/>)
                                                         )
 
 

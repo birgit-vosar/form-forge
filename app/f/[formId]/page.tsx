@@ -15,7 +15,7 @@ interface SubmitFormInfo {
     footer_note: string | null
 }
 
-export default function FormsPage() {
+export default function SubmitFormPage() {
     const { formId } = useParams()
     const [error, setError] = useState('')
     const [fieldErrors, setFieldErrors] = useState<Record<number, string>>({})
@@ -90,12 +90,13 @@ export default function FormsPage() {
     }
 
     async function submitForm(values: Record<number, string>) {
-        setSubmitting(true)
+
         const newErrors = validateForm()
         setFieldErrors(newErrors)
         if (Object.keys(newErrors).length > 0) return
 
         try {
+            setSubmitting(true)
             const res = await fetch(`/api/public/forms/${formId}`, {
                 method: 'POST',
                 body: JSON.stringify({ values })
@@ -108,29 +109,26 @@ export default function FormsPage() {
 
             if (!res.ok) {
                 setError('Something went wrong with submitting the form.')
-                setSubmitting(false)
                 return
             }
+            setSubmitted(true)
         } catch (err) {
             setError('Something went wrong with submitting the form.')
-            setSubmitting(false)
         } finally {
             setSubmitting(false)
-            setSubmitted(true)
         }
 
     }
 
     function startOver() {
-        setFieldValues({})
+        setFieldValues(
+            Object.fromEntries((form?.fields ?? []).map((field) => [field.id, '']))
+        )
         setFieldErrors({})
         setSubmitted(false)
         setError('')
 
-        window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    })
+        window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
     if (submitted) return (<div className='flex flex-row min-h-screen'>
@@ -153,7 +151,7 @@ export default function FormsPage() {
                                         <div className='flex flex-col gap-4 '>
                                             <div className='px-2 pt-2 flex items-center '>
                                                 <div className='pb-4 flex flex-row py-1 w-full justify-center'>
-                                                    <p className='font-mono text-md font-semibold'>Thank you, your submittion has been received!</p>
+                                                    <p className='font-mono text-md font-semibold'>Thank you, your submission has been received!</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -196,6 +194,30 @@ export default function FormsPage() {
             </div>
         </div>
     </div>)
+
+    if (!form) return (
+        <div className='flex flex-row min-h-screen'>
+            {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
+            <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 min-h-screen`}>
+                <div className='flex-1 flex flex-col min-h-screen'>
+                    {/* main */}
+                    <div className='flex-1 flex flex-col lg:flex-row min-h-screen'>
+                        <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
+                            <div className='flex-1 flex flex-col min-h-screen'>
+                                <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
+                                    <div className='flex flex-row justify-between px-4 py-1'>
+                                        <div className='flex flex-row gap-3 items-center'>
+                                            <p className='font-mono text-md font-semibold'>Form not found.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
 
     return (
         <div className='flex flex-row min-h-screen'>

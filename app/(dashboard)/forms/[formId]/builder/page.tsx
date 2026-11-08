@@ -463,29 +463,30 @@ export default function DashboardPage() {
             </div>
         </div>
     </div>)
-    if (!form) return (<div className='flex flex-row min-h-screen'>
-        <Sidebar />
-        {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
-        <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 h-full`}>
-            <div className='flex-1 flex flex-col overflow-hidden'>
-                {/* main */}
-                <div className='flex-1 flex flex-col lg:flex-row overflow-hidden'>
-                    <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
-                        <div className='flex-1 flex flex-col overflow-hidden'>
-                            <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
-                                <div className='flex flex-row justify-between px-4 py-1'>
-                                    <div className='flex flex-col gap-2'>
-                                        <p className='font-mono text-md font-semibold'>Form not found</p>
+    if (!form) return (
+    <div className='flex flex-row min-h-screen'>
+            <Sidebar />
+            {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
+            <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 min-h-screen`}>
+                <div className='flex-1 flex flex-col min-h-screen'>
+                    {/* main */}
+                    <div className='flex-1 flex flex-col lg:flex-row min-h-screen'>
+                        <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
+                            <div className='flex-1 flex flex-col min-h-screen'>
+                                <div className='bg-white px-2 py-2 border-b-1 border-gray-300 flex justify-between items-center'>
+                                    <div className='flex flex-1 flex-row justify-between px-4 py-1'>
+                                        <div className='flex flex-col gap-2'>
+                                            <p className='font-mono text-md font-semibold'>Form not found.</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>)
+        </div>)
 
     return (
         <div className='flex flex-row min-h-screen'>

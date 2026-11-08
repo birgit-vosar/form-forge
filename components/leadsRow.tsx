@@ -27,7 +27,7 @@ export default function LeadsRow({ formId, title, topic, submitDate, leadId, for
                 <Link href={`/forms/${formId}/responses`} className='underline underline-offset-4 hover:underline-offset-3'>{title}</Link>
             </div>
             <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                <p>{topic}</p>
+                <p>{topic ? topic : '-'}</p>
             </div>
             <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
                 <p>{formattedDate}</p>

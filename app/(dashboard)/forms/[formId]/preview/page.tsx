@@ -116,6 +116,37 @@ export default function FormsPage() {
         </div>
     </div>)
 
+    if (!form) return (
+        <div className='flex flex-row min-h-screen'>
+            {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
+            <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 min-h-screen`}>
+                <div className='flex-1 flex flex-col min-h-screen'>
+                    {/* main */}
+                    <div className='flex-1 flex flex-col lg:flex-row min-h-screen'>
+                        <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
+                            <div className='flex-1 flex flex-col min-h-screen'>
+                                <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
+                                    <div className='flex flex-row justify-between px-4 py-1'>
+                                        <div className='flex flex-row gap-4 items-center'>
+                                            <button type="button" onClick={handleBack} className='cursor-pointer flex flex-row gap-2 items-center hover:underline'>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
+                                                </svg>
+
+                                                <p className='font-mono text-md font-semibold'>Back</p>
+                                            </button>
+                                            <p className='font-mono text-md font-semibold'>- Form not found.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+
     return (
         <div className='flex flex-row min-h-screen'>
             {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
