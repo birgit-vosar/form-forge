@@ -12,6 +12,7 @@ interface SubmitFormInfo {
     title: string
     description: string | null
     fields: Field[]
+    footer_note: string | null
 }
 
 export default function FormsPage() {
@@ -221,8 +222,11 @@ export default function FormsPage() {
 
                                             <div className='flex-1 flex flex-col gap-4 '>
                                                 <div className='px-2 mb-2 pt-2 flex items-center'>
-                                                    <div className='pb-6 flex flex-row py-1 border-b-2  border-[#6ca692] w-full'>
+                                                    <div className='flex flex-col py-1 gap-4 w-full'>
                                                         <p className='font-mono text-xl font-semibold'>{form?.title}</p>
+                                                        <p className='text-black/75 font-mono text-md font-semibold field-sizing-content
+                                                                     placeholder:font-semibold focus:outline-none resize-none
+                                                                    break-words whitespace-pre-wrap overflow-hidden'>{form?.description}</p>
                                                     </div>
                                                 </div>
                                                 {
@@ -242,7 +246,14 @@ export default function FormsPage() {
                                                         </div>
                                                     ))
                                                 }
-                                                <div className='pt-2 flex flex-row justify-between px-2 py-1 w-full justify-end'>
+                                                <div className={`${form?.footer_note ? '' : 'hidden'} px-2 mb-2 pt-2 flex items-center`}>
+                                                    <div className='flex flex-col py-1 w-full'>
+                                                        <p className='text-black/75 font-mono text-md font-semibold field-sizing-content
+                                                                     placeholder:font-semibold focus:outline-none resize-none
+                                                                    break-words whitespace-pre-wrap overflow-hidden'>{form?.footer_note}</p>
+                                                    </div>
+                                                </div>
+                                                <div className='pt-2 flex flex-row justify-between px-2 pt-3 pb-2 w-full justify-end'>
                                                     <button
                                                         className={`${submitting ? 'bg-gray-300 hover:bg-gray-200 border-gray-400 text-gray-500 cursor-not-allowed ' : 'bg-orange-100 border-[#E4572E] text-[#c5421c]'} text-xs cursor-pointer font-sans font-semibold py-2 px-6 border-2 rounded-md text-center hover:bg-orange-200 transition-all duration-200`}
                                                         type='button'

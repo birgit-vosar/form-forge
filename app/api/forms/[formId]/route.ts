@@ -48,6 +48,8 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
 
 const publishSchema = z.object({ published: z.boolean() })
 const titleSchema = z.object({ title: z.string().min(1).max(50) })
+const descriptionSchema = z.object({ description: z.string().min(1).max(255) })
+const footerNoteSchema = z.object({ footerNote: z.string().min(1).max(500) })
 const topicSchema = z.object({ topic: z.string().min(1).max(100) })
 
 export async function PATCH(req: NextRequest, context: { params: { formId: string } }) {
@@ -60,6 +62,7 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
     try {
         const { formId } = await context.params
         const body = await req.json()
+        console.log('this is the body that arrived to form/formid patch: ', body)
 
         if (body.published !== undefined) {
             const parsedPublish = publishSchema.safeParse(body)
@@ -72,7 +75,7 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
                 [parsedPublish.data.published, formId, userId]
             )
 
-            if (result.rows.length  === 0) {
+            if (result.rows.length === 0) {
                 return NextResponse.json({ error: 'Form not found' }, { status: 404 })
             }
 
@@ -90,10 +93,30 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
                 [parsedTopic.data.topic, formId, userId]
             )
 
-            if (result.rows.length  === 0) {
+            if (result.rows.length === 0) {
                 return NextResponse.json({ error: 'Form not found' }, { status: 404 })
             }
 
+            return NextResponse.json({ status: 200 })
+        }
+
+        if (body.description !== undefined) {
+            const parsed = descriptionSchema.safeParse(body)
+            if (!parsed.success) return NextResponse.json({ error: 'Invalid' }, { status: 400 })
+
+            await pool.query(
+                'UPDATE forms SET description = $1 WHERE id = $2 AND user_id = $3', [body.description, formId, userId]
+            )
+            return NextResponse.json({ status: 200 })
+        }
+
+        if (body.footerNote !== undefined) {
+            const parsed = footerNoteSchema.safeParse(body)
+            if (!parsed.success) return NextResponse.json({ error: 'Invalid' }, { status: 400 })
+
+            await pool.query(
+                'UPDATE forms SET footer_note = $1 WHERE id = $2 AND user_id = $3', [body.footerNote, formId, userId]
+            )
             return NextResponse.json({ status: 200 })
         }
 

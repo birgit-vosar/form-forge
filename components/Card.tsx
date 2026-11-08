@@ -39,13 +39,13 @@ export default function Card({ id, title, isLive, responseAmount, lastResponse, 
                 </div>
 
             </div>
-            <div className="flex flex-col mt-2">
+            <div className="flex flex-col mt-4">
                 <p className="text-md font-semibold">{title}</p>
                 <p className="text-sm text-gray-600">Quick info about what happens if you click here</p>
             </div>
-            <div className="flex justify-between text-sm text-gray-600 mt-6">
+            <div className="flex justify-between text-sm text-gray-600 mt-2">
                 <div className="flex gap-1">{responseAmount ? responseAmount : ''}<p>Responses</p> {lastResponse ? (<Link href={`/forms/${id}/responses`} className="underline text-[#004E89] hover:text-[#1A659E]">view</Link>) : ''}</div>
-                <p>{lastResponse ? timeAgo(lastResponse) : 'Publish the form to access live link.'}</p>
+                <p>{lastResponse ? timeAgo(lastResponse) : 'Publish the form to access live link'}</p>
             </div>
             <div className="flex gap-5 mt-2 pt-4 border-t border-gray-300">
                 <Link href={`/forms/${id}/builder`} className="basis-64 font-sans font-semibold text-[#E4572E] py-2 flex-1 border-2 rounded-md border-[#E4572E] 

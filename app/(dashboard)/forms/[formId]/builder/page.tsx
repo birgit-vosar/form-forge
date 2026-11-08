@@ -12,6 +12,7 @@ type Form = {
     id: number,
     title: string,
     description: string | null,
+    footer_note: string | null,
     topic: string | null
 }
 
@@ -23,11 +24,16 @@ export default function DashboardPage() {
     const [form, setForm] = useState<Form | null>(null)
 
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
+    const debounceRefDesc = useRef<ReturnType<typeof setTimeout>>(null)
+    const debounceRefFooter = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
+    const isMountedDesc = useRef(false)
+    const isMountedFooter = useRef(false)
     const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
     const isMountedMap = useRef<Record<number, boolean>>({});
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState<string | null>('')
+    const [footerNote, setFooterNote] = useState<string | null>('')
     const [topic, setTopic] = useState<string | null>('')
     const [published, setPublished] = useState<boolean>(false)
 
@@ -98,6 +104,85 @@ export default function DashboardPage() {
             }
         }, 800)
     }, [title])
+
+    useEffect(() => {
+        if (!isMountedDesc.current) {
+            isMountedDesc.current = true
+            return
+        }
+
+        if (!description) { return }
+
+        if (debounceRefDesc.current) { clearTimeout(debounceRefDesc.current) }
+        debounceRefDesc.current = setTimeout(async () => {
+            try {
+                setSaving(true)
+                setError('')
+                const res = await fetch(`/api/forms/${formId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ description })
+                })
+
+                if (!res.ok) {
+                    if (res.status === 400) {
+                        setError('Description format is incorrect.')
+                        console.log('error:', 400)
+                    } else {
+                        setError('Something went wrong saving the form — please try again.')
+                        console.log('error:', 500)
+                    }
+                }
+
+            } catch (err) {
+                setError('Something went wrong with saving the form.')
+            } finally {
+                setSaving(false)
+            }
+        }, 800)
+    }, [description])
+
+    useEffect(() => {
+        setError('')
+        if (!isMountedFooter.current) {
+            isMountedFooter.current = true
+            return
+        }
+
+        if (!footerNote) { return }
+
+        if (debounceRefFooter.current) { clearTimeout(debounceRefFooter.current) }
+        debounceRefFooter.current = setTimeout(async () => {
+            try {
+                setSaving(true)
+                setError('')
+                const res = await fetch(`/api/forms/${formId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ footerNote })
+                })
+
+                if (!res.ok) {
+                    if (res.status === 400) {
+                        setError('Footer description format is incorrect.')
+                        console.log('error:', 400)
+                    } else {
+                        setError('Something went wrong saving the form — please try again.')
+                        console.log('error:', 500)
+                    }
+                }
+
+            } catch (err) {
+                setError('Something went wrong with saving the form.')
+            } finally {
+                setSaving(false)
+            }
+        }, 800)
+    }, [footerNote])
 
     async function handleAddField(type: FieldType) {
         const typeInfo = FIELD_TYPE_CONFIG[type]
@@ -300,14 +385,13 @@ export default function DashboardPage() {
         }, 800)
     }
 
-    async function handleUpdateForm(topic?: string | null, description?: string | null) {
+    async function handleUpdateForm(topic?: string | null) {
 
         if (!isMounted.current) {
             isMounted.current = true
             return
         }
         if (topic !== undefined) setTopic(topic)
-        if (description !== undefined) setDescription(description)
         if (debounceRef.current) { clearTimeout(debounceRef.current) }
 
         debounceRef.current = setTimeout(async () => {
@@ -420,23 +504,23 @@ export default function DashboardPage() {
                     <div className='flex-1 flex flex-col lg:flex-row min-h-screen'>
                         <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
                             <div className='flex-1 flex flex-col min-h-screen'>
-                                <div className='bg-white px-2 pb-2 border-b-1 pt-2 border-gray-300 flex justify-between items-center'>
+                                <div className='bg-white px-2 py-2 border-b-1 border-gray-300 flex justify-between items-center'>
                                     <div className='flex flex-1 flex-row justify-between px-4 py-1'>
                                         <div className='flex flex-col gap-2'>
                                             <p className='font-mono text-md font-semibold'>{title ? title : form.title}</p>
                                         </div>
                                     </div>
-                                    <div className='flex gap-2 justify-end mr-4 flex-1'>
-                                        <button type='button' onClick={(e) => handlePublish()} className='max-w-32 basis-64 font-sans font-semibold text-[#E4572E] text-sm py-2 px-2 flex-1 border-2 rounded-lg border-[#E4572E] 
-                                                            text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200 cursor-pointer active:scale-90 active:bg-orange-400'>
-                                            {published ? 'Published' : 'Unpublished'}
-                                        </button>
+                                    <div className='flex gap-4 justify-end mr-4 flex-1'>
                                         {saving === true ? <p className='animate-pulse cursor-default font-sans text-sm text-gray-400'>Saving...</p> : (<div className='flex items-center gap-1'>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="text-gray-400 size-4">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
                                             </svg>
                                             <p className='cursor-default font-sans text-sm text-gray-400'>Auto-saved</p>
                                         </div>)}
+                                        <button type='button' onClick={(e) => handlePublish()} className='max-w-32 basis-64 font-sans font-semibold text-[#E4572E] text-sm py-1 px-2 flex-1 border-2 rounded-md border-[#E4572E] 
+                                                            text-center bg-orange-100 hover:bg-orange-200 transition-all duration-200 cursor-pointer active:scale-90 active:bg-orange-400'>
+                                            {published ? 'Published' : 'Unpublished'}
+                                        </button>
 
                                     </div>
                                 </div>
@@ -448,7 +532,7 @@ export default function DashboardPage() {
                                         </div>
                                         <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
                                             <div className='flex-1 flex flex-col gap-4 '>
-                                                <div className='flex flex-row items-center gap-2'>
+                                                <div className='flex flex-row items-center gap-4'>
                                                     <input
                                                         type='text'
                                                         className='text-black font-mono text-lg font-semibold field-sizing-content min-w-20 max-w-md
@@ -461,13 +545,13 @@ export default function DashboardPage() {
                                                         <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                     </svg>
                                                 </div>
-                                                <div className='flex flex-row items-center gap-2 mb-4'>
+                                                <div className='flex flex-row items-end gap-4 mb-4'>
                                                     <textarea
                                                         rows={1}
-                                                        className='w-full text-black/75 font-mono text-md font-semibold field-sizing-content min-w-20
+                                                        className='text-black/75 font-mono text-md font-semibold field-sizing-content
                                                                     placeholder:font-mono placeholder:text-md placeholder:font-semibold placeholder:text-black/50 focus:outline-none resize-none
                                                                     break-words whitespace-pre-wrap overflow-hidden'
-                                                        placeholder={description ? description : form.description || 'Description slot'}
+                                                        placeholder={description ? description : form.description || 'Header description slot.....'}
                                                         defaultValue={form.description || ''}
                                                         maxLength={1000}
                                                         onChange={(e) => {
@@ -481,7 +565,24 @@ export default function DashboardPage() {
                                                 </div>
                                                 <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField}
                                                     selectedFieldId={selectedFieldId} formId={formId} />
-
+                                                <div className='flex flex-row items-end gap-4 mb-4'>
+                                                    <textarea
+                                                        rows={1}
+                                                        className='text-black/75 font-mono text-md font-semibold field-sizing-content
+                                                                    placeholder:font-mono placeholder:text-md placeholder:font-semibold placeholder:text-black/50 focus:outline-none resize-none
+                                                                    break-words whitespace-pre-wrap overflow-hidden'
+                                                        placeholder={footerNote ? footerNote : form.footer_note || 'Footer description slot.....'}
+                                                        defaultValue={form.footer_note || ''}
+                                                        maxLength={1000}
+                                                        onChange={(e) => {
+                                                            setFooterNote(e.target.value)
+                                                            e.target.style.height = 'auto'
+                                                            e.target.style.height = `${e.target.scrollHeight}px`
+                                                        }} />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="#659785" className="size-4">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                    </svg>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
