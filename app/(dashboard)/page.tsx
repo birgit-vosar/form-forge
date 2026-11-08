@@ -21,6 +21,7 @@ export default function DashboardPage() {
     const [formTitle, setFormTitle] = useState<string>('')
     const [formId, setFormId] = useState<number>(0)
     const [forms, setForms] = useState<Form[]>([])
+    const [totalResponse, setTotalResponse] = useState<number>(0)
 
     useEffect(() => {
         setLoading(true)
@@ -42,12 +43,20 @@ export default function DashboardPage() {
         fetchForms()
     }, [])
 
+    useEffect(() => {
+        const responsesAmount = forms.reduce(
+            (sum, form) => sum + Number(form.responses_amount),
+            0
+        )
+        setTotalResponse(responsesAmount)
+    }, [forms])
+
     async function createForm() {
         const res = await fetch('/api/forms', {
             method: 'POST'
         })
 
-        if(!res.ok) {
+        if (!res.ok) {
             setError('Failed to create new form, please try again.')
         }
         const formId = await res.json()
@@ -107,7 +116,7 @@ export default function DashboardPage() {
                                     <div className='flex flex-row justify-between items-center px-4 py-1'>
                                         <div className='flex flex-col gap-2'>
                                             <p className='font-mono text-md font-semibold'>Welcome to dashboard!</p>
-                                            <p className='text-xs text-gray-600'>8 forms • 0 responses</p>
+                                            <p className='text-xs text-gray-600'>{forms.length} forms • {totalResponse} responses</p>
                                         </div>
                                     </div>
                                     <div>
@@ -141,7 +150,7 @@ export default function DashboardPage() {
                                                         2
                                                     </div>
                                                     <div className='w-3/4'>
-                                                    <p><b>Build</b> in the editor: drag in fields, configure validation, reorder live.</p>
+                                                        <p><b>Build</b> in the editor: drag in fields, configure validation, reorder live.</p>
                                                     </div>
                                                 </div>
                                                 <div className='flex gap-3'>
@@ -149,7 +158,7 @@ export default function DashboardPage() {
                                                         3
                                                     </div>
                                                     <div className='w-3/4'>
-                                                    <p><b>Submit & review</b> — every response is stored and browsable in Responses.</p>
+                                                        <p><b>Submit & review</b> — every response is stored and browsable in Responses.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -161,14 +170,14 @@ export default function DashboardPage() {
                                 </div>
 
                                 <div className='flex-3 px-6'>
-                                    <div className='grid lg:grid-cols-3 grid-col-reverse gap-4'>
+                                    <div className='grid gap-4 grid-cols-[repeat(auto-fill,minmax(420px,1fr))]'>
                                         {loading === true ?
-                                            (<div className='flex ml-8 mt-8'>
+                                            (<div className='col-span-full flex ml-8 mt-8'>
                                                 <div className='min-w-8 min-h-8 w-8 h-8 border-4 border-gray-300 border-t-transparent rounded-full animate-spin'></div>
                                             </div>)
                                             :
                                             (
-                                                forms.map (form => <Card key={form.id} id={form.id} title={form.title} isLive={form.is_published} responseAmount={form.responses_amount}
+                                                forms.map(form => <Card key={form.id} id={form.id} title={form.title} isLive={form.is_published} responseAmount={form.responses_amount}
                                                     lastResponse={form.last_response} onDelete={() => handleDelete({ id: form.id, title: form.title })} />)
 
                                             )
