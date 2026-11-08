@@ -35,7 +35,7 @@ export default function FormSettingsPanel({ onUpdateForm, form, published }: For
                 <div className={isOpen ? '' : 'hidden'}>
                     <div className='flex flex-col w-5/6 gap-2 mx-4 my-3'>
                         <p className='uppercase font-sans font-semibold text-black/75 text-sm'>Topic</p>
-                        <input onChange={(e) => { onUpdateForm(e.target.value) }} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                        <input onChange={(e) => { onUpdateForm(e.target.value) }} className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
                             placeholder='Enter the topic of this form' value={form.topic}></input>
                     </div>
                     <div className='flex flex-row w-5/6 gap-1 mx-4 my-3'>
@@ -47,9 +47,9 @@ export default function FormSettingsPanel({ onUpdateForm, form, published }: For
                         <Link
                                 href={`/forms/${form.id}/preview`}
                                 target="_blank"
-                                className={`group inline-flex items-center gap-1 font-medium text-gray-500 hover:text-[#E4572E] transition-colors`}
+                                className={`group inline-flex items-center gap-1 text-gray-500 hover:text-[#E4572E] transition-colors`}
                             >
-                                <span className="group-hover:underline underline-offset-4">View</span>
+                                <span className="font-sans group-hover:underline underline-offset-4">View</span>
                                 <span aria-hidden className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
                             </Link>
                     </div>
@@ -60,9 +60,9 @@ export default function FormSettingsPanel({ onUpdateForm, form, published }: For
                             <Link
                                 href={`/f/${form.id}`}
                                 target="_blank"
-                                className={`group inline-flex items-center gap-1 font-medium text-gray-500 hover:text-[#E4572E] transition-colors`}
+                                className={`group inline-flex items-center gap-1 text-gray-500 hover:text-[#E4572E] transition-colors`}
                             >
-                                <span className="group-hover:underline underline-offset-4">Live link</span>
+                                <span className="font-sans group-hover:underline underline-offset-4">Live link</span>
                                 <span aria-hidden className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">↗</span>
                             </Link>
                         ) : ''}

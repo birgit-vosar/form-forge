@@ -53,8 +53,8 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
                         </svg>
                     </button>
                 </div>
-                <div className={isOpen ? '' : 'hidden'}>
-                    <div className='flex flex-row  w-5/6 gap-6 mx-4 my-3'>
+                <div className={`${isOpen ? '' : 'hidden'} w-5/6`}>
+                    <div className='flex flex-row  w-full gap-6 mx-4 my-3'>
                         <div className='flex flex-row gap-2'>
                             <p className='font-sans font-semibold text-black/75 text-sm'>Required:</p>
                             <button
@@ -75,20 +75,20 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
                         </div>
 
                     </div>
-                    <div className='flex flex-col w-5/6 gap-2 mx-4 my-3'>
+                    <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                         <p className='font-sans font-semibold text-black/75 text-sm'>Name</p>
-                        <input onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { name: e.target.value } }) }} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                        <input onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { name: e.target.value } }) }} className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
                             placeholder='Enter a unique name for each field' value={selectedField.name}></input>
                     </div>
-                    <div className='flex flex-col w-5/6 gap-2 mx-4 my-3'>
+                    <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                         <p className='font-sans font-semibold text-black/75 text-sm'>Label</p>
-                        <input onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { label: e.target.value } }) }} className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                        <input onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { label: e.target.value } }) }} className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
                             placeholder='Enter a label...' value={selectedField.label}></input>
                     </div>
-                    {fieldConfig.hasPlaceholder && (<div className='flex flex-col w-5/6 gap-2 mx-4 my-3'>
+                    {fieldConfig.hasPlaceholder && (<div className='flex flex-col w-full gap-2 mx-4 my-3'>
                         <p className='font-sans font-semibold text-black/75 text-sm'>Placeholder text</p>
                         <textarea onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { placeholder: e.target.value } }) }}
-                            className="py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                            className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
                             placeholder='Enter a placeholder...' value={selectedField.placeholder ?? undefined}></textarea>
                     </div>)
                     }

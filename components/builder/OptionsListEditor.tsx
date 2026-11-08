@@ -14,8 +14,8 @@ export default function OptionsListEditor({ fieldId, fieldOptions, addOption, de
             <p className='font-sans font-semibold text-black/75 text-sm'>Options</p>
             {fieldOptions.map((option) => {
                 return (
-                    <div key={option.id} className="flex gap-1">
-                        <input className="py-2 w-5/6 px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
+                    <div key={option.id} className="flex gap-1 w-full">
+                        <input className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
                             placeholder='Enter a label...' onChange={(e) => updateOption({fieldId: fieldId, optionId: option.id, update: { label: e.target.value }})} value={option.label}></input>
                         <button onClick={() => deleteOption(option.id, fieldId)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="size-4 text-gray-800/75 cursor-pointer hover:text-black hover:scale-105">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -24,7 +24,7 @@ export default function OptionsListEditor({ fieldId, fieldOptions, addOption, de
                 )
             })}
 
-            <button onClick={addOption} className="cursor-pointer w-5/6 flex justify-center border rounded-xs border-stone-300 py-2 bg-[#dddbdb] hover:bg-[#d1cfcf] active:scale-101">
+            <button onClick={addOption} className="cursor-pointer w-full flex justify-center border rounded-xs border-stone-300 py-2 bg-[#dddbdb] hover:bg-[#d1cfcf] active:scale-101">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>

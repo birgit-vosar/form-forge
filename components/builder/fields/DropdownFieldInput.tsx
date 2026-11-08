@@ -6,7 +6,7 @@ export default function DropdownFieldInput({ field, onChange, value }: FieldInpu
         <div>
             <select 
             value={value} 
-            className="py-2 w-full px-2 border rounded-sm border-[#8ed0b8] bg-[#dbf1e9] text-sm"
+            className="cursor-pointer py-2 w-full px-2 border rounded-sm border-[#8ed0b8] bg-[#dbf1e9] text-sm"
             onChange={(e) => onChange?.(field.id, e.target.value)}>
                 <option value="" disabled>-- Please choose an option --</option>
                 {field.options?.map((option) => {
