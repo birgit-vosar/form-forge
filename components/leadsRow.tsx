@@ -36,7 +36,7 @@ export default function LeadsRow({ formId, title, topic, submitDate, leadId, for
                 <p>{leadId}</p>
             </div>
             <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                {formStatus ? <p className='color-lime-600'>Active</p> : <p>Inactive</p>}
+                <p>{formStatus ? 'Active' : 'Inactive'}</p>
             </div>
             <div className='py-2 pl-2 flex-1 flex border-r border-gray-300'>
                 <Link href={`/forms/${formId}/responses`} className='underline underline-offset-4 hover:underline-offset-3'>More</Link>

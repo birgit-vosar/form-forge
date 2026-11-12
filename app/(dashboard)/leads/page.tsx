@@ -17,11 +17,6 @@ export default function LeadsPage() {
                 const res = await fetch(`/api/forms/leads`)
                 const data = await res.json()
 
-                if (!res.status) {
-                    setError(data.error ?? 'Something went wrong with loading the data.')
-                    return
-                }
-
                 if (data.length === 0) {
                     setResError('No responses to any forms yet.')
                     return

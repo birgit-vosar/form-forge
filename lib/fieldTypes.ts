@@ -20,8 +20,8 @@ export interface Field {
     id: number,
     form_id: number,
     type: FieldType,
-    topic: string,
-    name: string,
+    name: string | null,
+    topic: string | null,
     label: string,
     placeholder: string | null,
     required: boolean,
@@ -32,8 +32,8 @@ export interface Field {
 
 export interface NewField {
     type: FieldType,
-    topic: string,
-    name: string,
+    topic: string | null,
+    name: string | null,
     label: string,
     placeholder: string | null,
     required: boolean,

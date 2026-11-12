@@ -48,16 +48,6 @@ export default function ResponsesPage() {
         fetchForms()
     }, [])
 
-    useEffect(() => {
-        console.log('this is form in response p.: ', form)
-    }, [form])
-    useEffect(() => {
-        console.log('this is fields in response p.: ', fields)
-    }, [fields])
-    useEffect(() => {
-        console.log('this is leads in response p.: ', leads)
-    }, [leads])
-
     return (
         <div className='flex flex-row min-h-screen'>
             <Sidebar />
@@ -108,11 +98,14 @@ export default function ResponsesPage() {
                                                                     <div className='py-2 pl-2 flex-1 flex border-r border-gray-300'>
                                                                         {response.id}
                                                                     </div>  
-                                                                    {response.answers.map((answer) => (
-                                                                        <div key={answer.answer_id} className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                                                                            {answer.value}
+                                                                    {fields.map((field) => {
+                                                                        const answer = response.answers.find((a) => a.field_id === field.id)
+                                                                        return (
+                                                                            <div key={field.id} className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
+                                                                            {answer?.value ?? ''}
                                                                         </div>
-                                                                    ))}
+                                                                        )
+                                                                    })}
                                                                     <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
                                                                         {new Date(response.submitted_at).toLocaleString('et-EE')}
                                                                     </div>

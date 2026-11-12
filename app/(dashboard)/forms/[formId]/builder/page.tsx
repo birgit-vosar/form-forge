@@ -182,6 +182,8 @@ export default function DashboardPage() {
 
         const newField: NewField = {
             type: type,
+            topic: null,
+            name: null,
             label: typeInfo.label,
             placeholder: null,
             required: false,
@@ -464,7 +466,7 @@ export default function DashboardPage() {
         </div>
     </div>)
     if (!form) return (
-    <div className='flex flex-row min-h-screen'>
+        <div className='flex flex-row min-h-screen'>
             <Sidebar />
             {/*{mobileMenu ? (<div className='fixed inset-0 bg-black/20 z-40 md:hidden' onClick={toggleMobileNav} />) : (<div className='md:hidden' />)}*/}
             <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 min-h-screen`}>
