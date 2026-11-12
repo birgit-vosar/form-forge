@@ -59,6 +59,7 @@ export default function SubmitFormPage() {
     }, [formId])
 
     function handleValueChange(fieldId: number, newValue: string) {
+        setError('')
         setFieldValues((prev) => ({ ...prev, [fieldId]: newValue }))
         setFieldErrors((prev) => {
             if (!prev[fieldId]) return prev
@@ -78,10 +79,10 @@ export default function SubmitFormPage() {
                 continue
             }
 
-            if (field.type === 'email' && !isValidEmail(value)) {
+            if (field.type === 'email' && value !== '' && !isValidEmail(value)) {
                 newErrors[field.id] = 'Please enter a valid email address'
             }
-            if (field.type === 'phone' && !isValidPhone(value)) {
+            if (field.type === 'phone' && value !== '' && !isValidPhone(value)) {
                 newErrors[field.id] = 'Please enter a valid phone number'
             }
         }
@@ -90,7 +91,7 @@ export default function SubmitFormPage() {
     }
 
     async function submitForm(values: Record<number, string>) {
-
+        setError('')
         const newErrors = validateForm()
         setFieldErrors(newErrors)
         if (Object.keys(newErrors).length > 0) return
@@ -99,6 +100,9 @@ export default function SubmitFormPage() {
             setSubmitting(true)
             const res = await fetch(`/api/public/forms/${formId}`, {
                 method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify({ values })
             })
 
