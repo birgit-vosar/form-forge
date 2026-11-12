@@ -85,7 +85,6 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
         }
 
         const { optionId, update } = await req.json()
-        console.log('this is the update label that arrives to forms/formid/fields/fieldid/options: ', update.label)
 
 
         await pool.query(
