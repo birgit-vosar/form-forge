@@ -38,6 +38,8 @@ export default function SortableFieldRow({ field, selectedFieldId, onSelect, onD
                     </span>
                     <label className='cursor-pointer text-black font-mono text-md font-semibold mb-1'>{field.label}</label>
                     {field.required === true ? (<p className="font-mono text-md font-semibold">*</p>) : ('')}
+                    {field.name === '' ? ('') : (<label className='cursor-pointer text-black font-mono text-xs mb-1'> ({field.name})</label>) }
+                    
                 </div>
                 <button onClick={() => onDelete(field.id)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="size-4 mb-2 text-gray-800/75 cursor-pointer hover:text-teal-800 hover:scale-115">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
