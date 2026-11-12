@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { pool } from '@/lib/db'
 import { SessionData, sessionOptions } from "@/lib/sessions"
 import { getIronSession } from "iron-session"
+import { fieldNameDraftSchema } from "@/lib/fieldHelpers"
 
 export async function PATCH(req: NextRequest, context: { params: { formId: string, fieldId: number } }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
@@ -28,8 +29,13 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
         }
 
         if (update.name !== undefined) {
+            const parsedName = fieldNameDraftSchema.safeParse({ name: update.name })
+            if (!parsedName.success) {
+                return NextResponse.json({ error: parsedName.error.issues[0].message }, { status: 400 })
+            }
+
             await pool.query(
-                'UPDATE fields SET name = $1 WHERE form_id = $2 AND id = $3', [update.name, formId, fieldId]
+                'UPDATE fields SET name = $1 WHERE form_id = $2 AND id = $3', [parsedName.data.name, formId, fieldId]
             )
         }
 

@@ -421,6 +421,7 @@ export default function DashboardPage() {
     async function handlePublish() {
         try {
             setSaving(true)
+            setError('')
             const res = await fetch(`/api/forms/${formId}`, {
                 method: 'PATCH',
                 headers: {
@@ -429,6 +430,7 @@ export default function DashboardPage() {
                 body: JSON.stringify({ published: !published })
             })
             const publishData = await res.json()
+            console.log('this is the publishdata error in the handlepublish in builder: ', publishData.error)
             if (!res.ok) {
                 setError(publishData.error ?? 'Something went wrong with publishing the form.')
                 return
@@ -507,7 +509,7 @@ export default function DashboardPage() {
                                         </div>
                                     </div>
                                     <div className='flex gap-4 justify-end mr-4 flex-1'>
-                                        {saving === true ? <p className='animate-pulse cursor-default font-sans text-sm text-gray-400'>Saving...</p> : (<div className='flex items-center gap-1'>
+                                        {saving === true ? <p className='animate-pulse cursor-default font-sans text-sm pt-1 text-gray-400'>Saving...</p> : (<div className='flex items-center gap-1'>
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="text-gray-400 size-4">
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
                                             </svg>

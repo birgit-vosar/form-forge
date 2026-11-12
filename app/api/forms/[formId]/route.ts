@@ -47,6 +47,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
 }
 
 const publishSchema = z.object({ published: z.boolean() })
+
 const titleSchema = z.object({ title: z.string().min(1).max(50) })
 const descriptionSchema = z.object({ description: z.string().min(1).max(255) })
 const footerNoteSchema = z.object({ footerNote: z.string().min(1).max(500) })
@@ -62,12 +63,36 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
     try {
         const { formId } = await context.params
         const body = await req.json()
-        console.log('this is the body that arrived to form/formid patch: ', body)
 
         if (body.published !== undefined) {
             const parsedPublish = publishSchema.safeParse(body)
             if (!parsedPublish.success) {
                 return NextResponse.json({ error: 'Invalid' }, { status: 400 })
+            }
+
+            if (parsedPublish.data.published === true) {
+                const data = await pool.query(
+                    `SELECT f.name FROM fields f JOIN forms fo ON fo.id = f.form_id WHERE f.form_id = $1 AND fo.user_id = $2`,
+                    [formId, userId]
+                )
+                const hasEmptyName = data.rows.some(
+                    (row) => !row.name || row.name.trim() === ''
+                )
+
+                if (hasEmptyName) {
+                    return NextResponse.json(
+                        { error: 'Each field must have a name before publishing.' },
+                        { status: 400 }
+                    )
+                }
+
+                const names = data.rows.map((row) => row.name.trim())
+                if (new Set(names).size !== names.length) {
+                    return NextResponse.json(
+                        { error: 'Each field must have a unique name before publishing.' },
+                        { status: 400 }
+                    )
+                }
             }
 
             const result = await pool.query(
