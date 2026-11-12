@@ -230,6 +230,7 @@ export default function DashboardPage() {
                     : field
             )
         )
+        isMountedMap.current[fieldId] = true
     }
 
     async function handleDeleteField(fieldId: number) {
@@ -331,10 +332,7 @@ export default function DashboardPage() {
             )
         )
 
-        if (!isMountedMap.current[optionId]) {
-            isMountedMap.current[optionId] = true
-            return
-        }
+        
 
         if (debounceRefMap.current[optionId]) {
             clearTimeout(debounceRefMap.current[optionId])
@@ -356,7 +354,7 @@ export default function DashboardPage() {
                     } else {
                         setError('Something went wrong saving the form — please try again.')
                     }
-                    return // stop here — don't try to parse a failed response as the saved option
+                    return
                 }
 
                 const savedOptionsField = await res.json()
