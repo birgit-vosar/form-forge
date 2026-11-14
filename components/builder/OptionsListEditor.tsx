@@ -6,7 +6,7 @@ interface OptionsListEditorProps {
   addOption: () => void,
   deleteOption: (optionId: number, fieldId: number) => void,
   updateOption: (props: OptionsUpdateProps) => void
-}
+} 
 
 export default function OptionsListEditor({ fieldId, fieldOptions, addOption, deleteOption, updateOption }: OptionsListEditorProps) {
     return (

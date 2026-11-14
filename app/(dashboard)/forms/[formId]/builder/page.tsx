@@ -19,9 +19,14 @@ export default function DashboardPage() {
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
     const debounceRefDesc = useRef<ReturnType<typeof setTimeout>>(null)
     const debounceRefFooter = useRef<ReturnType<typeof setTimeout>>(null)
+    const debounceRefUpdateField = useRef<ReturnType<typeof setTimeout>>(null)
+    const debounceRefUpdateOption = useRef<NodeJS.Timeout | null>(null)
+    const debounceRefTopic = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
     const isMountedDesc = useRef(false)
     const isMountedFooter = useRef(false)
+    const isMountedUpdateField = useRef(false)
+    const isMountedTopic = useRef(false)
     const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
     const isMountedMap = useRef<Record<number, boolean>>({});
     const [title, setTitle] = useState('')
@@ -275,14 +280,14 @@ export default function DashboardPage() {
                 field
         ))
 
-        if (!isMounted.current) {
-            isMounted.current = true
+        if (!isMountedUpdateField.current) {
+            isMountedUpdateField.current = true
             return
         }
 
-        if (debounceRef.current) { clearTimeout(debounceRef.current) }
+        if (debounceRefUpdateField.current) { clearTimeout(debounceRefUpdateField.current) }
 
-        debounceRef.current = setTimeout(async () => {
+        debounceRefUpdateField.current = setTimeout(async () => {
             try {
                 setSaving(true)
                 setError('')
@@ -334,11 +339,11 @@ export default function DashboardPage() {
 
         
 
-        if (debounceRefMap.current[optionId]) {
-            clearTimeout(debounceRefMap.current[optionId])
+        if (debounceRefUpdateOption.current[optionId]) {
+            clearTimeout(debounceRefUpdateOption.current[optionId])
         }
 
-        debounceRefMap.current[optionId] = setTimeout(async () => {
+        debounceRefUpdateOption.current[optionId] = setTimeout(async () => {
             try {
                 setSaving(true)
                 setError('')
@@ -380,14 +385,14 @@ export default function DashboardPage() {
 
     async function handleUpdateForm(topic?: string | null) {
 
-        if (!isMounted.current) {
-            isMounted.current = true
+        if (!isMountedTopic.current) {
+            isMountedTopic.current = true
             return
         }
         if (topic !== undefined) setTopic(topic)
-        if (debounceRef.current) { clearTimeout(debounceRef.current) }
+        if (debounceRefTopic.current) { clearTimeout(debounceRefTopic.current) }
 
-        debounceRef.current = setTimeout(async () => {
+        debounceRefTopic.current = setTimeout(async () => {
             try {
                 setSaving(true)
                 setError('')
