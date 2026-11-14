@@ -20,7 +20,6 @@ export default function DashboardPage() {
     const debounceRefDesc = useRef<ReturnType<typeof setTimeout>>(null)
     const debounceRefFooter = useRef<ReturnType<typeof setTimeout>>(null)
     const debounceRefUpdateField = useRef<ReturnType<typeof setTimeout>>(null)
-    const debounceRefUpdateOption = useRef<NodeJS.Timeout | null>(null)
     const debounceRefTopic = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
     const isMountedDesc = useRef(false)
@@ -88,10 +87,10 @@ export default function DashboardPage() {
                 if (!res.ok) {
                     if (res.status === 400) {
                         setError('Title format is incorrect.')
-                        console.log('error:', 400)
+                        return
                     } else {
                         setError('Something went wrong saving the form — please try again.')
-                        console.log('error:', 500)
+                        return
                     }
                 }
 
@@ -127,10 +126,10 @@ export default function DashboardPage() {
                 if (!res.ok) {
                     if (res.status === 400) {
                         setError('Description format is incorrect.')
-                        console.log('error:', 400)
+                        return
                     } else {
                         setError('Something went wrong saving the form — please try again.')
-                        console.log('error:', 500)
+                        return
                     }
                 }
 
@@ -167,10 +166,10 @@ export default function DashboardPage() {
                 if (!res.ok) {
                     if (res.status === 400) {
                         setError('Footer description format is incorrect.')
-                        console.log('error:', 400)
+                        return
                     } else {
                         setError('Something went wrong saving the form — please try again.')
-                        console.log('error:', 500)
+                        return
                     }
                 }
 
@@ -302,10 +301,10 @@ export default function DashboardPage() {
                 if (!res.ok) {
                     if (res.status === 400) {
                         setError('Update format is incorrect.')
-                        console.log('error:', 400)
+                        return
                     } else {
                         setError('Something went wrong saving the form — please try again.')
-                        console.log('error:', 500)
+                        return
                     }
                 }
 
@@ -339,11 +338,11 @@ export default function DashboardPage() {
 
         
 
-        if (debounceRefUpdateOption.current[optionId]) {
-            clearTimeout(debounceRefUpdateOption.current[optionId])
+        if (debounceRefMap.current[optionId]) {
+            clearTimeout(debounceRefMap.current[optionId])
         }
 
-        debounceRefUpdateOption.current[optionId] = setTimeout(async () => {
+        debounceRefMap.current[optionId] = setTimeout(async () => {
             try {
                 setSaving(true)
                 setError('')
@@ -433,7 +432,6 @@ export default function DashboardPage() {
                 body: JSON.stringify({ published: !published })
             })
             const publishData = await res.json()
-            console.log('this is the publishdata error in the handlepublish in builder: ', publishData.error)
             if (!res.ok) {
                 setError(publishData.error ?? 'Something went wrong with publishing the form.')
                 return
