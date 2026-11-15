@@ -19,19 +19,19 @@ export default function DashboardPage() {
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
     const debounceRefDesc = useRef<ReturnType<typeof setTimeout>>(null)
     const debounceRefFooter = useRef<ReturnType<typeof setTimeout>>(null)
-    const debounceRefUpdateField = useRef<ReturnType<typeof setTimeout>>(null)
+    const debounceRefUpdateField = useRef<Record<number, ReturnType<typeof setTimeout>>>({})
+    const pendingFieldUpdates = useRef<Record<number, FieldUpdateProps['update']>>({})
     const debounceRefTopic = useRef<ReturnType<typeof setTimeout>>(null)
     const isMounted = useRef(false)
     const isMountedDesc = useRef(false)
     const isMountedFooter = useRef(false)
     const isMountedUpdateField = useRef(false)
-    const isMountedTopic = useRef(false)
-    const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
-    const isMountedMap = useRef<Record<number, boolean>>({});
+    const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({})
+    const isMountedMap = useRef<Record<number, boolean>>({})
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState<string | null>('')
     const [footerNote, setFooterNote] = useState<string | null>('')
-    const [topic, setTopic] = useState<string | null>('')
+    const [topic, setTopic] = useState<string | null>(form?.topic ?? '')
     const [published, setPublished] = useState<boolean | undefined>(undefined)
 
     const [fields, setFields] = useState<Field[]>([])
@@ -279,14 +279,17 @@ export default function DashboardPage() {
                 field
         ))
 
-        if (!isMountedUpdateField.current) {
-            isMountedUpdateField.current = true
-            return
+        pendingFieldUpdates.current[fieldId] = {
+            ...pendingFieldUpdates.current[fieldId],
+            ...update
         }
 
-        if (debounceRefUpdateField.current) { clearTimeout(debounceRefUpdateField.current) }
+        if (debounceRefUpdateField.current[fieldId]) { clearTimeout(debounceRefUpdateField.current[fieldId]) }
 
-        debounceRefUpdateField.current = setTimeout(async () => {
+        debounceRefUpdateField.current[fieldId] = setTimeout(async () => {
+            const merged = pendingFieldUpdates.current[fieldId]
+            delete pendingFieldUpdates.current[fieldId]
+            if (!merged) return
             try {
                 setSaving(true)
                 setError('')
@@ -295,25 +298,18 @@ export default function DashboardPage() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ update })
+                    body: JSON.stringify({ update: merged })
                 })
 
                 if (!res.ok) {
                     if (res.status === 400) {
-                        setError('Update format is incorrect.')
-                        return
+                        const errData = await res.json()
+                        setError(errData.error ?? 'Update format is incorrect.')
                     } else {
-                        setError('Something went wrong saving the form — please try again.')
-                        return
+                        setError('Something went wrong with saving the form — please try again.')
                     }
+                    return
                 }
-
-                const savedField = await res.json()
-                setFields(prev =>
-                    prev.map(field =>
-                        field.id === fieldId ? { ...field, ...savedField } : field
-                    )
-                )
             } catch (err) {
                 setError('Something went wrong with saving the new field update.')
             } finally {
@@ -336,7 +332,7 @@ export default function DashboardPage() {
             )
         )
 
-        
+
 
         if (debounceRefMap.current[optionId]) {
             clearTimeout(debounceRefMap.current[optionId])
@@ -383,11 +379,6 @@ export default function DashboardPage() {
     }
 
     async function handleUpdateForm(topic?: string | null) {
-
-        if (!isMountedTopic.current) {
-            isMountedTopic.current = true
-            return
-        }
         if (topic !== undefined) setTopic(topic)
         if (debounceRefTopic.current) { clearTimeout(debounceRefTopic.current) }
 
@@ -587,7 +578,7 @@ export default function DashboardPage() {
                                     </div>
                                     <div className='bg-[#eeeeee] flex-1 flex pt-6 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
                                         <div className='flex flex-col gap-2 divide-y divide-gray-300 w-full'>
-                                            <FormSettingsPanel key={form.id} form={form} onUpdateForm={handleUpdateForm} published={published} />
+                                            <FormSettingsPanel key={form.id} form={form} onUpdateForm={handleUpdateForm} setTopic={topic} published={published} />
                                             <FieldSettingsPanel key={selectedFieldId} selectedField={selectedField} onUpdate={handleUpdateField} addOption={handleAddOption}
                                                 deleteOption={handleDeleteOption} updateOption={handleUpdateOption} />
                                         </div>

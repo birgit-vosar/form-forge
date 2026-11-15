@@ -24,7 +24,7 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
 
         if (update.label !== undefined) {
             await pool.query(
-                'UPDATE fields f JOIN forms ON forms.id = f.form_id SET label = $1 WHERE f.form_id = $2 AND forms.user_id = $3 AND f.id = $4 ', [update.label, formId, userId, fieldId]
+                'UPDATE fields f SET label = $1 FROM forms WHERE forms.id = f.form_id AND f.form_id = $2 AND forms.user_id = $3 AND f.id = $4 ', [update.label, formId, userId, fieldId]
             )
         }
 
@@ -35,24 +35,24 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
             }
 
             await pool.query(
-                'UPDATE fields f JOIN forms ON forms.id = f.form_id SET name = $1 WHERE f.form_id = $2 AND forms.user_id = $3 AND f.id = $4', [parsedName.data.name, formId, userId, fieldId]
+                'UPDATE fields f SET name = $1 FROM forms WHERE forms.id = f.form_id AND f.form_id = $2 AND forms.user_id = $3 AND f.id = $4', [parsedName.data.name, formId, userId, fieldId]
             )
         }
 
         if (update.placeholder !== undefined) {
             await pool.query(
-                'UPDATE fields f JOIN forms ON forms.id = f.form_id SET placeholder = $1 WHERE f.form_id = $2 AND forms.user_id = $3 AND f.id = $4', [update.placeholder, formId, userId, fieldId]
+                'UPDATE fields f SET placeholder = $1 FROM forms WHERE forms.id = f.form_id AND f.form_id = $2 AND forms.user_id = $3 AND f.id = $4', [update.placeholder, formId, userId, fieldId]
             )
         }
 
         if (update.required !== undefined) {
             await pool.query(
-                'UPDATE fields f JOIN forms ON forms.id = f.form_id SET required = $1 WHERE f.form_id = $2 AND forms.user_id = $3 AND f.id = $4', [update.required, formId, userId, fieldId]
+                'UPDATE fields f SET required = $1 FROM forms WHERE forms.id = f.form_id AND f.form_id = $2 AND forms.user_id = $3 AND f.id = $4', [update.required, formId, userId, fieldId]
             )
         }
 
         const result = await pool.query(
-            'SELECT * FROM fields f JOIN forms ON forms.id = f.form_id WHERE f.id = $1 AND f.form_id = $2 AND forms.user_id = $3', [fieldId, formId, userId]
+            'SELECT f.* FROM fields f JOIN forms ON forms.id = f.form_id WHERE f.id = $1 AND f.form_id = $2 AND forms.user_id = $3', [fieldId, formId, userId]
         )
 
         if (result.rows.length === 0) {

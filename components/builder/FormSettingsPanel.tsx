@@ -2,18 +2,21 @@ import { useState } from "react"
 import { Form } from "@/lib/formTypes"
 import Link from "next/link"
 
+
+
 interface FormSettingsPanelProps {
     onUpdateForm: (topic: string) => void,
-    form: Form,
+    setTopic: (string) => void
     published: boolean | undefined
 }
 
 
 
 
-export default function FormSettingsPanel({ onUpdateForm, form, published }: FormSettingsPanelProps) {
+export default function FormSettingsPanel({ onUpdateForm,  form, published }: FormSettingsPanelProps) {
     const [isOpen, setIsOpen] = useState<boolean>(true)
     const isLive = published ?? form.is_published
+    const [topic, setTopic] = useState<string | null>(form?.topic ?? '')
     return (
         <div className='bg-[#eeeeee] flex flex-row pb-4 text-sm '>
             <div className='flex-1 flex flex-col h-full w-5/6 min-w-40 xl:min-w-60'>
@@ -34,8 +37,8 @@ export default function FormSettingsPanel({ onUpdateForm, form, published }: For
                 <div className={isOpen ? '' : 'hidden'}>
                     <div className='flex flex-col w-5/6 gap-2 mx-4 my-3'>
                         <p className='uppercase font-sans font-semibold text-black/75 text-sm'>Topic</p>
-                        <input onChange={(e) => { onUpdateForm(e.target.value) }} className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
-                            placeholder='Enter the topic of this form' value={form.topic}></input>
+                        <input onChange={(e) => { setTopic(e.target.value), onUpdateForm(e.target.value) }} className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                            placeholder='Enter the topic of this form' value={topic ?? ''}></input>
                     </div>
                     <div className='flex flex-row w-5/6 gap-1 mx-4 my-3'>
                         <p className='uppercase font-sans font-semibold text-black/75 text-sm'>Form id: </p>

@@ -83,7 +83,7 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
                     <div className='flex flex-col w-full gap-2 mx-4 my-3'>
                         <p className='font-sans font-semibold text-black/75 text-sm'>Name</p>
                         <input onChange={(e) => { onUpdate({ fieldId: selectedField.id, update: { name: e.target.value } }) }} className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
-                            placeholder='Enter a unique name for each field' value={selectedField.name}></input>
+                            placeholder='Enter a unique name for each field' value={selectedField.name ?? undefined}></input>
                     </div>
                     {fieldConfig.hasPlaceholder && (<div className='flex flex-col w-full gap-2 mx-4 my-3'>
                         <p className='font-sans font-semibold text-black/75 text-sm'>Placeholder text</p>
