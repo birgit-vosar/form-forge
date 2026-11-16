@@ -6,7 +6,7 @@ import Link from "next/link"
 
 interface FormSettingsPanelProps {
     onUpdateForm: (topic: string) => void,
-    setTopic: (string) => void
+    form: Form
     published: boolean | undefined
 }
 

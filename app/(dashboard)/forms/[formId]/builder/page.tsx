@@ -387,6 +387,7 @@ export default function DashboardPage() {
 
     async function handleUpdateForm(topic?: string | null) {
         if (topic !== undefined) setTopic(topic)
+        if (!topic) setTopic('')
         if (debounceRefTopic.current) { clearTimeout(debounceRefTopic.current) }
 
         debounceRefTopic.current = setTimeout(async () => {
