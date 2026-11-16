@@ -4,7 +4,7 @@ import { SessionData, sessionOptions } from "@/lib/sessions"
 import { getIronSession } from "iron-session"
 import { fieldNameDraftSchema } from "@/lib/fieldHelpers"
 
-export async function PATCH(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: number }> }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {

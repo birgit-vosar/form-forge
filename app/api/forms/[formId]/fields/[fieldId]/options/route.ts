@@ -3,7 +3,7 @@ import { pool } from '@/lib/db'
 import { SessionData, sessionOptions } from "@/lib/sessions"
 import { getIronSession } from "iron-session"
 
-export async function POST(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: number }> }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ formId
     }
 }
 
-export async function DELETE(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: number }> }) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {
@@ -71,7 +71,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ form
     }
 }
 
-export async function PATCH(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: number }> }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {
