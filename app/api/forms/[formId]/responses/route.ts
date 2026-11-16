@@ -22,10 +22,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
         }
 
         const responsesRes = await pool.query(
-            `SELECT id, submitted_at
-             FROM responses
-             WHERE form_id = $1
-             ORDER BY submitted_at DESC`,
+            `SELECT id, submitted_at FROM responses WHERE form_id = $1 ORDER BY submitted_at DESC`,
             [formId]
         )
 
@@ -36,9 +33,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
         const responseIds = responsesRes.rows.map((r) => r.id)
 
         const answersRes = await pool.query(
-            `SELECT id AS answer_id, response_id, field_id, value
-     FROM response_answers
-     WHERE response_id = ANY($1::int[])`,
+            `SELECT id AS answer_id, response_id, field_id, value FROM response_answers WHERE response_id = ANY($1::int[])`,
             [responseIds]
         )
 
@@ -46,11 +41,9 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
             ...response,
             answers: answersRes.rows.filter((answer) => answer.response_id === response.id),
         }))
-        console.log(responsesWithAnswers)
 
         return NextResponse.json(responsesWithAnswers, { status: 200 })
     } catch (err) {
-        console.error(err)
         return NextResponse.json({ error: 'Failed to fetch the responses from the server.' }, { status: 500 })
     }
 }

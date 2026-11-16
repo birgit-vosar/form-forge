@@ -20,8 +20,8 @@ export async function POST(req: NextRequest, context: { params: Promise<{ formId
         }
 
         const countRes = await pool.query(
-            'SELECT COALESCE(MAX(order_index), -1) AS max_order FROM field_options WHERE field_id = $1',
-            [fieldId]
+            'SELECT COALESCE(MAX(f_o.order_index), -1) AS max_order FROM field_options f_o JOIN forms ON forms.id = f_o.form_id WHERE f_o.field_id = $1 AND f_o.form_id = $2 AND forms.user_id = $3',
+            [fieldId, formId, userId]
         )
 
         const orderIndex = countRes.rows[0].max_order + 1;
@@ -33,7 +33,6 @@ export async function POST(req: NextRequest, context: { params: Promise<{ formId
         return NextResponse.json(resOptionField.rows[0])
 
     } catch (err) {
-        console.log(err)
         return NextResponse.json({ error: 'Failed to add a new options field.' }, { status: 500 })
     }
 }
@@ -56,11 +55,15 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ form
 
         const body = await req.json()
 
-        await pool.query(
-            'DELETE FROM field_options WHERE id = $1 AND field_id = $2', [body.optionId, fieldId]
+        const deleteRes = await pool.query(
+            'DELETE FROM field_options f_o USING forms WHERE forms.id = f_o.form_id AND f_o.id = $1 AND f_o.field_id = $2 AND forms.user_id = $3', [body.optionId, fieldId, userId]
         )
 
-        return NextResponse.json({ response: 'Options field deletion successful.'}, { status: 201 })
+        if (deleteRes.rowCount === 0) {
+            return NextResponse.json({ error: 'Option not found' }, { status: 404 })
+        }
+
+        return NextResponse.json({ response: 'Options field deletion successful.' }, { status: 201 })
 
     } catch (err) {
         console.log(err)
@@ -88,12 +91,12 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
 
 
         await pool.query(
-            'UPDATE field_options SET label = $1 WHERE field_id = $2 AND id = $3', [update.label, fieldId, optionId ]
+            'UPDATE field_options f_o SET label = $1 FROM forms WHERE forms.id = f_o.form_id AND f_o.field_id = $2 AND f_o.id = $3 AND forms.user_id = $4', [update.label, fieldId, optionId, userId]
         )
-        
+
 
         const result = await pool.query(
-            'SELECT * FROM field_options WHERE id = $1 AND field_id = $2', [optionId, fieldId]
+            'SELECT f_o.* FROM field_options f_o JOIN forms ON forms.id = f_o.form_id WHERE f_o.id = $1 AND f_o.field_id = $2 AND forms.user_id = $3', [optionId, fieldId, userId]
         )
 
         if (result.rows.length === 0) {
@@ -103,7 +106,6 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
         return NextResponse.json(result.rows[0])
 
     } catch (err) {
-        console.log(err)
         return NextResponse.json({ error: 'Failed to delete field.' }, { status: 500 })
     }
 }

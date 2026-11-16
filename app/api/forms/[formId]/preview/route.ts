@@ -26,11 +26,11 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
         }
 
         const fieldsRes = await pool.query(
-            'SELECT id, type, label, placeholder, required, order_index, validation_rules, form_id FROM fields WHERE form_id = $1', [formId]
+            'SELECT f.id, f.type, f.label, f.placeholder, f.required, f.order_index, f.validation_rules, f.form_id FROM fields f JOIN forms ON forms.id = f.form_id WHERE f.form_id = $1 AND forms.user_id = $2 ORDER BY f.order_index ASC', [formId, userId]
         )
 
         const optionsRes = await pool.query(
-            'SELECT id, field_id, label, order_index, value FROM field_options WHERE form_id = $1', [formId]
+            'SELECT f_o.id, f_o.field_id, f_o.label, f_o.order_index, f_o.value FROM field_options f_o JOIN forms ON forms.id = f_o.form_id WHERE f_o.form_id = $1 AND forms.user_id = $2 ORDER BY f_o.order_index ASC', [formId, userId]
         )
 
         const form = formsRes.rows[0]
@@ -49,7 +49,6 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
 
         return NextResponse.json({ ...form, fields })
     } catch (err) {
-        console.error('Failed to fetch forms:', err)
         return NextResponse.json({ error: 'Failed to fetch the forms from the server.' }, { status: 500 })
     }
 }

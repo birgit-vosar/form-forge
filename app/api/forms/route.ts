@@ -17,7 +17,6 @@ export async function GET(req: NextRequest) {
         )
         return NextResponse.json(res.rows)
     } catch (err) {
-        console.error('Failed to fetch forms data in api:', err)
         return NextResponse.json({ error: 'Failed to fetch forms data' }, { status: 500 })
     }
 }
@@ -36,7 +35,6 @@ export async function POST(req: NextRequest) {
                 'INSERT INTO forms (user_id, title) VALUES ($1, $2) RETURNING id', [userId, title]
             )
             const formId = res.rows[0].id
-            console.log(formId)
 
             return NextResponse.json(formId)
         } catch (err) {
@@ -46,7 +44,6 @@ export async function POST(req: NextRequest) {
 
 
     } catch (err) {
-        console.log('Failed to create new form base in server')
         return NextResponse.json({ error: 'Failed to create new form' }, { status: 500 })
     }
 }

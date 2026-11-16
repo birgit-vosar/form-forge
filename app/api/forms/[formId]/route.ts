@@ -149,7 +149,6 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
 
         return NextResponse.json({ response: 'Title changed successfully' }, { status: 200 })
     } catch (err) {
-        console.log('failed to change the info in the form/formid/patch')
         return NextResponse.json({ error: 'Something went wrong with changing the form property.' }, { status: 500 })
     }
 

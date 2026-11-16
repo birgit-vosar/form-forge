@@ -35,8 +35,8 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
         await client.query('BEGIN')
         for (const field of fieldOrder) {
             await client.query(
-                'UPDATE fields SET order_index = $1 WHERE id = $2 AND form_id = $3',
-                [field.order_index, field.id, formId]
+                'UPDATE fields f SET order_index = $1 FROM forms WHERE f.id = $2 AND f.form_id = $3 AND forms.user_id = $4',
+                [field.order_index, field.id, formId, userId]
             )
         }
         await client.query('COMMIT')
@@ -44,7 +44,6 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
 
     } catch (err) {
         await client.query('ROLLBACK')
-        console.error(err)
         return NextResponse.json({ error: 'Failed to save field order' }, { status: 500 })
     } finally {
         client.release()

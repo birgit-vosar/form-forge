@@ -22,11 +22,11 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
         }
 
         const existingFields = await pool.query(
-            'SELECT * FROM fields WHERE form_id = $1 ORDER BY order_index ASC', [formId]
+            'SELECT f.* FROM fields f JOIN forms ON forms.id = f.form_id WHERE f.form_id = $1 AND forms.user_id = $2 ORDER BY f.order_index ASC', [formId, userId]
         )
 
         const optionsFields = await pool.query(
-            'SELECT * FROM field_options WHERE form_id = $1 ORDER BY order_index ASC', [formId]
+            'SELECT f_o.* FROM field_options f_o JOIN forms ON forms.id = f.form_id WHERE f_o.form_id = $1 AND forms.user_id = $2 ORDER BY f_o.order_index ASC', [formId, userId]
         )
 
         const fields = existingFields.rows.map( field => ({
@@ -81,7 +81,6 @@ export async function POST(req: NextRequest, context: { params: { formId: string
 
         return NextResponse.json(fieldRes.rows[0], { status: 201 })
     } catch (err) {
-        console.error(err)
         return NextResponse.json({ error: 'Failed to add a form field.' }, { status: 500 })
     }
 
@@ -106,13 +105,12 @@ export async function DELETE(req: NextRequest, context: { params: { formId: stri
         const fieldId = await req.json()
         
         await pool.query(
-            'DELETE FROM fields WHERE id = $1', [fieldId]
+            'DELETE FROM fields f USING forms WHERE forms.id = f.form_id AND forms.user_id = $1 AND f.id = $2', [userId, fieldId]
         )
 
         return NextResponse.json({ response: 'Field deletion successful.'}, { status: 201 })
 
     } catch(err) {
-        console.log(err)
         return NextResponse.json({ error: 'Failed to delete field.' }, { status: 500 })
     }
 }
