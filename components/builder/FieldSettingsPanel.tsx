@@ -59,7 +59,7 @@ export default function FieldSettingsPanel({ selectedField, onUpdate, addOption,
                             <p className='font-sans font-semibold text-black/75 text-sm'>Required:</p>
                             <button
                                 type="button"
-                                onClick={() => { !selectedField.required; onUpdate({ fieldId: selectedField.id, update: { required: !selectedField.required } }) }}
+                                onClick={() => { onUpdate({ fieldId: selectedField.id, update: { required: !selectedField.required } }) }}
                                 className={`cursor-pointer relative h-5 w-10 rounded-full transition-colors ${selectedField.required === true ? "bg-[#9ed4c9]" : "bg-gray-300"
                                     }`}
                             >

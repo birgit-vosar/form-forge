@@ -74,7 +74,7 @@ export default function Signup() {
                                 </label>
                                 <div className='mt-2'>
                                     <input
-                                        id='email' name='email' type='email' required autoComplete='email'
+                                        id='email' name='email' type='email' required
                                         className='text-stone-700 bg-stone-50 w-full outline-1 -outline-offset-1 outline-stone-300 placeholder:text-muted-foreground px-3 py-1.5 rounded-md sm:text-sm/6'
                                         placeholder='you@example.com'
                                     />
@@ -86,7 +86,7 @@ export default function Signup() {
                                 </label>
                                 <div className='mt-2'>
                                     <input
-                                        id='password' name='password' type='password' required autoComplete='current-password'
+                                        id='password' name='password' type='password' required
                                         className='text-stone-700 bg-stone-50 w-full outline-1 -outline-offset-1 outline-stone-300 placeholder:text-stone-500 px-3 py-1.5 rounded-md sm:text-sm/6'
                                         placeholder='••••••••'
                                     />
