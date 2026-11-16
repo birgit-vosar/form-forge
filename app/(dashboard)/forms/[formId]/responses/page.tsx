@@ -1,5 +1,5 @@
 'use client'
-import LeadsRow from '@/components/leadsRow'
+
 import Sidebar from '@/components/Sidebar'
 import { useParams } from 'next/navigation'
 import { ResponseLeadsData } from '@/lib/leadsTypes'

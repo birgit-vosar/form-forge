@@ -18,7 +18,6 @@ export async function DELETE(req: NextRequest) {
 
         return NextResponse.json({ status: 200 })
     } catch (err) {
-        console.error('Failed to delete form in api:', err)
         return NextResponse.json({ error: 'Failed to delete form in api' }, { status: 500 })
     }
 }
@@ -40,7 +39,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ formId:
         }
         return NextResponse.json(res.rows[0])
     } catch (err) {
-        console.log('failed to fetch info for the specific form')
         return NextResponse.json({ error: 'Failed to fetch info for the specific form' }, { status: 500 })
     }
 
