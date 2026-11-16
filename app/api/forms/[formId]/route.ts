@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { pool } from '@/lib/db'
 import { SessionData, sessionOptions } from "@/lib/sessions"
 import { getIronSession } from "iron-session"
-import { z } from 'zod'
+import { publishSchema, titleSchema, descriptionSchema, footerNoteSchema, topicSchema } from "@/lib/formTypes"
 
 export async function DELETE(req: NextRequest) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
@@ -46,12 +46,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
 
 }
 
-const publishSchema = z.object({ published: z.boolean() })
 
-const titleSchema = z.object({ title: z.string().min(1).max(50) })
-const descriptionSchema = z.object({ description: z.string().min(1).max(255) })
-const footerNoteSchema = z.object({ footerNote: z.string().min(1).max(500) })
-const topicSchema = z.object({ topic: z.string().min(1).max(100) })
 
 export async function PATCH(req: NextRequest, context: { params: { formId: string } }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)

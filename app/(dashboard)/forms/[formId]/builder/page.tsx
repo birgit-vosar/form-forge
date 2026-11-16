@@ -25,7 +25,6 @@ export default function DashboardPage() {
     const isMounted = useRef(false)
     const isMountedDesc = useRef(false)
     const isMountedFooter = useRef(false)
-    const isMountedUpdateField = useRef(false)
     const debounceRefMap = useRef<Record<number, ReturnType<typeof setTimeout>>>({})
     const isMountedMap = useRef<Record<number, boolean>>({})
     const [title, setTitle] = useState('')
@@ -108,13 +107,16 @@ export default function DashboardPage() {
             return
         }
 
-        if (!description) { return }
-
         if (debounceRefDesc.current) { clearTimeout(debounceRefDesc.current) }
         debounceRefDesc.current = setTimeout(async () => {
             try {
                 setSaving(true)
                 setError('')
+                if (!description) {
+                    setDescription('')
+                    const textarea = document.getElementById('header-description')
+                    textarea.placeholder = 'Header description slot...'
+                }
                 const res = await fetch(`/api/forms/${formId}`, {
                     method: 'PATCH',
                     headers: {
@@ -148,13 +150,18 @@ export default function DashboardPage() {
             return
         }
 
-        if (!footerNote) { return }
+        
 
         if (debounceRefFooter.current) { clearTimeout(debounceRefFooter.current) }
         debounceRefFooter.current = setTimeout(async () => {
             try {
                 setSaving(true)
                 setError('')
+                if (!footerNote) { 
+                    setFooterNote('')
+                    const textarea = document.getElementById('footer-description')
+                    textarea.placeholder = 'Footer description slot...'
+                 }
                 const res = await fetch(`/api/forms/${formId}`, {
                     method: 'PATCH',
                     headers: {
@@ -537,6 +544,7 @@ export default function DashboardPage() {
                                                 </div>
                                                 <div className='flex flex-row items-end gap-4 mb-4'>
                                                     <textarea
+                                                    id='header-description'
                                                         rows={1}
                                                         className='text-black/75 font-mono text-md font-semibold field-sizing-content
                                                                     placeholder:font-mono placeholder:text-md placeholder:font-semibold placeholder:text-black/50 focus:outline-none resize-none
@@ -557,6 +565,7 @@ export default function DashboardPage() {
                                                     selectedFieldId={selectedFieldId} formId={formId} />
                                                 <div className='flex flex-row items-end gap-4 mb-4'>
                                                     <textarea
+                                                    id='footer-description'
                                                         rows={1}
                                                         className='text-black/75 font-mono text-md font-semibold field-sizing-content
                                                                     placeholder:font-mono placeholder:text-md placeholder:font-semibold placeholder:text-black/50 focus:outline-none resize-none
@@ -578,7 +587,7 @@ export default function DashboardPage() {
                                     </div>
                                     <div className='bg-[#eeeeee] flex-1 flex pt-6 border-l border-gray-300 text-sm 2xl:min-w-40 max-w-100'>
                                         <div className='flex flex-col gap-2 divide-y divide-gray-300 w-full'>
-                                            <FormSettingsPanel key={form.id} form={form} onUpdateForm={handleUpdateForm} setTopic={topic} published={published} />
+                                            <FormSettingsPanel key={form.id} form={form} onUpdateForm={handleUpdateForm} published={published} />
                                             <FieldSettingsPanel key={selectedFieldId} selectedField={selectedField} onUpdate={handleUpdateField} addOption={handleAddOption}
                                                 deleteOption={handleDeleteOption} updateOption={handleUpdateOption} />
                                         </div>
