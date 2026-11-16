@@ -3,7 +3,7 @@ import { SessionData, sessionOptions } from "@/lib/sessions";
 import { getIronSession } from "iron-session";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: NextRequest, context: { params: { formId: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ formId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {

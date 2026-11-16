@@ -3,7 +3,7 @@ import { pool } from '@/lib/db'
 import { SessionData, sessionOptions } from "@/lib/sessions"
 import { getIronSession } from "iron-session"
 
-export async function GET(req: NextRequest, context: { params: { formId: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ formId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {

@@ -71,7 +71,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ form
     }
 }
 
-export async function PATCH(req: NextRequest, context: { params: { formId: string, fieldId: number } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ formId: string, fieldId: number }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {

@@ -3,7 +3,7 @@ import { pool } from '@/lib/db'
 import { submitResponseSchema } from "@/lib/validations"
 import { isValidEmail, isValidPhone } from "@/lib/fieldHelpers"
 
-export async function GET(req: NextRequest, context: { params: { formId: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ formId: string }> }) {
     const { formId } = await context.params
     const id = Number(formId)
 
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
     }
 }
 
-export async function POST(req: NextRequest, context: { params: { formId: string } }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ formId: string }> }) {
     const { formId } = await context.params
     const body = await req.json()
 

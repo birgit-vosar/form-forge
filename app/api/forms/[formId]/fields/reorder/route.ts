@@ -4,7 +4,7 @@ import { sessionOptions, SessionData } from "@/lib/sessions"
 import { pool } from "@/lib/db"
 import { reorderFieldsSchema } from "@/lib/validations"
 
-export async function PATCH(req: NextRequest, context: { params: { formId: string } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ formId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {

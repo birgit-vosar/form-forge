@@ -23,7 +23,7 @@ export async function DELETE(req: NextRequest) {
     }
 }
 
-export async function GET(req: NextRequest, context: { params: { formId: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ formId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {
@@ -48,7 +48,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
 
 
 
-export async function PATCH(req: NextRequest, context: { params: { formId: string } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ formId: string }> }) {
     const session = await getIronSession<SessionData>(req, new NextResponse(), sessionOptions)
     const userId = session.userId
     if (!userId) {
