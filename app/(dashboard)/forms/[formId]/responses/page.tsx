@@ -49,34 +49,34 @@ export default function ResponsesPage() {
     }, [])
 
     return (
-        <div className='flex flex-row min-h-screen'>
+        <div className='flex flex-row max-h-screen min-h-screen overflow-hidden'>
             <Sidebar />
-            <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 min-h-screen`}>
-                <div className='flex-1 flex flex-col min-h-screen'>
-                    {/* main */}
-                    <div className='flex-1 flex flex-col lg:flex-row min-h-screen'>
-                        <div className='flex-[4] flex flex-col bg-stone-100 h-full'>
-                            <div className='flex-1 flex flex-col min-h-screen'>
+            <div className={`flex-1 flex flex-col bg-stone-100 text-zinc-800 min-h-0`}>
+                <div className='flex-1 min-h-0 flex flex-col'>
+                    <div className='flex-1 flex flex-col min-h-0'>
+                        <div className='flex-1 flex flex-col bg-stone-100  min-h-0'>
+                            <div className='flex-1 min-h-0 flex flex-col'>
                                 <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
                                     <p className='text-red-600 font-sans text-sm'>{error}</p>
                                 </div>
-                                <div className='flex-1 flex flex-row justify-between'>
-                                    <div className='bg-white gap-2 flex-1 flex flex-col mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-gray-300 text-sm shadow-lg'>
+                                <div className='flex-1 flex flex-row justify-between min-h-0 '>
+                                    <div className='bg-white gap-2 flex-1 flex flex-col mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-gray-300 text-sm shadow-lg min-h-0'>
                                         <div className='py-2 flex flex-col'>
                                             <p className='font-sans text-xs'>Form name:</p>
                                             <p className='font-mono text-lg font-semibold'>{form?.title}</p>
                                         </div>
-                                        <div className='flex flex-col bg-white border rounded-md border-gray-300 h-full'>
-                                            <div className='flex flex-row border-b border-gray-300 bg-stone-100 text-sm font-mono font-semibold'>
-                                                <div className={`${loading ? 'hidden' : ''} capitalize py-2 pl-2 flex-1 flex border-r border-gray-300`}>
-                                                    ID
+                                        {/* box start */}
+                                        <div className='flex flex-col bg-white border rounded-md border-gray-300 h-full min-h-0 overflow-y-auto overflow-x-auto'>
+                                            <div className='sticky top-0 z-10 flex flex-row border-b border-gray-300 bg-stone-100 text-sm font-mono font-semibold'>
+                                                <div className={`${loading ? 'hidden' : ''} capitalize py-2 pl-2 flex-1 flex border-r border-gray-300 min-w-[5%] max-w-[5%]`}>
+                                                    ID ({leads?.length})
                                                 </div>
                                                 {fields.map((field) => (
-                                                    <div key={field.id} className='capitalize py-2 pl-2 flex-4 flex border-r border-gray-300'>
+                                                    <div key={field.id} className='capitalize py-2 px-2 flex-4 flex border-r border-gray-300 min-w-[5%]'>
                                                         {field.name}
                                                     </div>
                                                 ))}
-                                                <div className={`${loading ? 'hidden' : ''} capitalize py-2 pl-2 flex-4 flex border-r border-gray-300`}>
+                                                <div className={`${loading ? 'hidden' : ''} capitalize py-2 pl-2 flex-4 flex border-r border-gray-300 min-w-[10%] max-w-[10%]`}>
                                                     Date
                                                 </div>
                                             </div>
@@ -95,18 +95,22 @@ export default function ResponsesPage() {
 
                                                             leads?.map((response) => (
                                                                 <div key={response.id} className='flex flex-row border-b border-gray-300 font-sans text-xs'>
-                                                                    <div className='py-2 pl-2 flex-1 flex border-r border-gray-300'>
+                                                                    <div className='py-2 pl-2 flex-1 flex border-r border-gray-300 min-w-[5%] max-w-[5%]'>
                                                                         {response.id}
                                                                     </div>  
                                                                     {fields.map((field) => {
                                                                         const answer = response.answers.find((a) => a.field_id === field.id)
                                                                         return (
-                                                                            <div key={field.id} className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
-                                                                            {answer?.value ?? ''}
+                                                                            <div key={field.id} className='py-2 px-2 flex-4 flex whitespace-normal break-all border-r border-gray-300 min-w-[5%]'>
+                                                                            {answer?.value
+                                                                            ? answer?.value.length > 1000
+                                                                                ? `${answer?.value.slice(0, 500)}...`
+                                                                                : answer?.value
+                                                                            : '-'}
                                                                         </div>
                                                                         )
                                                                     })}
-                                                                    <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
+                                                                    <div className='py-2 pl-2 flex-4 flex border-r border-gray-300 min-w-[10%] max-w-[10%]'>
                                                                         {new Date(response.submitted_at).toLocaleString('et-EE')}
                                                                     </div>
                                                                 </div>
@@ -117,6 +121,7 @@ export default function ResponsesPage() {
                                                 )
                                             }
                                         </div>
+                                        {/* box end */}
                                     </div>
                                 </div>
                             </div>

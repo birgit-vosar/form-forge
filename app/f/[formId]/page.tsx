@@ -4,7 +4,6 @@ import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { Field } from "@/lib/fieldTypes"
 import FieldRenderer from "@/components/builder/FieldRenderer"
-import { getOptionValue } from "@/lib/fieldHelpers"
 import { isValidEmail, isValidPhone } from "@/lib/fieldHelpers"
 
 interface SubmitFormInfo {
@@ -73,6 +72,14 @@ export default function SubmitFormPage() {
 
         for (const field of form?.fields ?? []) {
             const value = (fieldValues[field.id] ?? '').trim()
+
+            if (field.type === 'text' && value.length > 100) {
+                newErrors[field.id] = 'Short text fields length must be shorter than 100 characters'
+            }
+
+            if (field.type === 'textarea' && value.length > 1000) {
+                newErrors[field.id] = 'Long text fields length must be shorter than 1000 characters'
+            }
 
             if (field.required && value === '') {
                 newErrors[field.id] = 'This field is required'

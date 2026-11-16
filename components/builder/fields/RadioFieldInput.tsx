@@ -24,7 +24,7 @@ export default function RadioFieldInput({ field, value, onChange }: FieldInputPr
                       onChange={()=> onChange?.(field.id, optionValue)}/>
                     <span className="absolute top-1/2 left-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-slate-800 opacity-0 transition-opacity duration-200 peer-checked:opacity-100"></span>
                   </label>
-                  <label htmlFor={optionId} className="ml-2 cursor-pointer text-sm text-black">
+                  <label htmlFor={optionId} className="mx-2 cursor-pointer text-sm text-black break-all break-words whitespace-normal">
                     {option.label}
                   </label>
                 </div>

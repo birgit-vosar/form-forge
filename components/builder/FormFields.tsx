@@ -10,10 +10,11 @@ interface FormFieldsType {
     selectedFieldId: number | null,
     onDelete: (fieldId: number) => void,
     onSelect: (fieldId: number) => void,
-    formId: string
+    formId: string,
+    fieldErrors: Record<number, string>
 }
 
-export default function FormFields({ fields, setFields, selectedFieldId, onDelete, onSelect, formId }: FormFieldsType) {
+export default function FormFields({ fields, setFields, selectedFieldId, onDelete, onSelect, formId, fieldErrors }: FormFieldsType) {
     const sensors = useSensors(useSensor(PointerSensor))
 
     async function handleDragEnd(e: DragEndEvent) {
@@ -34,7 +35,7 @@ export default function FormFields({ fields, setFields, selectedFieldId, onDelet
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ fieldOrder }),
             })
-        } catch(err) {
+        } catch (err) {
             console.error('Failed to save field order', err)
         }
     }
@@ -49,10 +50,13 @@ export default function FormFields({ fields, setFields, selectedFieldId, onDelet
     return (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={fields.map((field) => field.id)} strategy={verticalListSortingStrategy}>
-                <div>
+                <div className="flex flex-col gap-4">
                     {
                         fields.map((field) => (
-                            <SortableFieldRow key={field.id} field={field} selectedFieldId={selectedFieldId} onSelect={onSelect} onDelete={onDelete} />
+                            <div key={field.id}>
+                                <SortableFieldRow key={field.id} field={field} selectedFieldId={selectedFieldId} onSelect={onSelect} onDelete={onDelete} />
+                                {fieldErrors[field.id] && (<p className='text-[#d70000] font-sans text-sm mt-1'>{fieldErrors[field.id]}</p>)}
+                            </div>
                         ))
                     }
                 </div>

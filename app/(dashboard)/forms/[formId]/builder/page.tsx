@@ -14,6 +14,7 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [error, setError] = useState<string>('')
+    const [fieldErrors, setFieldErrors] = useState<Record<number, string>>([])
     const [form, setForm] = useState<Form | null>(null)
 
     const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
@@ -150,18 +151,18 @@ export default function DashboardPage() {
             return
         }
 
-        
+
 
         if (debounceRefFooter.current) { clearTimeout(debounceRefFooter.current) }
         debounceRefFooter.current = setTimeout(async () => {
             try {
                 setSaving(true)
                 setError('')
-                if (!footerNote) { 
+                if (!footerNote) {
                     setFooterNote('')
                     const textarea = document.getElementById('footer-description')
                     textarea.placeholder = 'Footer description slot...'
-                 }
+                }
                 const res = await fetch(`/api/forms/${formId}`, {
                     method: 'PATCH',
                     headers: {
@@ -423,6 +424,23 @@ export default function DashboardPage() {
         try {
             setSaving(true)
             setError('')
+
+            const fieldsWithOptions = fields.filter((field) => field.type === 'checkbox' ||
+                field.type === 'dropdown' ||
+                field.type === 'radio')
+
+            const fieldsWithNoOptions = fieldsWithOptions.filter((field) => !field.options?.length).map((field) => field.id)
+
+            if (fieldsWithNoOptions.length > 0) {
+                fieldsWithNoOptions.forEach((fieldId) => {
+                    setFieldErrors((prev) => ({
+                        ...prev,
+                        [fieldId] : 'Must have at least one option.'
+                    }))
+                })
+                return
+            }
+
             const res = await fetch(`/api/forms/${formId}`, {
                 method: 'PATCH',
                 headers: {
@@ -533,7 +551,7 @@ export default function DashboardPage() {
                                                 <div className='flex flex-row items-center gap-4'>
                                                     <input
                                                         type='text'
-                                                        className='text-black font-mono text-lg font-semibold field-sizing-content min-w-20 max-w-md
+                                                        className='text-black font-mono text-lg font-semibold field-sizing-content min-w-20 max-w-md break-all
                                                                     placeholder:font-mono placeholder:text-md placeholder:font-semibold placeholder:text-black focus:outline-none'
                                                         placeholder={title ? title : form.title}
                                                         defaultValue={form.title}
@@ -545,9 +563,8 @@ export default function DashboardPage() {
                                                 </div>
                                                 <div className='flex flex-row items-end gap-4 mb-4'>
                                                     <textarea
-                                                    id='header-description'
-                                                        rows={1}
-                                                        className='text-black/75 font-mono text-md font-semibold field-sizing-content
+                                                        id='header-description'
+                                                        className='text-black/75 font-mono text-md font-semibold field-sizing-content break-all
                                                                     placeholder:font-mono placeholder:text-md placeholder:font-semibold placeholder:text-black/50 focus:outline-none resize-none
                                                                     break-words whitespace-pre-wrap overflow-hidden'
                                                         placeholder={description ? description : form.description || 'Header description slot.....'}
@@ -563,10 +580,10 @@ export default function DashboardPage() {
                                                     </svg>
                                                 </div>
                                                 <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField}
-                                                    selectedFieldId={selectedFieldId} formId={formId} />
+                                                    selectedFieldId={selectedFieldId} formId={formId} fieldErrors={fieldErrors}/>
                                                 <div className='flex flex-row items-end gap-4 mb-4'>
                                                     <textarea
-                                                    id='footer-description'
+                                                        id='footer-description'
                                                         rows={1}
                                                         className='text-black/75 font-mono text-md font-semibold field-sizing-content
                                                                     placeholder:font-mono placeholder:text-md placeholder:font-semibold placeholder:text-black/50 focus:outline-none resize-none

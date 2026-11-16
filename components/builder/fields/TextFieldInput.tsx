@@ -7,7 +7,7 @@ export default function TextFieldInput({ field, value, onChange } : FieldInputPr
         <div>
             <input className="py-2 w-full px-2 border rounded-sm border-[#8ed0b8] bg-[#dbf1e9]" 
              placeholder={newPh === '' ? (field.placeholder ?? undefined): newPh} 
-             value={value ?? ''} 
+             value={value ?? ''} maxLength={100}
              onChange={(e) => {setNewPh(e.target.value), onChange?.(field.id, e.target.value)}}>
             </input>
         </div>

@@ -37,7 +37,7 @@ export default function FormSettingsPanel({ onUpdateForm,  form, published }: Fo
                 <div className={isOpen ? '' : 'hidden'}>
                     <div className='flex flex-col w-5/6 gap-2 mx-4 my-3'>
                         <p className='uppercase font-sans font-semibold text-black/75 text-sm'>Topic</p>
-                        <input onChange={(e) => { setTopic(e.target.value), onUpdateForm(e.target.value) }} className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
+                        <input maxLength={50} onChange={(e) => { setTopic(e.target.value), onUpdateForm(e.target.value) }} className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white"
                             placeholder='Enter the topic of this form' value={topic ?? ''}></input>
                     </div>
                     <div className='flex flex-row w-5/6 gap-1 mx-4 my-3'>

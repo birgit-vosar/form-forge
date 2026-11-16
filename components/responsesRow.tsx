@@ -24,18 +24,18 @@ export default function ResponsesRow({ formId, title, topic, submitDate, leadId,
             <div className='py-2 pl-2 gap-2 flex-4 flex flex-row border-r border-gray-300'>
                 <div className='w-4 h-4 bg-gray-100 rounded-md border border-gray-300 hover:bg-gray-300 cursor-pointer'>
                 </div>
-                <Link href={`/forms/${formId}/responses`} className='underline underline-offset-4 hover:underline-offset-3'>{title}</Link>
+                <Link href={`/forms/${formId}/responses`} className='underline underline-offset-4 hover:underline-offset-3 whitespace-normal'>{title}</Link>
             </div>
-            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
+            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300 whitespace-normal'>
                 <p>{topic}</p>
             </div>
-            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
+            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300 whitespace-normal'>
                 <p>{formattedDate}</p>
             </div>
-            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
+            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300 whitespace-normal'>
                 <p>{leadId}</p>
             </div>
-            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300'>
+            <div className='py-2 pl-2 flex-4 flex border-r border-gray-300 whitespace-normal'>
                 <p>{formStatus ? 'Active' : 'Inactive'}</p>
             </div>
             <div className='py-2 pl-2 flex-1 flex border-r border-gray-300'>

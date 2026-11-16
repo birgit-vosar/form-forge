@@ -16,7 +16,7 @@ export default function OptionsListEditor({ fieldId, fieldOptions, addOption, de
                 return (
                     <div key={option.id} className="flex gap-1 w-full">
                         <input className="font-sans text-sm text-gray-600 py-2 w-full px-2 border rounded-xs border-stone-300 focus:outline-stone-500 bg-white" 
-                            placeholder='Enter a label...' onChange={(e) => updateOption({fieldId: fieldId, optionId: option.id, update: { label: e.target.value }})} value={option.label}></input>
+                            placeholder='Enter a label...' maxLength={255} onChange={(e) => updateOption({fieldId: fieldId, optionId: option.id, update: { label: e.target.value }})} value={option.label}></input>
                         <button onClick={() => deleteOption(option.id, fieldId)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="size-4 text-gray-800/75 cursor-pointer hover:text-black hover:scale-105">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg></button>

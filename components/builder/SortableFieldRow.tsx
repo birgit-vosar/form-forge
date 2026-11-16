@@ -21,7 +21,7 @@ export default function SortableFieldRow({ field, selectedFieldId, onSelect, onD
 
     return ( 
         <div ref={setNodeRef} style={style}
-             className={`cursor-pointer flex flex-col gap-1 mb-4 py-4 px-2 border-2 rounded-md bg-[#9ed4c9] hover:border-[#6ca692] active:scale-99 active:shadow-sm active:shadow-[#6ca692]/50 
+             className={`cursor-pointer flex flex-col gap-1 py-4 px-2 border-2 rounded-md bg-[#9ed4c9] hover:border-[#6ca692] active:scale-99 active:shadow-sm active:shadow-[#6ca692]/50 
             ${field.id === selectedFieldId ? 'border-[#6ca692]' : 'border-[#84c9b1]'}`} 
             key={field.id} onClick={() => onSelect(field.id)}>
             <div className="flex justify-between">

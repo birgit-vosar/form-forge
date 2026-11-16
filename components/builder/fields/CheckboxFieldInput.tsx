@@ -33,7 +33,7 @@ export default function CheckboxFieldInput({ field, value, onChange }: FieldInpu
               </span>
             </label>
 
-            <label className="ml-2 cursor-pointer text-sm text-black" htmlFor={optionId}>
+            <label className="mx-2 cursor-pointer text-sm text-black break-all break-words whitespace-normal" htmlFor={optionId}>
               {option.label ?? 'Untitled option'}
             </label>
           </div>
