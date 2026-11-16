@@ -13,7 +13,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
 
     try {
         const formsRes = await pool.query(
-            'SELECT id, title, description, is_published FROM forms WHERE id = $1', [formId]
+            'SELECT id, title, description, footer_note, is_published FROM forms WHERE id = $1', [formId]
         )
 
         if (formsRes.rows.length === 0 || formsRes.rows[0].is_published === false) {
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest, context: { params: { formId: string
 
         await client.query('BEGIN')
 
-        const responseRes = await pool.query(
+        const responseRes = await client.query(
             'INSERT INTO responses (form_id) VALUES ($1) RETURNING id', [formId]
         )
 

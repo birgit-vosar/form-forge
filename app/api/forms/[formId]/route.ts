@@ -16,7 +16,7 @@ export async function DELETE(req: NextRequest) {
             'DELETE FROM forms WHERE id = $1 AND user_id = $2', [formId, userId]
         )
 
-        return NextResponse.json({ response: 'Form successfully deleted' }, { status: 200 })
+        return NextResponse.json({ status: 200 })
     } catch (err) {
         console.error('Failed to delete form in api:', err)
         return NextResponse.json({ error: 'Failed to delete form in api' }, { status: 500 })
@@ -36,7 +36,7 @@ export async function GET(req: NextRequest, context: { params: { formId: string 
             'SELECT * FROM forms WHERE id = $1 AND user_id = $2', [formId, userId]
         )
         if (res.rows.length === 0) {
-            return NextResponse.json({ response: 'Form not found' }, { status: 404 })
+            return NextResponse.json({ error: 'Form not found' }, { status: 404 })
         }
         return NextResponse.json(res.rows[0])
     } catch (err) {
@@ -147,7 +147,7 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
             'UPDATE forms SET title = $1 WHERE id = $2 AND user_id = $3', [body.title, formId, userId]
         )
 
-        return NextResponse.json({ response: 'Title changed successfully' }, { status: 200 })
+        return NextResponse.json({ status: 200 })
     } catch (err) {
         return NextResponse.json({ error: 'Something went wrong with changing the form property.' }, { status: 500 })
     }

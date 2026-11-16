@@ -17,7 +17,7 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
         'SELECT id FROM forms WHERE user_id = $1 AND id = $2', [userId, formId]
     )
     if (res.rows.length === 0) {
-        return NextResponse.json({ response: 'Request failed, please try again.' }, { status: 404 })
+        return NextResponse.json({ error: 'Request failed, please try again.' }, { status: 404 })
     }
 
     const body = await req.json()

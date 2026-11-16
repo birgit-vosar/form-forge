@@ -16,7 +16,7 @@ export async function POST(req: NextRequest, context: { params: Promise<{ formId
             'SELECT id FROM forms WHERE user_id = $1 AND id = $2', [userId, formId]
         )
         if (res.rows.length === 0) {
-            return NextResponse.json({ response: 'Request failed, please try again.' }, { status: 404 })
+            return NextResponse.json({ error: 'Request failed, please try again.' }, { status: 404 })
         }
 
         const countRes = await pool.query(
@@ -50,7 +50,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ form
             'SELECT id FROM forms WHERE user_id = $1 AND id = $2', [userId, formId]
         )
         if (res.rows.length === 0) {
-            return NextResponse.json({ response: 'Request failed, please try again.' }, { status: 404 })
+            return NextResponse.json({ error: 'Request failed, please try again.' }, { status: 404 })
         }
 
         const body = await req.json()
@@ -63,7 +63,7 @@ export async function DELETE(req: NextRequest, context: { params: Promise<{ form
             return NextResponse.json({ error: 'Option not found' }, { status: 404 })
         }
 
-        return NextResponse.json({ response: 'Options field deletion successful.' }, { status: 201 })
+        return NextResponse.json({ status: 201 })
 
     } catch (err) {
         console.log(err)
@@ -84,7 +84,7 @@ export async function PATCH(req: NextRequest, context: { params: { formId: strin
             'SELECT id FROM forms WHERE user_id = $1 AND id = $2', [userId, formId]
         )
         if (res.rows.length === 0) {
-            return NextResponse.json({ response: 'Request failed, please try again.' }, { status: 404 })
+            return NextResponse.json({ error: 'Request failed, please try again.' }, { status: 404 })
         }
 
         const { optionId, update } = await req.json()
