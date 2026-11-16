@@ -28,7 +28,6 @@ export default function Login() {
             })
             const data = await response.json()
             if (!response.ok) {
-                console.log(data.error)
                 setError(data.error)
                 setLoading(false)
                 return
@@ -43,7 +42,7 @@ export default function Login() {
 
 
         } catch (err) {
-            console.log('Login error:', err)
+            setLoading(false)
             setError('Something went wrong with logging in, please try again')
         }
 

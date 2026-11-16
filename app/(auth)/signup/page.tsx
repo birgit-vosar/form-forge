@@ -19,7 +19,6 @@ export default function Signup() {
             setError(false)
             const email = formData.get('email')
             const password = formData.get('password')
-            /* check if user already has an account */
             const response = await fetch('/api/auth/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -39,14 +38,8 @@ export default function Signup() {
                 setTimeout(() => {
                     router.push('/login')
                 }, 3000)
-            
-
-            /* user is redirected to login page */
-
-
-
         } catch (err) {
-            console.error('Signup error:', err);
+            setLoading(false)
             setError('Something went wrong with signup.')
         }
 
