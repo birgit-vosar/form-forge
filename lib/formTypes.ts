@@ -11,6 +11,19 @@ export interface Form {
     is_published: boolean,
 }
 
+export type FormIssue = {
+    scope: 'form',
+    message: string
+}
+
+export type FieldIssue = {
+    scope: 'field',
+    fieldId: number,
+    message: string
+}
+
+export type PublishIssues = FormIssue | FieldIssue
+
 export const publishSchema = z.object({ published: z.boolean() })
 
 export const titleSchema = z.object({ title: z.string().min(1).max(50) })

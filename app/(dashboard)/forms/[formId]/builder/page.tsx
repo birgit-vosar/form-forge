@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import FieldTypeMenu from '@/components/builder/FieldTypeMenu'
 import { Field, NewField, FieldUpdateProps, OptionsUpdateProps, FieldType, FIELD_TYPE_CONFIG } from '@/lib/fieldTypes'
-import { Form } from '@/lib/formTypes'
+import { FieldIssue, Form, PublishIssues } from '@/lib/formTypes'
 import FormFields from '@/components/builder/FormFields'
 import FieldSettingsPanel from '@/components/builder/FieldSettingsPanel'
 import FormSettingsPanel from '@/components/builder/FormSettingsPanel'
@@ -420,32 +420,54 @@ export default function DashboardPage() {
         setSelectedFieldId(fieldId)
     }
 
+    function publishCheck(): PublishIssues[] {
+        const issues: PublishIssues[] = []
+
+        const currentTitle = (title || form?.title || '').trim()
+        if (currentTitle === '' || currentTitle === 'Untitled form') {
+            issues.push({ scope: 'form', message: 'Give your form a title before publishing' })
+        }
+
+        if (fields.length === 0) {
+            issues.push({ scope: 'form', message: 'Add at least one field to the form.' })
+        }
+
+        for (const field of fields) {
+            if (FIELD_TYPE_CONFIG[field.type].hasOptions && !field.options?.length) {
+                issues.push({ scope: 'field', fieldId: field.id, message: 'Must have at least one option' })
+            }
+        }
+
+        return issues
+    }
+
     async function handlePublish() {
         try {
-            setSaving(true)
+
             setError('')
-            console.log(fields.length)
+            setFieldErrors({})
 
-            const fieldsWithOptions = fields.filter((field) => field.type === 'checkbox' ||
-                field.type === 'dropdown' ||
-                field.type === 'radio')
+            if (!published) {
+                const issues = publishCheck()
 
-            const fieldsWithNoOptions = fieldsWithOptions.filter((field) => !field.options?.length).map((field) => field.id)
+                if (issues.length > 0) {
+                    const formMessages = issues
+                        .filter((issue) => issue.scope === 'form')
+                        .map((issue) => issue.message)
 
-            if (fields.length === 0) {
-                setError('Must have at least one field added to the form')
-                return
+                    const fieldIssues = issues.filter((issue): issue is FieldIssue => issue.scope === 'field')
+
+                    setError(formMessages.join(' and '))
+                    setFieldErrors(
+                        Object.fromEntries(fieldIssues.map((issue) => [issue.fieldId, issue.message]))
+                    )
+                    if (fieldIssues.length > 0) setSelectedFieldId(fieldIssues[0].fieldId)
+
+                    return
+                }
             }
-            else if (fieldsWithNoOptions.length > 0) {
-                fieldsWithNoOptions.forEach((fieldId) => {
-                    setFieldErrors((prev) => ({
-                        ...prev,
-                        [fieldId] : 'Must have at least one option'
-                    }))
-                })
-                return
-            }
 
+            setSaving(true)
             const res = await fetch(`/api/forms/${formId}`, {
                 method: 'PATCH',
                 headers: {
@@ -549,7 +571,7 @@ export default function DashboardPage() {
                                     <FieldTypeMenu onAddField={handleAddField} />
                                     <div className='flex-1 self-start flex flex-col'>
                                         <div className={error ? 'block flex bg-red-500/20 flex-1 max-h-10 border-b-2 border-red-300 py-2 px-4' : 'hidden'}>
-                                            <p className='text-red-400 font-sans text-sm'>{error}</p>
+                                            <p className='text-red-400 font-sans text-sm lowercase first-letter:uppercase'>{error}</p>
                                         </div>
                                         <div className='bg-[#B7E0D8] flex-1 flex flex-row mx-6 lg:mx-10 px-4 py-6 my-6 border rounded-xl border-[#8ed0b8] text-sm shadow-lg'>
                                             <div className='flex-1 flex flex-col gap-4 '>
@@ -585,7 +607,7 @@ export default function DashboardPage() {
                                                     </svg>
                                                 </div>
                                                 <FormFields fields={fields} setFields={setFields} onSelect={handleSelect} onDelete={handleDeleteField}
-                                                    selectedFieldId={selectedFieldId} formId={formId} fieldErrors={fieldErrors}/>
+                                                    selectedFieldId={selectedFieldId} formId={formId} fieldErrors={fieldErrors} />
                                                 <div className='flex flex-row items-end gap-4 mb-4'>
                                                     <textarea
                                                         id='footer-description'
