@@ -435,7 +435,7 @@ export default function DashboardPage() {
                 fieldsWithNoOptions.forEach((fieldId) => {
                     setFieldErrors((prev) => ({
                         ...prev,
-                        [fieldId] : 'Must have at least one option.'
+                        [fieldId] : 'Must have at least one option'
                     }))
                 })
                 return

@@ -9,9 +9,10 @@ interface SortableFieldRowProps {
     selectedFieldId: number | null,
     onDelete: (fieldId: number) => void,
     onSelect: (fieldId: number) => void,
+    hasError: boolean
 }
 
-export default function SortableFieldRow({ field, selectedFieldId, onSelect, onDelete }: SortableFieldRowProps) {
+export default function SortableFieldRow({ field, selectedFieldId, onSelect, onDelete, hasError }: SortableFieldRowProps) {
     const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: field.id })
 
     const style = {
@@ -21,7 +22,7 @@ export default function SortableFieldRow({ field, selectedFieldId, onSelect, onD
 
     return ( 
         <div ref={setNodeRef} style={style}
-             className={`cursor-pointer flex flex-col gap-1 py-4 px-2 border-2 rounded-md bg-[#9ed4c9] hover:border-[#6ca692] active:scale-99 active:shadow-sm active:shadow-[#6ca692]/50 
+             className={`${hasError ? ('border-[#d36c6c] hover:border-red-700 bg-[#9ed4c9]') :('bg-[#9ed4c9]')} cursor-pointer flex flex-col gap-1 py-4 px-2 border-2 rounded-md  hover:border-[#6ca692] active:scale-99 active:shadow-sm active:shadow-[#6ca692]/50 
             ${field.id === selectedFieldId ? 'border-[#6ca692]' : 'border-[#84c9b1]'}`} 
             key={field.id} onClick={() => onSelect(field.id)}>
             <div className="flex justify-between">
@@ -38,7 +39,7 @@ export default function SortableFieldRow({ field, selectedFieldId, onSelect, onD
                     </span>
                     <label className='cursor-pointer text-black font-mono text-md font-semibold mb-1'>{field.label}</label>
                     {field.required === true ? (<p className="font-mono text-md font-semibold">*</p>) : ('')}
-                    {field.name === '' ? (<label className='cursor-pointer text-red-600 font-mono text-xs mb-1'> (Name required)</label>) : (<label className='cursor-pointer text-black font-mono text-xs mb-1'> ({field.name})</label>) }
+                    {field.name === '' ? (<label className='cursor-pointer text-[#d70000] font-mono text-xs mb-1'> (Name required)</label>) : (<label className='cursor-pointer text-black font-mono text-xs mb-1'> ({field.name})</label>) }
                     
                 </div>
                 <button onClick={() => onDelete(field.id)}><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="size-4 mb-2 text-gray-800/75 cursor-pointer hover:text-teal-800 hover:scale-115">

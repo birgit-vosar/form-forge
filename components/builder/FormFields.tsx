@@ -54,8 +54,13 @@ export default function FormFields({ fields, setFields, selectedFieldId, onDelet
                     {
                         fields.map((field) => (
                             <div key={field.id}>
-                                <SortableFieldRow key={field.id} field={field} selectedFieldId={selectedFieldId} onSelect={onSelect} onDelete={onDelete} />
-                                {fieldErrors[field.id] && (<p className='text-[#d70000] font-sans text-sm mt-1'>{fieldErrors[field.id]}</p>)}
+                                
+                                {fieldErrors[field.id] 
+                                ? (<div>
+                                    <SortableFieldRow key={field.id} field={field} selectedFieldId={selectedFieldId} onSelect={onSelect} onDelete={onDelete} hasError={true} />
+                                    <p className='text-[#d70000] font-sans text-sm mt-1'>{fieldErrors[field.id]}</p>
+                                    </div>) 
+                                : (<SortableFieldRow key={field.id} field={field} selectedFieldId={selectedFieldId} onSelect={onSelect} onDelete={onDelete} hasError={false}/>)}
                             </div>
                         ))
                     }
