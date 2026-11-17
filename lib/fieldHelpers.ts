@@ -21,6 +21,7 @@ export function getOptionValue(option: FieldOption) {
 export const fieldNameDraftSchema = z.object({
     name: z
         .string()
-        .max(50, 'Name can be at most 50 characters.')
-        .regex(/^[a-z0-9_]*$/, 'Name can only contain lowercase letters, numbers and underscores.')
+        .min(1, 'Name cannot be empty')
+        .max(50, 'Name can be at most 50 characters')
+        .regex(/^[a-z0-9_]+$/, 'Name can only contain lowercase letters, numbers, empty spaces and underscores')
 })

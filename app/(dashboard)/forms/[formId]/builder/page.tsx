@@ -424,6 +424,7 @@ export default function DashboardPage() {
         try {
             setSaving(true)
             setError('')
+            console.log(fields.length)
 
             const fieldsWithOptions = fields.filter((field) => field.type === 'checkbox' ||
                 field.type === 'dropdown' ||
@@ -431,7 +432,11 @@ export default function DashboardPage() {
 
             const fieldsWithNoOptions = fieldsWithOptions.filter((field) => !field.options?.length).map((field) => field.id)
 
-            if (fieldsWithNoOptions.length > 0) {
+            if (fields.length === 0) {
+                setError('Must have at least one field added to the form')
+                return
+            }
+            else if (fieldsWithNoOptions.length > 0) {
                 fieldsWithNoOptions.forEach((fieldId) => {
                     setFieldErrors((prev) => ({
                         ...prev,
